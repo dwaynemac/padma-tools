@@ -4,7 +4,7 @@ Plugins y skills para que los usuarios de [PADMA](https://derose.app/) puedan tr
 
 Este repositorio funciona como un marketplace de Codex. Cada plugin puede combinar instrucciones especializadas, documentación y conexiones MCP con las aplicaciones de PADMA.
 
-## Instalar el marketplace
+## Instalar el marketplace en Codex
 
 Necesitás una versión reciente de Codex con soporte para plugins.
 
@@ -23,6 +23,23 @@ Para actualizar el catálogo y los plugins instalados:
 
 ```bash
 codex plugin marketplace upgrade padma-tools
+```
+
+## Instalar el marketplace en Claude Code
+
+Necesitás una versión reciente de Claude Code con soporte para plugins.
+
+```bash
+claude plugin marketplace add dwaynemac/padma-tools
+claude plugin install money@padma-tools
+```
+
+Iniciá o reiniciá Claude Code para cargar las skills y herramientas del plugin.
+
+Para actualizar el catálogo:
+
+```bash
+claude plugin marketplace update padma-tools
 ```
 
 ## Plugins disponibles
@@ -44,13 +61,13 @@ El plugin incluye la skill `padma-money`, que enseña al agente el modelo financ
 #### Configurar el acceso
 
 1. Creá una API key con permiso `full_access` para la organización correcta en [PADMA Accounts](https://accounts.padm.am/accounts/current).
-2. Definí la clave en el entorno desde el que iniciás Codex:
+2. Definí la clave en el entorno desde el que iniciás Codex o Claude Code:
 
    ```bash
    export MONEY_MCP_TOKEN="tu-api-key"
    ```
 
-3. Reiniciá Codex e iniciá una tarea nueva.
+3. Reiniciá el agente e iniciá una tarea nueva.
 4. Probá la conexión con: `Decime qué negocio de Money está conectado.`
 
 La API key determina a qué organización puede acceder el agente. No la pegues en prompts, archivos del repositorio, logs ni URLs; tratala como una contraseña.
