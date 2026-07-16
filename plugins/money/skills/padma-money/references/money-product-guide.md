@@ -29,9 +29,9 @@ Recommended first steps:
 
 Every movement belongs to an account. Each account has exactly one currency, and every movement inside it is interpreted in that currency.
 
-The documented currencies are ARS, BRL, EUR, USD, and BTC. The school has one global currency. Category subtotals are presented in that global currency using the relevant month's exchange rate. Transfers between accounts with different currencies may specify their own exchange rate.
+The documented currencies are ARS, BRL, EUR, USD, and BTC. The school has one global currency. Category subtotals are presented in that global currency using the relevant month's exchange rate. Transfers between accounts with different currencies may specify their own exchange rate. UI currency previews use the current rate for presentation and do not change the business's base currency.
 
-Archiving is preferable to deletion when historical relationships must be retained. The MCP currently supports account archive and unarchive through `update_account`; it does not expose account deletion.
+An archived account disappears from forms and no longer contributes to total balances, but its movements remain in history and category totals. Deleting an account also deletes its movements and removes their effects. The MCP currently supports account archive and unarchive through `update_account`; it does not expose deletion.
 
 ## Movements and reporting
 
@@ -109,11 +109,14 @@ Treat this as background product behavior, not as an MCP operation. Verify curre
 - [Money](https://app.notion.com/p/d3f8c1b5da5c44be8ec38d06891c185c)
 - [Primeiros pasos](https://app.notion.com/p/1c13160bddf28024896ed99279913678)
 - [Contas](https://app.notion.com/p/73c5ffd7acdf437ab6b60e8800a0b83f)
+- [Archivar cuentas vs eliminar cuentas](https://app.notion.com/p/c0f0259394aa4518bf82a22b850988a4)
 - [Movimentos](https://app.notion.com/p/153638ddc21440eeaf7ca24887da4758)
 - [Categorías](https://app.notion.com/p/105d8b73df8744b2948fea7eee990af3)
 - [Planos](https://app.notion.com/p/a0ac2e68f9ef45c783d0e79f1d0bdd1c)
 - [Movimentos recorrentes](https://app.notion.com/p/2c36e123f6e74df29233d64ddcd1b68a)
 - [Moedas](https://app.notion.com/p/3a2b7491a0bf4b958618bba0790ea7f4)
+- [Taxas de câmbio](https://app.notion.com/p/2bf3160bddf280119e71da42c3c79a4d)
+- [Previsualizar en otra moneda](https://app.notion.com/p/85748507d7614d98ac8f3a78ec6de91a)
 - [Importar movimentos](https://app.notion.com/p/c8727841213c479891d078caad0e9970)
 - [Reportes no Google Spreadsheet](https://app.notion.com/p/d2ca50e9ef7340378e76464070286670)
 - [Automatizaciones](https://app.notion.com/p/323e1c1a77084930aa31f78b57d30511)

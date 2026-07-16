@@ -13,8 +13,9 @@ Use the `money` MCP server as the only execution path for Money data. Keep every
 2. Call `get_business_context` first. State the connected business, currency, and timezone when they matter.
 3. Read [references/mcp-operations.md](references/mcp-operations.md) for connection, tool, date, amount, and error contracts.
 4. Read [references/domain-model.md](references/domain-model.md) before calculations or when terms could be confused.
-5. Read only the relevant sections of [references/money-product-guide.md](references/money-product-guide.md) when product semantics affect the request.
-6. Read [references/workflows-and-output.md](references/workflows-and-output.md) for monthly reports, reconciliation, anomaly review, or mutation presentation.
+5. Read [references/objects-and-attributes.md](references/objects-and-attributes.md) when interpreting a returned object, choosing or changing attributes, or explaining lifecycle and currency effects.
+6. Read only the relevant sections of [references/money-product-guide.md](references/money-product-guide.md) when broader product semantics affect the request.
+7. Read [references/workflows-and-output.md](references/workflows-and-output.md) for monthly reports, reconciliation, anomaly review, or mutation presentation.
 
 ## Read and analyze
 
