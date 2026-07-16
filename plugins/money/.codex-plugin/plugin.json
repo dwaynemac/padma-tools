@@ -1,0 +1,36 @@
+{
+  "name": "money",
+  "version": "0.1.0",
+  "description": "Consult and manage PADMA Money safely through its remote MCP server.",
+  "author": {
+    "name": "PADMA"
+  },
+  "homepage": "https://app.notion.com/p/d3f8c1b5da5c44be8ec38d06891c185c",
+  "repository": "https://github.com/dwaynemac/padma-tools",
+  "keywords": [
+    "money",
+    "finance",
+    "padma",
+    "mcp"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Money",
+    "shortDescription": "Consultá y administrá Money con MCP",
+    "longDescription": "Conecta Codex con Money para consultar cuentas, categorías, contactos, movimientos y reportes, y para realizar cambios financieros con confirmación, idempotencia y verificación.",
+    "developerName": "PADMA",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "websiteURL": "https://money.derose.app/",
+    "defaultPrompt": [
+      "Decime qué negocio de Money está conectado.",
+      "Listá mis cuentas y sus monedas.",
+      "Analizá los movimientos del último mes."
+    ],
+    "brandColor": "#22C55E"
+  },
+  "mcpServers": "./.mcp.json"
+}

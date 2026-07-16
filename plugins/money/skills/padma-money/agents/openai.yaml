@@ -1,0 +1,12 @@
+interface:
+  display_name: "PADMA Money"
+  short_description: "Consultar y administrar Money de forma segura"
+  default_prompt: "Usá $padma-money para analizar mis movimientos del último mes."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "money"
+      description: "Servidor MCP remoto de PADMA Money"
+      transport: "streamable_http"
+      url: "https://money.derose.app/mcp"

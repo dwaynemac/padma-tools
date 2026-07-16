@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "money": {
+      "type": "http",
+      "url": "https://money.derose.app/mcp",
+      "bearer_token_env_var": "MONEY_MCP_TOKEN"
+    }
+  }
+}

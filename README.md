@@ -1,0 +1,90 @@
+# PADMA Tools
+
+Plugins y skills para que los usuarios de [PADMA](https://derose.app/) puedan trabajar con sus datos desde agentes compatibles con Codex.
+
+Este repositorio funciona como un marketplace de Codex. Cada plugin puede combinar instrucciones especializadas, documentación y conexiones MCP con las aplicaciones de PADMA.
+
+## Instalar el marketplace
+
+Necesitás una versión reciente de Codex con soporte para plugins.
+
+```bash
+codex plugin marketplace add dwaynemac/padma-tools
+```
+
+Después:
+
+1. Abrí el catálogo con `/plugins` en Codex CLI o desde **Plugins** en la app de ChatGPT/Codex.
+2. Elegí **PADMA Tools**.
+3. Instalá el plugin que quieras usar.
+4. Iniciá una tarea nueva para que el agente cargue sus skills y herramientas.
+
+Para actualizar el catálogo y los plugins instalados:
+
+```bash
+codex plugin marketplace upgrade padma-tools
+```
+
+## Plugins disponibles
+
+### Money
+
+Conecta el agente con [PADMA Money](https://money.derose.app/) mediante su servidor MCP oficial.
+
+Permite:
+
+- consultar cuentas, categorías, contactos y movimientos;
+- analizar gastos, ingresos, períodos y posibles anomalías;
+- crear y corregir movimientos financieros;
+- administrar cuentas, categorías, movimientos recurrentes, planes y automatizaciones;
+- aplicar confirmación, idempotencia y verificación en operaciones de escritura.
+
+El plugin incluye la skill `padma-money`, que enseña al agente el modelo financiero de Money, sus workflows seguros y las limitaciones reales de las herramientas disponibles.
+
+#### Configurar el acceso
+
+1. Creá una API key con permiso `full_access` para la organización correcta en [PADMA Accounts](https://accounts.padm.am/accounts/current).
+2. Definí la clave en el entorno desde el que iniciás Codex:
+
+   ```bash
+   export MONEY_MCP_TOKEN="tu-api-key"
+   ```
+
+3. Reiniciá Codex e iniciá una tarea nueva.
+4. Probá la conexión con: `Decime qué negocio de Money está conectado.`
+
+La API key determina a qué organización puede acceder el agente. No la pegues en prompts, archivos del repositorio, logs ni URLs; tratala como una contraseña.
+
+## Ejemplos
+
+- “¿Cuánto gastamos el mes pasado, separado por categoría?”
+- “Buscá movimientos sin categoría y proponé cómo clasificarlos.”
+- “Registrá este gasto después de mostrarme exactamente qué vas a crear.”
+- “Compará este mes con el anterior y explicá las variaciones relevantes.”
+- “Revisá esta cuenta contra el extracto y listá las diferencias sin modificar nada.”
+
+## Estructura
+
+```text
+.agents/plugins/marketplace.json  catálogo que descubre Codex
+plugins/                          plugins instalables
+  money/                          integración MCP con PADMA Money
+```
+
+Las skills específicas de un producto viajan dentro de su plugin. Las skills independientes podrán publicarse bajo `skills/` cuando no necesiten MCP ni otro componente adicional.
+
+## Seguridad y alcance
+
+- Cada integración debe respetar la organización resuelta por sus credenciales.
+- Los secretos deben permanecer fuera del repositorio.
+- El agente debe mostrar y confirmar cambios financieros cuando el usuario todavía no haya autorizado la operación exacta.
+- Las reglas de negocio, permisos e invariantes siguen viviendo en las aplicaciones PADMA; las skills orientan al agente, no reemplazan esas protecciones.
+
+## Contribuir
+
+Consultá [CONTRIBUTING.md](CONTRIBUTING.md) para agregar o actualizar un plugin o una skill.
+
+## Documentación relacionada
+
+- [Plugins de Codex](https://developers.openai.com/codex/plugins)
+- [Crear y distribuir plugins](https://developers.openai.com/codex/plugins/build)

@@ -1,0 +1,20 @@
+{
+  "name": "padma-tools",
+  "interface": {
+    "displayName": "PADMA Tools"
+  },
+  "plugins": [
+    {
+      "name": "money",
+      "source": {
+        "source": "local",
+        "path": "./plugins/money"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
