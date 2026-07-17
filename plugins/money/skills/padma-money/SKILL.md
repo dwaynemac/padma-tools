@@ -28,6 +28,14 @@ Use the `money` MCP server as the only execution path for Money data. Keep every
 7. State the business or account scope, period, date basis, currency, filters, and material exclusions.
 8. Separate MCP-confirmed facts from interpretation or recommendations. Do not label derived output as an official accounting statement.
 
+## Movement permalinks
+
+When the user requests a direct link to a movement:
+
+1. Use the authenticated `business.id` from `get_business_context` and the `movement.id` from a current `get_movement` or search response.
+2. Build `https://<configured-money-host>/businesses/<business.id>/movements/<movement.id>`, preserving the configured MCP server host and removing only its trailing `/mcp` path.
+3. Return the result as a clickable Markdown link. Never infer an ID, select a host from the business name, or construct a link for an unverified movement.
+
 ## Write safely
 
 1. Read or search the current records before proposing a mutation.
