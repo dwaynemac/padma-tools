@@ -5,7 +5,7 @@ description: Use PADMA Money through its remote MCP server to inspect accounts, 
 
 # Use Money MCP
 
-Use the `money` MCP server as the only execution path for Money data. Keep every operation scoped to the business resolved by the configured credential.
+Use the `money` MCP server as the only execution path for Money data. Keep every operation scoped to the business resolved by the authenticated OAuth session.
 
 ## Prepare
 
@@ -48,11 +48,11 @@ When the user requests a direct link to a movement:
 
 ## Protect credentials and tenant scope
 
-- Never ask the user to paste the API key into a prompt.
-- Never place the key in files, URLs, logs, or MCP arguments. The plugin reads `MONEY_MCP_TOKEN` from the environment.
-- Never accept or invent a `business_id`; the credential determines the business.
-- Treat `full_access` as permission to read and write financial data, not as permission to broaden the user's request.
-- Stop on an unexpected business context and ask the user to correct the credential.
+- Never ask the user to paste an OAuth authorization code or access token into a prompt.
+- Never place OAuth credentials in files, URLs, logs, or MCP arguments. The client manages the OAuth session.
+- Never accept or invent a `business_id`; the authenticated session determines the business.
+- Treat granted read or write access as permission to operate only within the user's request.
+- Stop on an unexpected business context and ask the user to disconnect and authorize the correct organization.
 
 ## Handle unavailable or unsupported operations
 

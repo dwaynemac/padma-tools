@@ -13,11 +13,16 @@
 
 - Server: `https://money.derose.app/mcp`
 - Transport: Streamable HTTP
-- Authentication: `Authorization: Bearer <API_KEY>`
-- Credential source: `MONEY_MCP_TOKEN`
-- Required key permission: `full_access`
+- Authentication: OAuth managed by the MCP client
+- Client registration: Dynamic Client Registration (DCR)
+- OAuth resource: `https://money.derose.app/mcp`
 
-Create the API key for the intended account in [PADMA Accounts](https://accounts.padm.am/accounts/current). Treat it as a password. Restart Codex after defining or changing the environment variable.
+Connect Money when the client requests authorization, sign in, and authorize the intended organization. The plugin does not require an API key or environment variable. Never paste authorization codes or access tokens into prompts, files, logs, URLs, or MCP arguments.
+
+Do not configure a shared `oauth_client_id`, Client ID, or Client Secret. The
+client discovers the Accounts `registration_endpoint`, registers its exact
+callback as a public PKCE client, and receives its own `client_id`. Callback
+wildcards such as `http://127.0.0.1/callback/*` are not supported.
 
 The plugin supplies this equivalent server configuration:
 
@@ -26,12 +31,41 @@ The plugin supplies this equivalent server configuration:
   "mcpServers": {
     "money": {
       "type": "http",
-      "url": "https://money.derose.app/mcp",
-      "bearer_token_env_var": "MONEY_MCP_TOKEN"
+      "url": "https://money.derose.app/mcp"
     }
   }
 }
 ```
+
+### Codex
+
+The plugin deliberately omits `oauth_client_id` so Codex uses DCR. If Money was
+previously added manually with the shared static client, replace that entry:
+
+```bash
+codex mcp logout money
+codex mcp remove money
+codex mcp add money \
+  --url https://money.derose.app/mcp \
+  --oauth-resource https://money.derose.app/mcp
+codex mcp login money --scopes openid,profile,email,account,money
+```
+
+### Claude Code
+
+The plugin also omits advanced OAuth credentials for Claude Code. If the MCP
+server must be added manually, use:
+
+```bash
+claude mcp add --transport http money https://money.derose.app/mcp
+```
+
+Then run `/mcp`, select Money, and complete authentication. Leave Client ID and
+Client Secret empty so Claude Code can use DCR.
+
+Accounts accepts up to 10 dynamic registrations per IP address every 60
+seconds. On `429 Too Many Requests`, wait for the `Retry-After` interval instead
+of looping.
 
 ## Verification
 
@@ -134,13 +168,13 @@ Reuse a `request_id` only when the prior response was uncertain and the payload 
 
 ## Errors
 
-- `401`: token missing, invalid, expired, or unavailable to Codex. Check `MONEY_MCP_TOKEN` and restart.
-- `403`: token lacks `full_access`, the business is disabled, the local user cannot authorize the action, or the client origin is rejected.
+- `401`: the OAuth session is missing, invalid, or expired. Reconnect Money and complete authorization.
+- `403`: the OAuth session lacks the required access, the business is disabled, the user cannot authorize the action, or the client origin is rejected.
 - `404` or `not_found`: the record is absent from the authenticated business; verify the ID through a scoped search.
 - Validation error: correct the typed inputs; do not bypass schemas.
 - Conflict: refetch the record or inspect idempotency input mismatch before retrying.
 - Rate limit: wait for the indicated retry interval. Do not loop aggressively.
-- No tools: verify that the URL ends in `/mcp`, the environment variable is available, and Codex was restarted.
-- Unexpected business: remove or disable the connection and configure a key created for the correct account.
+- No tools: verify that the URL ends in `/mcp`, reconnect Money, complete OAuth authorization, and start a new task.
+- Unexpected business: disconnect the connection and authorize the correct organization.
 
-Source: [Money MCP documentation in Notion](https://app.notion.com/p/39e3160bddf28027a1fbec7a5102e070), fetched 2026-07-16, reconciled with the implemented Money MCP contract.
+Source: [Money MCP documentation in Notion](https://app.notion.com/p/39e3160bddf28027a1fbec7a5102e070), fetched 2026-07-16, reconciled with the implemented Money MCP contract. Authentication configuration updated for OAuth on 2026-07-20.

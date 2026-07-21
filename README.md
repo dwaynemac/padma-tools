@@ -60,17 +60,18 @@ El plugin incluye la skill `padma-money`, que enseña al agente el modelo financ
 
 #### Configurar el acceso
 
-1. Creá una API key con permiso `full_access` para la organización correcta en [PADMA Accounts](https://accounts.padm.am/accounts/current).
-2. Definí la clave en el entorno desde el que iniciás Codex o Claude Code:
-
-   ```bash
-   export MONEY_MCP_TOKEN="tu-api-key"
-   ```
-
-3. Reiniciá el agente e iniciá una tarea nueva.
+1. Instalá el plugin e iniciá una tarea nueva.
+2. Cuando el cliente lo solicite, conectá Money e iniciá sesión mediante OAuth.
+   Codex o Claude Code registrarán automáticamente un cliente público mediante
+   DCR; no configures un Client ID ni un Client Secret compartidos.
+3. Autorizá el acceso a la organización correcta.
 4. Probá la conexión con: `Decime qué negocio de Money está conectado.`
 
-La API key determina a qué organización puede acceder el agente. No la pegues en prompts, archivos del repositorio, logs ni URLs; tratala como una contraseña.
+El plugin no requiere una API key ni una variable de entorno. El cliente administra la sesión OAuth; no pegues códigos de autorización ni tokens en prompts, archivos del repositorio, logs o URLs.
+
+Si una instalación anterior tenía un Client ID OAuth estático, actualizá el
+plugin, eliminá esa configuración y desconectá/reconectá Money para que el
+cliente use DCR.
 
 ## Ejemplos
 

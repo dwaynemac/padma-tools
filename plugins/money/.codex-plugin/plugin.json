@@ -1,6 +1,6 @@
 {
   "name": "money",
-  "version": "0.1.0",
+  "version": "0.1.0+codex.20260721011929",
   "description": "Consult and manage PADMA Money safely through its remote MCP server.",
   "author": {
     "name": "PADMA"
