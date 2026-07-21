@@ -4,7 +4,7 @@ Use these distinctions before selecting tools or calculating results.
 
 ## Business
 
-The PADMA tenant whose financial data is available. The bearer credential resolves exactly one business. Never accept a caller-selected business ID.
+The PADMA tenant whose financial data is available. OAuth resolves one or more authorized Businesses. `list_businesses` exposes that allowlist, and `business_id` selects one member for a contextual tool call; the ID never grants access by itself.
 
 ## Account
 

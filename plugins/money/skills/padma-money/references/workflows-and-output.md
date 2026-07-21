@@ -12,7 +12,7 @@
 
 ## Monthly financial review
 
-1. Resolve the authenticated business with `get_business_context`.
+1. Resolve one authorized Business through `list_businesses`, then call `get_business_context` for that selection.
 2. Confirm the calendar period, reporting date basis, and currency.
 3. Use `category_subtotals` for category totals.
 4. Use `analyze_movements` for deterministic findings.

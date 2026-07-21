@@ -1,7 +1,7 @@
 {
   "name": "money",
-  "version": "0.1.0+codex.20260721011929",
-  "description": "Consult and manage PADMA Money safely through its remote MCP server.",
+  "version": "0.1.0+codex.20260721220819",
+  "description": "Consult and manage authorized PADMA Money businesses safely through its remote MCP server.",
   "author": {
     "name": "PADMA"
   },
@@ -17,7 +17,7 @@
   "interface": {
     "displayName": "Money",
     "shortDescription": "Consultá y administrá Money con MCP",
-    "longDescription": "Conecta Codex con Money para consultar cuentas, categorías, contactos, movimientos y reportes, y para realizar cambios financieros con confirmación, idempotencia y verificación.",
+    "longDescription": "Conecta Codex con los negocios autorizados de Money para consultar cuentas, categorías, contactos, movimientos y reportes, y para realizar cambios financieros con confirmación, idempotencia y verificación.",
     "developerName": "PADMA",
     "category": "Productivity",
     "capabilities": [
@@ -26,7 +26,7 @@
     ],
     "websiteURL": "https://money.derose.app/",
     "defaultPrompt": [
-      "Decime qué negocio de Money está conectado.",
+      "Listá los negocios de Money que tengo autorizados.",
       "Listá mis cuentas y sus monedas.",
       "Analizá los movimientos del último mes."
     ],

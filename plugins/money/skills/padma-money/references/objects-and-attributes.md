@@ -20,7 +20,7 @@ Interpret Money records with these product semantics. The field names shown are 
 
 - `currency` is the school's base or global currency. It is used to present category subtotals after monthly conversion.
 - A configured display currency or the UI's `view_in_currency` preview does not change the base currency or underlying records.
-- The authenticated credential fixes the business. A business identifier in a record is context, not permission to switch tenants.
+- OAuth fixes the Business allowlist. A `business_id` returned by `list_businesses` selects one authorized Business for contextual calls; any other identifier is context, not permission to switch tenants.
 
 ## Account
 

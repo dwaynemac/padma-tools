@@ -17,7 +17,7 @@
 - Client registration: Dynamic Client Registration (DCR)
 - OAuth resource: `https://money.derose.app/mcp`
 
-Connect Money when the client requests authorization, sign in, and authorize the intended organization. The plugin does not require an API key or environment variable. Never paste authorization codes or access tokens into prompts, files, logs, URLs, or MCP arguments.
+Connect Money when the client requests authorization, sign in, and authorize the intended account or accounts. The plugin does not require an API key or environment variable. Never paste authorization codes or access tokens into prompts, files, logs, URLs, or MCP arguments.
 
 Do not configure a shared `oauth_client_id`, Client ID, or Client Secret. The
 client discovers the Accounts `registration_endpoint`, registers its exact
@@ -48,7 +48,7 @@ codex mcp remove money
 codex mcp add money \
   --url https://money.derose.app/mcp \
   --oauth-resource https://money.derose.app/mcp
-codex mcp login money --scopes openid,profile,email,account,money
+codex mcp login money --scopes openid,profile,account,money
 ```
 
 ### Claude Code
@@ -69,12 +69,20 @@ of looping.
 
 ## Verification
 
-1. Call `get_business_context`.
-2. Confirm the business, currency, timezone, capabilities, and limits.
-3. Run a scoped read such as `list_accounts`.
-4. Before the first write, preview the exact proposal and confirm it.
+1. Call `list_businesses` with no arguments.
+2. If it returns one Business, use it automatically. If it returns several, select only one explicitly identified by the user or ask which one to use.
+3. Call `get_business_context` with the selected `business_id` when selection is required.
+4. Confirm the business, currency, timezone, capabilities, and limits.
+5. Run a scoped read such as `list_accounts`, preserving the same `business_id` throughout the workflow.
+6. Before the first write, preview the exact proposal and confirm it.
 
 ## Tool surface
+
+### Discovery
+
+- `list_businesses`
+
+It accepts no arguments and returns only locally usable Businesses authorized by OAuth, with `id`, `name`, `currency`, and `timezone`.
 
 ### Context and reads
 
@@ -113,18 +121,22 @@ Selection guidance:
 - `create_plan`, `update_plan`
 - `create_automation_rule`, `update_automation_rule`
 
-The implemented MCP does not expose deletion, batch mutation, import, contact mutation, or automatic bank-statement reconciliation.
+The implemented MCP exposes twenty-seven tools: `list_businesses` plus twenty-six Business-contextual tools. It does not expose deletion, batch mutation, import, contact mutation, or automatic bank-statement reconciliation.
 It also does not expose dedicated account-balance, payable, receivable, budget, or projected-cash-flow tools. Never claim those outputs are directly available.
 
 ## Shared contracts
 
-- IDs are integers and are resolved only inside the authenticated business.
+- `business_id` is an optional integer on every tool except `list_businesses`. It selects from the OAuth-derived allowlist; it never grants access by itself.
+- With one authorized Business, contextual tools select it automatically when `business_id` is omitted. With several, omission returns `business_required`.
+- Use only IDs returned by `list_businesses`. An unknown or unauthorized selector returns `forbidden` without revealing whether another tenant exists.
+- Record IDs are integers and are resolved only inside the selected Business.
 - Monetary values use integer cents and always carry a currency. For example, ARS 1,000 is `100000` cents.
 - `request_id` is a client-generated UUID for durable write idempotency.
 - `expected_updated_at` is the latest ISO 8601 timestamp from a read and protects updates with optimistic concurrency.
 - Search responses are cursor-paginated. Default and maximum page sizes may vary by tool.
-- Related account, category, contact, agent, and target-account IDs must belong to the authenticated business.
+- Related account, category, contact, agent, and target-account IDs must belong to the selected Business.
 - Records belonging to another business appear as `not_found` to avoid leaking their existence.
+- The rate limit is shared by the OAuth token across all its authorized Businesses.
 
 ### Dates and reporting months
 
@@ -170,11 +182,13 @@ Reuse a `request_id` only when the prior response was uncertain and the payload 
 
 - `401`: the OAuth session is missing, invalid, or expired. Reconnect Money and complete authorization.
 - `403`: the OAuth session lacks the required access, the business is disabled, the user cannot authorize the action, or the client origin is rejected.
-- `404` or `not_found`: the record is absent from the authenticated business; verify the ID through a scoped search.
+- `404` or `not_found`: the record is absent from the selected Business; verify the ID through a scoped search.
+- `business_required`: more than one Business is authorized and a contextual tool omitted `business_id`; call `list_businesses`, select one, and retry.
+- MCP `forbidden`: the requested `business_id` is not in the authorized allowlist or the local user cannot perform the action. Do not probe other IDs.
 - Validation error: correct the typed inputs; do not bypass schemas.
 - Conflict: refetch the record or inspect idempotency input mismatch before retrying.
 - Rate limit: wait for the indicated retry interval. Do not loop aggressively.
 - No tools: verify that the URL ends in `/mcp`, reconnect Money, complete OAuth authorization, and start a new task.
-- Unexpected business: disconnect the connection and authorize the correct organization.
+- Intended Business missing from `list_businesses`: reconnect Money and grant the corresponding account in OAuth.
 
-Source: [Money MCP documentation in Notion](https://app.notion.com/p/39e3160bddf28027a1fbec7a5102e070), fetched 2026-07-16, reconciled with the implemented Money MCP contract. Authentication configuration updated for OAuth on 2026-07-20.
+Source: [Money MCP documentation in Notion](https://app.notion.com/p/39e3160bddf28027a1fbec7a5102e070), fetched 2026-07-16, reconciled with the implemented Money MCP contract. Authentication and multi-Business selection updated on 2026-07-21.

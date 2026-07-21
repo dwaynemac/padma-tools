@@ -50,6 +50,7 @@ Conecta el agente con [PADMA Money](https://money.derose.app/) mediante su servi
 
 Permite:
 
+- descubrir y seleccionar entre los negocios autorizados por OAuth;
 - consultar cuentas, categorías, contactos y movimientos;
 - analizar gastos, ingresos, períodos y posibles anomalías;
 - crear y corregir movimientos financieros;
@@ -64,8 +65,8 @@ El plugin incluye la skill `padma-money`, que enseña al agente el modelo financ
 2. Cuando el cliente lo solicite, conectá Money e iniciá sesión mediante OAuth.
    Codex o Claude Code registrarán automáticamente un cliente público mediante
    DCR; no configures un Client ID ni un Client Secret compartidos.
-3. Autorizá el acceso a la organización correcta.
-4. Probá la conexión con: `Decime qué negocio de Money está conectado.`
+3. Autorizá el acceso a una o más cuentas. Money limitará cada operación a los negocios habilitados que también puedas usar localmente.
+4. Probá la conexión con: `Listá los negocios de Money que tengo autorizados.`
 
 El plugin no requiere una API key ni una variable de entorno. El cliente administra la sesión OAuth; no pegues códigos de autorización ni tokens en prompts, archivos del repositorio, logs o URLs.
 
@@ -93,7 +94,7 @@ Las skills específicas de un producto viajan dentro de su plugin. Las skills in
 
 ## Seguridad y alcance
 
-- Cada integración debe respetar la organización resuelta por sus credenciales.
+- Cada integración debe respetar la lista de organizaciones autorizadas por sus credenciales y usar cualquier selector de organización solo dentro de esa lista.
 - Los secretos deben permanecer fuera del repositorio.
 - El agente debe mostrar y confirmar cambios financieros cuando el usuario todavía no haya autorizado la operación exacta.
 - Las reglas de negocio, permisos e invariantes siguen viviendo en las aplicaciones PADMA; las skills orientan al agente, no reemplazan esas protecciones.

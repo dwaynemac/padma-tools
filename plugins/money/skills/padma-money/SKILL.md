@@ -5,17 +5,20 @@ description: Use PADMA Money through its remote MCP server to inspect accounts, 
 
 # Use Money MCP
 
-Use the `money` MCP server as the only execution path for Money data. Keep every operation scoped to the business resolved by the authenticated OAuth session.
+Use the `money` MCP server as the only execution path for Money data. OAuth determines the Business allowlist; `business_id` only selects one Business from that authorized set.
 
 ## Prepare
 
 1. Confirm that `money` tools are available. Do not substitute browser automation or another integration when the MCP server is unavailable.
-2. Call `get_business_context` first. State the connected business, currency, and timezone when they matter.
-3. Read [references/mcp-operations.md](references/mcp-operations.md) for connection, tool, date, amount, and error contracts.
-4. Read [references/domain-model.md](references/domain-model.md) before calculations or when terms could be confused.
-5. Read [references/objects-and-attributes.md](references/objects-and-attributes.md) when interpreting a returned object, choosing or changing attributes, or explaining lifecycle and currency effects.
-6. Read only the relevant sections of [references/money-product-guide.md](references/money-product-guide.md) when broader product semantics affect the request.
-7. Read [references/workflows-and-output.md](references/workflows-and-output.md) for monthly reports, reconciliation, anomaly review, or mutation presentation.
+2. Call `list_businesses` first. It is the authoritative list of Businesses this OAuth session may use.
+3. If the list contains one Business, use it automatically. If it contains several, use a Business explicitly identified by the user or ask which one to use; never guess from unrelated context.
+4. Call `get_business_context` for the selected Business. When more than one Business is authorized, pass the selected `id` returned by `list_businesses` as `business_id` and keep that same selector on every contextual tool call in the workflow.
+5. State the selected business, currency, and timezone when they matter.
+6. Read [references/mcp-operations.md](references/mcp-operations.md) for connection, selection, tool, date, amount, and error contracts.
+7. Read [references/domain-model.md](references/domain-model.md) before calculations or when terms could be confused.
+8. Read [references/objects-and-attributes.md](references/objects-and-attributes.md) when interpreting a returned object, choosing or changing attributes, or explaining lifecycle and currency effects.
+9. Read only the relevant sections of [references/money-product-guide.md](references/money-product-guide.md) when broader product semantics affect the request.
+10. Read [references/workflows-and-output.md](references/workflows-and-output.md) for monthly reports, reconciliation, anomaly review, or mutation presentation.
 
 ## Read and analyze
 
@@ -50,9 +53,9 @@ When the user requests a direct link to a movement:
 
 - Never ask the user to paste an OAuth authorization code or access token into a prompt.
 - Never place OAuth credentials in files, URLs, logs, or MCP arguments. The client manages the OAuth session.
-- Never accept or invent a `business_id`; the authenticated session determines the business.
+- Never invent a `business_id` or treat one supplied by the user as authorization. Resolve it through `list_businesses` and use only an ID returned there.
 - Treat granted read or write access as permission to operate only within the user's request.
-- Stop on an unexpected business context and ask the user to disconnect and authorize the correct organization.
+- Do not switch Businesses during a workflow unless the user explicitly asks. If the intended Business is not listed, stop and ask the user to reconnect and grant the required account.
 
 ## Handle unavailable or unsupported operations
 
