@@ -63,7 +63,7 @@ Permite:
 - buscar contactos y analizar métricas comerciales mediante CRM;
 - consultar y administrar las operaciones financieras disponibles en Money;
 - preparar panoramas combinados con períodos, organizaciones y fuentes claras;
-- reconocer cuándo una solicitud pertenece a Learn, WhatsApp u otra app que
+- reconocer cuándo una solicitud pertenece a Learn u otra app que
   todavía no está conectada por este plugin.
 
 El plugin incluye la skill `padma-assistant`, una versión orientada al usuario
@@ -127,8 +127,10 @@ MCP oficial read-only.
 Permite:
 
 - descubrir y seleccionar cuentas autorizadas por OAuth;
-- buscar contactos por nombre, PADMA ID, email, teléfono o estado;
+- buscar contactos por identidad, estado, vínculo con la cuenta, actividad y fechas;
+- descubrir etiquetas, métodos de marketing y listas guardadas antes de usarlos como filtros;
 - consultar datos operativos del contacto dentro de la cuenta seleccionada;
+- recorrer el historial de actividad del contacto con paginación segura;
 - leer series mensuales persistidas y su fecha de actualización;
 - comparar métricas con el mes anterior y el promedio de los tres meses previos;
 - analizar el funnel comercial de procura, visitas, visitas perfil y matrículas.
@@ -173,6 +175,7 @@ versión.
 ### CRM
 
 - “Buscá a Ana por email en la cuenta de Cerviño.”
+- “Mostrame la actividad reciente de este contacto.”
 - “Mostrame alumnos y bajas mes a mes durante el último año.”
 - “Compará la efectividad de este mes con el mes anterior.”
 - “Analizá el funnel comercial de los últimos seis meses.”

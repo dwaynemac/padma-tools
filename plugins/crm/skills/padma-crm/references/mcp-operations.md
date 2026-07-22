@@ -22,8 +22,12 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 |---|---|---|
 | `list_accounts` | none | Discover authorized accounts, brands, and grant roles. |
 | `get_account_context` | optional `account_name` | Get selected account, user, roles, statuses, capabilities, and limits. |
-| `search_contacts` | optional `account_name`, `text`, `status`, `page_size`, `cursor` | Search account-scoped contact summaries. |
+| `list_tags` | optional `account_name` | Discover account tag IDs and names for `tag_ids`. |
+| `list_marketing_methods` | optional `account_name` | Discover active account marketing method IDs and values. |
+| `list_contact_lists` | optional `account_name` | Discover saved contact-list IDs and names. |
+| `search_contacts` | optional account, filters, `page_size`, `cursor` | Search account-scoped contact summaries using identity, relationship, activity, date, tag, marketing, and list filters. |
 | `get_contact` | optional `account_name`, required `padma_id` | Read one account-scoped contact detail. |
+| `get_contact_history` | optional account, required `padma_id`; optional `page_size`, `cursor` | Read the contact activity feed, newest entry first. |
 | `list_monthly_stat_definitions` | optional `account_name` | Discover stable metric names, localized metadata, types, and availability. |
 | `get_monthly_stats` | `stat_names`; optional account and month range | Read dense persisted monthly series. |
 | `compare_monthly_stats` | `stat_names`; optional account and month | Compare current, previous, and prior-three-month baselines. |
@@ -33,6 +37,10 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 
 - Contact pages default to 50 and accept at most 200 records.
 - A returned contact cursor is signed and bound to its account and filters. Reuse it only for the next page of the identical search.
+- Contact-history pages use the same 1–200 page-size limit. Reuse their signed cursor only with the same account, `padma_id`, and page size.
+- Explicit contact-search dates use strict `YYYY-MM-DD` values.
+- `status` accepts one value; `statuses` accepts several. Do not send both.
+- Call the matching discovery tool before using `tag_ids`, `marketing_method_ids`, `intersect_list_ids`, `union_list_ids`, or `not_in_list_ids`. IDs from another account are rejected.
 - Monthly series default to 12 months ending with the current month and accept at most 36 months.
 - Statistics tools accept 1–20 supported `stat_names` per call.
 - Month strings are strict `YYYY-MM` values.

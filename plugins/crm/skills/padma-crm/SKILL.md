@@ -1,6 +1,6 @@
 ---
 name: padma-crm
-description: Use PADMA CRM through its remote read-only MCP server to find authorized accounts, search contacts by name, PADMA ID, email, phone, or status, inspect account-scoped contact details, analyze persisted school monthly statistics, compare periods, and review lead funnels. Use for requests about CRM contacts, prospects, students, contact status, enrollment and dropout metrics, monthly school performance, or commercial funnels stored in PADMA CRM.
+description: Use PADMA CRM through its remote read-only MCP server to find authorized accounts, discover contact tags, marketing methods, and saved lists, search contacts with account-scoped identity, relationship, activity, and list filters, inspect contact details and history, analyze persisted school monthly statistics, compare periods, and review lead funnels. Use for requests about CRM contacts, prospects, students, communication history, segmentation, contact status, enrollment and dropout metrics, monthly school performance, or commercial funnels stored in PADMA CRM.
 ---
 
 # Use PADMA CRM
@@ -20,11 +20,13 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 
 ## Search contacts
 
-1. Use `search_contacts` with the narrowest useful text and status filters.
-2. Paginate when the requested scope exceeds one page. Do not present a truncated page as a complete result.
-3. Use only returned `padma_id` values with `get_contact`; never invent or substitute an identifier.
-4. Treat email, phone, visits, status, coefficient, and teacher information as personal data. Return only fields needed for the user's request.
-5. State the selected account and material filters. Keep facts returned by CRM separate from interpretation.
+1. Use `search_contacts` with the narrowest useful identity, relationship, activity, and date filters.
+2. Before filtering by tags, marketing methods, or saved lists, call `list_tags`, `list_marketing_methods`, or `list_contact_lists` in the selected account. Use only IDs returned by those current calls.
+3. Use `intersect_list_ids` for membership in every selected list, `union_list_ids` for membership in any selected list, and `not_in_list_ids` for exclusions.
+4. Paginate when the requested scope exceeds one page. Do not present a truncated page as a complete result or reuse a cursor after changing filters.
+5. Use only returned `padma_id` values with `get_contact` or `get_contact_history`; never invent or substitute an identifier.
+6. Treat email, phone, visits, status, coefficient, teacher, tags, and list membership as personal data. Return only fields needed for the user's request.
+7. State the selected account and material filters. Keep facts returned by CRM separate from interpretation.
 
 ## Analyze monthly statistics
 

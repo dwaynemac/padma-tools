@@ -1,6 +1,6 @@
 {
   "name": "crm",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Consult authorized PADMA CRM contacts and school metrics safely through its remote MCP server.",
   "author": {
     "name": "PADMA"
@@ -18,7 +18,7 @@
   "interface": {
     "displayName": "CRM",
     "shortDescription": "Consultá contactos y métricas de CRM",
-    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para buscar contactos, consultar sus datos operativos y analizar estadísticas mensuales y el funnel comercial en modo read-only.",
+    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para descubrir segmentos, buscar contactos con filtros operativos y analizar estadísticas mensuales y el funnel comercial en modo read-only.",
     "developerName": "PADMA",
     "category": "Productivity",
     "capabilities": [

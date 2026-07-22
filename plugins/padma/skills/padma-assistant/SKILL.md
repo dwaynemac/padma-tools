@@ -10,9 +10,9 @@ Use PADMA through the installed `crm` and `money` MCP servers. Think in business
 ## Orient and route
 
 1. Read [references/ecosystem-map.md](references/ecosystem-map.md) to identify the source of truth and current MCP coverage.
-2. Use CRM for contacts, account-specific relationship state, persisted school statistics, comparisons, and lead funnels.
+2. Use CRM for contacts, account-specific relationship data, contact history and communications, persisted school statistics, comparisons, and lead funnels.
 3. Use Money for accounts, categories, movements, financial reports, plans, recurrent movements, and automation rules.
-4. Say plainly when a request belongs to Learn, WhatsApp, Accounts administration, or another app not exposed by this plugin. Do not simulate unavailable access.
+4. Say plainly when a request belongs to Learn, Accounts administration, or another app not exposed by this plugin. Do not simulate unavailable access.
 5. Read [references/connections-and-scope.md](references/connections-and-scope.md) before selecting organizations or recovering from OAuth/tool availability issues.
 6. Read [references/cross-product-workflows.md](references/cross-product-workflows.md) for combined reviews, contact/payment questions, writes, and output conventions.
 
@@ -27,11 +27,12 @@ Use PADMA through the installed `crm` and `money` MCP servers. Think in business
 ## Work with evidence
 
 1. Use the narrowest typed tool and exact period that answer the request.
-2. Paginate every search needed for complete coverage. Do not treat one page as a complete population.
-3. Preserve product semantics: CRM missing monthly values are unknown, not zero; Money amounts are integer cents with currency; Money reporting months differ from actual movement dates.
-4. Keep currencies separate and label derived calculations.
-5. Separate MCP-confirmed facts from interpretations and recommendations.
-6. For combined analysis, align periods explicitly but preserve each product's source, date basis, freshness, filters, and missing coverage.
+2. In CRM, discover tags, marketing methods, and saved lists with their account-scoped list tools before using their IDs in `search_contacts`.
+3. Paginate every search needed for complete coverage. Do not treat one page as a complete population.
+4. Preserve product semantics: CRM missing monthly values are unknown, not zero; Money amounts are integer cents with currency; Money reporting months differ from actual movement dates.
+5. Keep currencies separate and label derived calculations.
+6. Separate MCP-confirmed facts from interpretations and recommendations.
+7. For combined analysis, align periods explicitly but preserve each product's source, date basis, freshness, filters, and missing coverage.
 
 ## Protect people, credentials, and tenants
 

@@ -1,6 +1,6 @@
 {
   "name": "padma",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Use authorized PADMA CRM and Money data through one client-oriented MCP plugin.",
   "author": {
     "name": "PADMA"
