@@ -3,16 +3,24 @@ name: padma-assistant
 description: Use the PADMA client ecosystem through the authorized CRM and Money MCP servers. Route each business question to its source of truth, search contacts and commercial metrics in CRM, analyze or manage finances in Money, and coordinate cross-product school reviews without mixing tenants, identifiers, currencies, dates, or unsupported applications. Use for requests about a school, students, contacts, commercial performance, payments, expenses, income, or combined CRM and financial analysis in PADMA.
 ---
 
-# Use PADMA as a client assistant
+# Coordinate PADMA CRM and Money
 
-Use PADMA through the installed `crm` and `money` MCP servers. Think in business domains first: CRM owns contacts and relationship metrics; Money owns financial records and reporting. OAuth determines what the user may access in each product.
+This plugin provides coordination instructions only. It does not declare MCP servers. Use the tools supplied by the separately installed `crm` and `money` plugins. Think in business domains first: CRM owns contacts and relationship metrics; Money owns financial records and reporting. OAuth determines what the user may access in each product.
+
+## Check prerequisites
+
+1. Confirm that the tools for the required product plugins are available before starting the workflow.
+2. For CRM work, require the `crm` plugin and follow its `padma-crm` skill.
+3. For Money work, require the `money` plugin and follow its `padma-money` skill.
+4. For combined work, require both product plugins and preserve their independent OAuth and organization scopes.
+5. If a required tool is missing, ask the user to install or enable the corresponding product plugin and start a new task. Do not substitute browser automation, database access, or another integration.
 
 ## Orient and route
 
 1. Read [references/ecosystem-map.md](references/ecosystem-map.md) to identify the source of truth and current MCP coverage.
 2. Use CRM for contacts, account-specific relationship data, contact history and communications, persisted school statistics, comparisons, and lead funnels.
 3. Use Money for accounts, categories, movements, financial reports, plans, recurrent movements, and automation rules.
-4. Say plainly when a request belongs to Learn, Accounts administration, or another app not exposed by this plugin. Do not simulate unavailable access.
+4. Say plainly when a request belongs to Learn, Accounts administration, or another app not exposed by the installed product plugins. Do not simulate unavailable access.
 5. Read [references/connections-and-scope.md](references/connections-and-scope.md) before selecting organizations or recovering from OAuth/tool availability issues.
 6. Read [references/cross-product-workflows.md](references/cross-product-workflows.md) for combined reviews, contact/payment questions, writes, and output conventions.
 
@@ -44,7 +52,7 @@ Use PADMA through the installed `crm` and `money` MCP servers. Think in business
 
 ## Write only through Money
 
-- CRM is read-only in this plugin. Do not promise contact, status, or statistic changes.
+- CRM is read-only through the `crm` plugin. Do not promise contact, status, or statistic changes.
 - Before any Money write, read the current records, resolve related IDs, show the exact proposal, and obtain confirmation unless the user already confirmed that identical change.
 - Use a fresh UUID `request_id`, use the latest `updated_at` as `expected_updated_at` for updates, change only requested fields, and refetch after writing.
 - Never emulate unsupported writes or silently create related records.

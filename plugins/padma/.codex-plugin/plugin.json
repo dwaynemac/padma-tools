@@ -1,7 +1,7 @@
 {
   "name": "padma",
-  "version": "0.1.2",
-  "description": "Use authorized PADMA CRM and Money data through one client-oriented MCP plugin.",
+  "version": "0.1.2+codex.20260722214632",
+  "description": "Coordinate the PADMA CRM and Money plugins through one client-oriented skill.",
   "author": {
     "name": "PADMA"
   },
@@ -12,26 +12,23 @@
     "crm",
     "money",
     "business",
-    "mcp"
+    "coordination"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "PADMA",
-    "shortDescription": "Trabajá con CRM y Money desde un agente",
-    "longDescription": "Conecta Codex con PADMA CRM y Money para consultar contactos, métricas comerciales y finanzas, y coordinar análisis entre productos sin mezclar cuentas ni fuentes de verdad.",
+    "shortDescription": "Trabaj\u00e1 con CRM y Money desde un agente",
+    "longDescription": "Ense\u00f1a a Codex cu\u00e1ndo usar los plugins CRM y Money y c\u00f3mo coordinar an\u00e1lisis entre productos sin mezclar cuentas, identificadores ni fuentes de verdad.",
     "developerName": "PADMA",
     "category": "Productivity",
     "capabilities": [
-      "Interactive",
-      "Read",
-      "Write"
+      "Interactive"
     ],
     "websiteURL": "https://derose.app/",
     "defaultPrompt": [
       "Dame un panorama comercial y financiero de mi escuela este mes.",
-      "Buscá un contacto en CRM y revisá sus movimientos en Money.",
-      "Compará el funnel comercial con los ingresos del último trimestre."
+      "Busc\u00e1 un contacto en CRM y revis\u00e1 sus movimientos en Money.",
+      "Compar\u00e1 el funnel comercial con los ingresos del \u00faltimo trimestre."
     ]
-  },
-  "mcpServers": "./.mcp.json"
+  }
 }

@@ -31,10 +31,13 @@ Necesitás una versión reciente de Claude Code con soporte para plugins.
 
 ```bash
 claude plugin marketplace add dwaynemac/padma-tools
+claude plugin install crm@padma-tools
+claude plugin install money@padma-tools
 claude plugin install padma@padma-tools
 ```
 
-Para usar sólo un producto, instalá el plugin individual en lugar de `padma`:
+El plugin `padma` sólo coordina los otros dos: no declara servidores MCP. Para
+usar un solo producto, instalá únicamente su plugin:
 
 ```bash
 claude plugin install money@padma-tools
@@ -54,8 +57,10 @@ claude plugin marketplace update padma-tools
 
 ### PADMA
 
-Conecta un único agente con CRM y Money para trabajar con la situación
-comercial y financiera de una escuela sin perder los límites entre productos.
+Coordina los plugins CRM y Money para trabajar con la situación comercial y
+financiera de una escuela sin perder los límites entre productos. No declara
+servidores MCP propios: las herramientas son provistas exclusivamente por los
+plugins `crm` y `money`.
 
 Permite:
 
@@ -73,14 +78,13 @@ correcto y a no mezclar tenants, identificadores, monedas ni fechas.
 
 #### Elegir el modo de instalación
 
-- Instalá `padma` para disponer de CRM y Money en un mismo agente.
-- Instalá `crm` o `money` por separado cuando sólo necesites ese producto.
-- No instales `padma` junto con sus plugins individuales en la misma sesión:
-  exponen servidores MCP con los mismos nombres y pueden generar conflictos.
+- Instalá `crm` y `money` para disponer de sus herramientas MCP.
+- Instalá también `padma` cuando quieras que el agente coordine ambos productos.
+- Instalá sólo `crm` o `money` cuando necesites un único producto.
 
 #### Configurar el acceso
 
-1. Instalá `padma` e iniciá una tarea nueva.
+1. Instalá `crm`, `money` y `padma`, e iniciá una tarea nueva.
 2. Conectá CRM y Money cuando el cliente lo solicite. Cada servidor tiene su
    propio recurso y grant OAuth; ambos usan DCR y PKCE sin Client Secret.
 3. Autorizá las organizaciones necesarias en cada producto.
@@ -185,7 +189,7 @@ versión.
 ```text
 .agents/plugins/marketplace.json  catálogo que descubre Codex
 plugins/                          plugins instalables
-  padma/                          agente integrado para CRM y Money
+  padma/                          skill coordinadora, sin servidores MCP
   money/                          integración MCP con PADMA Money
   crm/                            integración MCP read-only con PADMA CRM
 ```

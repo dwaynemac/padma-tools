@@ -23,7 +23,7 @@ CRM uses stable `account_name`. Money uses the integer `business_id` returned by
 
 ## Availability and authorization
 
-- Missing tools: start a new task after installing or updating the plugin, then reconnect the affected MCP.
+- Missing tools: install or update the affected `crm` or `money` plugin, start a new task, and then reconnect that MCP.
 - `401`: reconnect the affected server and verify its exact resource URL.
 - `403` or `forbidden`: refresh discovery and authorization; do not probe other tenants.
 - `429`: wait for `Retry-After` instead of looping.
