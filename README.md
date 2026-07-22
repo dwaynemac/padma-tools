@@ -31,7 +31,15 @@ Necesitás una versión reciente de Claude Code con soporte para plugins.
 
 ```bash
 claude plugin marketplace add dwaynemac/padma-tools
+claude plugin install padma@padma-tools
+```
+
+Para usar sólo un producto, instalá el plugin individual en lugar de `padma`:
+
+```bash
 claude plugin install money@padma-tools
+# o
+claude plugin install crm@padma-tools
 ```
 
 Iniciá o reiniciá Claude Code para cargar las skills y herramientas del plugin.
@@ -43,6 +51,43 @@ claude plugin marketplace update padma-tools
 ```
 
 ## Plugins disponibles
+
+### PADMA
+
+Conecta un único agente con CRM y Money para trabajar con la situación
+comercial y financiera de una escuela sin perder los límites entre productos.
+
+Permite:
+
+- ubicar cada pregunta en su fuente de verdad dentro de PADMA;
+- buscar contactos y analizar métricas comerciales mediante CRM;
+- consultar y administrar las operaciones financieras disponibles en Money;
+- preparar panoramas combinados con períodos, organizaciones y fuentes claras;
+- reconocer cuándo una solicitud pertenece a Learn, WhatsApp u otra app que
+  todavía no está conectada por este plugin.
+
+El plugin incluye la skill `padma-assistant`, una versión orientada al usuario
+final del mapa de ecosistema que usan los developers. Evita detalles de
+repositorios, modelos y rutas internas; enseña al agente a elegir el MCP
+correcto y a no mezclar tenants, identificadores, monedas ni fechas.
+
+#### Elegir el modo de instalación
+
+- Instalá `padma` para disponer de CRM y Money en un mismo agente.
+- Instalá `crm` o `money` por separado cuando sólo necesites ese producto.
+- No instales `padma` junto con sus plugins individuales en la misma sesión:
+  exponen servidores MCP con los mismos nombres y pueden generar conflictos.
+
+#### Configurar el acceso
+
+1. Instalá `padma` e iniciá una tarea nueva.
+2. Conectá CRM y Money cuando el cliente lo solicite. Cada servidor tiene su
+   propio recurso y grant OAuth; ambos usan DCR y PKCE sin Client Secret.
+3. Autorizá las organizaciones necesarias en cada producto.
+4. Verificá CRM con `Listá las cuentas de CRM que tengo autorizadas.`
+5. Verificá Money con `Listá los negocios de Money que tengo autorizados.`
+6. Para un análisis combinado, seleccioná la organización de cada producto de
+   forma independiente; nombres parecidos no prueban que sean el mismo tenant.
 
 ### Money
 
@@ -74,7 +119,50 @@ Si una instalación anterior tenía un Client ID OAuth estático, actualizá el
 plugin, eliminá esa configuración y desconectá/reconectá Money para que el
 cliente use DCR.
 
+### CRM
+
+Conecta el agente con [PADMA CRM](https://crm.derose.app/) mediante su servidor
+MCP oficial read-only.
+
+Permite:
+
+- descubrir y seleccionar cuentas autorizadas por OAuth;
+- buscar contactos por nombre, PADMA ID, email, teléfono o estado;
+- consultar datos operativos del contacto dentro de la cuenta seleccionada;
+- leer series mensuales persistidas y su fecha de actualización;
+- comparar métricas con el mes anterior y el promedio de los tres meses previos;
+- analizar el funnel comercial de procura, visitas, visitas perfil y matrículas.
+
+El plugin incluye la skill `padma-crm`, que enseña al agente a preservar el
+aislamiento entre cuentas, paginar búsquedas, minimizar la exposición de datos
+personales y distinguir estadísticas faltantes de valores cero.
+
+#### Configurar el acceso
+
+1. Instalá el plugin e iniciá una tarea nueva.
+2. Cuando el cliente lo solicite, conectá CRM e iniciá sesión mediante OAuth.
+   El cliente registrará automáticamente un cliente público mediante DCR; no
+   configures un Client ID ni un Client Secret compartidos.
+3. Autorizá una o más cuentas habilitadas. El hostname del MCP selecciona el
+   recurso OAuth, pero no restringe la marca de las cuentas autorizadas.
+4. Probá la conexión con: `Listá las cuentas de CRM que tengo autorizadas.`
+5. Elegí una cuenta devuelta y verificá una llamada real, por ejemplo:
+   `Mostrame las definiciones de estadísticas mensuales de esta cuenta.`
+
+El plugin no requiere una API key ni una variable de entorno. El cliente
+administra la sesión OAuth. CRM no ofrece operaciones de escritura en esta
+versión.
+
 ## Ejemplos
+
+### PADMA
+
+- “Dame un panorama comercial y financiero de mi escuela este trimestre.”
+- “¿La mejora del funnel coincide con mayores ingresos? Separá hechos de interpretación.”
+- “Buscá este contacto en CRM y revisá si tiene movimientos relacionados en Money.”
+- “¿Qué parte de esta consulta corresponde a CRM, Money o Learn?”
+
+### Money
 
 - “¿Cuánto gastamos el mes pasado, separado por categoría?”
 - “Buscá movimientos sin categoría y proponé cómo clasificarlos.”
@@ -82,12 +170,21 @@ cliente use DCR.
 - “Compará este mes con el anterior y explicá las variaciones relevantes.”
 - “Revisá esta cuenta contra el extracto y listá las diferencias sin modificar nada.”
 
+### CRM
+
+- “Buscá a Ana por email en la cuenta de Cerviño.”
+- “Mostrame alumnos y bajas mes a mes durante el último año.”
+- “Compará la efectividad de este mes con el mes anterior.”
+- “Analizá el funnel comercial de los últimos seis meses.”
+
 ## Estructura
 
 ```text
 .agents/plugins/marketplace.json  catálogo que descubre Codex
 plugins/                          plugins instalables
+  padma/                          agente integrado para CRM y Money
   money/                          integración MCP con PADMA Money
+  crm/                            integración MCP read-only con PADMA CRM
 ```
 
 Las skills específicas de un producto viajan dentro de su plugin. Las skills independientes podrán publicarse bajo `skills/` cuando no necesiten MCP ni otro componente adicional.
@@ -97,6 +194,7 @@ Las skills específicas de un producto viajan dentro de su plugin. Las skills in
 - Cada integración debe respetar la lista de organizaciones autorizadas por sus credenciales y usar cualquier selector de organización solo dentro de esa lista.
 - Los secretos deben permanecer fuera del repositorio.
 - El agente debe mostrar y confirmar cambios financieros cuando el usuario todavía no haya autorizado la operación exacta.
+- Los datos personales de CRM deben limitarse a lo necesario para responder la solicitud y nunca mezclarse entre cuentas.
 - Las reglas de negocio, permisos e invariantes siguen viviendo en las aplicaciones PADMA; las skills orientan al agente, no reemplazan esas protecciones.
 
 ## Contribuir

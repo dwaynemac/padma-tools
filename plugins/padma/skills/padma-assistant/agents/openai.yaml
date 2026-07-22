@@ -1,0 +1,17 @@
+interface:
+  display_name: "PADMA Assistant"
+  short_description: "Operar CRM y Money con contexto compartido"
+  default_prompt: "Usá $padma-assistant para revisar la situación comercial y financiera de mi escuela."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "crm"
+      description: "Servidor MCP remoto read-only de PADMA CRM"
+      transport: "streamable_http"
+      url: "https://crm.derose.app/mcp"
+    - type: "mcp"
+      value: "money"
+      description: "Servidor MCP remoto de PADMA Money"
+      transport: "streamable_http"
+      url: "https://money.derose.app/mcp"

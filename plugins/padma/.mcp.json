@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "crm": {
+      "type": "http",
+      "url": "https://crm.derose.app/mcp"
+    },
+    "money": {
+      "type": "http",
+      "url": "https://money.derose.app/mcp"
+    }
+  }
+}
