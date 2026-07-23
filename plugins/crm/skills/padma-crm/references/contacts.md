@@ -40,6 +40,14 @@ Use `get_contact` only with a `padma_id` returned by a current CRM call or suppl
 
 Email and phone are resolved from properties belonging to the selected account. Do not infer that another account has the same contact state or operational properties.
 
+## Learn activity summary
+
+Use `get_contact_learn_activity_summary` only with a `padma_id` confirmed in the selected account. It returns the latest normalized Learn snapshot stored on that account-contact relationship, including available attendance, activity-change, cancellation, last-seen, and churn-risk signals.
+
+Read [learn-activity-summary.md](learn-activity-summary.md) before interpreting its fields. Deltas are ratios calculated by Learn, not differences or percentage-point changes.
+
+The `learn_activity_summary` value is `null` when Learn has not calculated a summary. Do not substitute CRM history, a missing summary, or agent interpretation for Learn data. When a calculated timestamp is returned, state that the signals reflect that snapshot rather than current real-time activity.
+
 ## History
 
 Use `get_contact_history` only with a `padma_id` confirmed in the selected account. It returns the newest activity first and can include communications, comments visible to the current user, enrollments, dropouts, sent campaigns, and tracked contact changes.

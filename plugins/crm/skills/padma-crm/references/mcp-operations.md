@@ -27,6 +27,7 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 | `list_contact_lists` | optional `account_name` | Discover saved contact-list IDs and names. |
 | `search_contacts` | optional account, filters, `page_size`, `cursor` | Search account-scoped contact summaries using identity, relationship, activity, date, tag, marketing, and list filters. |
 | `get_contact` | optional `account_name`, required `padma_id` | Read one account-scoped contact detail. |
+| `get_contact_learn_activity_summary` | optional `account_name`, required `padma_id` | Read the latest stored Learn activity and churn-risk summary for one account-scoped contact. |
 | `get_contact_history` | optional account, required `padma_id`; optional `page_size`, `cursor` | Read the contact activity feed, newest entry first. |
 | `add_contact_comment` | optional account, required `padma_id` and `observations` | Add an account-visible follow-up comment as the authenticated user. |
 | `list_monthly_stat_definitions` | optional `account_name` | Discover stable metric names, localized metadata, types, and availability. |

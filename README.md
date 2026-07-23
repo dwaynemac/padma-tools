@@ -134,6 +134,7 @@ Permite:
 - buscar contactos por identidad, estado, vínculo con la cuenta, actividad y fechas;
 - descubrir etiquetas, métodos de marketing y listas guardadas antes de usarlos como filtros;
 - consultar datos operativos del contacto dentro de la cuenta seleccionada;
+- consultar el resumen de actividad y riesgo de abandono calculado por Learn;
 - recorrer el historial de actividad del contacto con paginación segura;
 - agregar comentarios visibles para la cuenta al contacto seleccionado;
 - leer series mensuales persistidas y su fecha de actualización;
@@ -181,6 +182,7 @@ agregar comentarios a contactos.
 
 - “Buscá a Ana por email en la cuenta de Cerviño.”
 - “Mostrame la actividad reciente de este contacto.”
+- “Mostrame el resumen de actividad de Learn de este contacto.”
 - “Agregá este comentario al contacto que acabo de seleccionar.”
 - “Mostrame alumnos y bajas mes a mes durante el último año.”
 - “Compará la efectividad de este mes con el mes anterior.”

@@ -1,6 +1,6 @@
 {
   "name": "crm",
-  "version": "0.1.4+codex.20260723170711",
+  "version": "0.1.6+codex.20260723184724",
   "description": "Consult authorized PADMA CRM contacts and school metrics, and add contact comments safely through its remote MCP server.",
   "author": {
     "name": "PADMA"
@@ -29,6 +29,7 @@
     "defaultPrompt": [
       "Listá las cuentas de CRM que tengo autorizadas.",
       "Buscá un contacto por nombre, email o teléfono.",
+      "Mostrame el resumen de actividad de Learn de este contacto.",
       "Agregá este comentario al contacto que acabo de seleccionar."
     ]
   },

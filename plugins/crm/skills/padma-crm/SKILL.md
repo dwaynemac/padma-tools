@@ -1,6 +1,6 @@
 ---
 name: padma-crm
-description: Use PADMA CRM through its remote MCP server to find authorized accounts, discover contact tags, marketing methods, and saved lists, search contacts with account-scoped identity, relationship, activity, and list filters, inspect contact details and history, add contact comments, analyze persisted school monthly statistics, compare periods, and review lead funnels. Use for requests about CRM contacts, prospects, students, comments, communication history, segmentation, contact status, enrollment and dropout metrics, monthly school performance, or commercial funnels stored in PADMA CRM.
+description: Use PADMA CRM through its remote MCP server to find authorized accounts, discover contact tags, marketing methods, and saved lists, search contacts with account-scoped identity, relationship, activity, and list filters, inspect contact details, Learn activity summaries, and history, add contact comments, analyze persisted school monthly statistics, compare periods, and review lead funnels. Use for requests about CRM contacts, prospects, students, Learn activity or churn risk, comments, communication history, segmentation, contact status, enrollment and dropout metrics, monthly school performance, or commercial funnels stored in PADMA CRM.
 ---
 
 # Use PADMA CRM
@@ -17,7 +17,8 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 6. Read [references/mcp-operations.md](references/mcp-operations.md) for connection, selection, tool, pagination, and error contracts.
 7. Read [references/objects-and-attributes.md](references/objects-and-attributes.md) for the product meaning of CRM objects.
 8. Read [references/contacts.md](references/contacts.md) for contact searches, detail handling, and privacy rules.
-9. Read [references/monthly-statistics.md](references/monthly-statistics.md) before answering metric, comparison, trend, or funnel questions.
+9. Read [references/learn-activity-summary.md](references/learn-activity-summary.md) before interpreting Learn activity deltas, flags, timestamps, or churn risk.
+10. Read [references/monthly-statistics.md](references/monthly-statistics.md) before answering metric, comparison, trend, or funnel questions.
 
 ## Search contacts
 
@@ -25,9 +26,17 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 2. Before filtering by tags, marketing methods, or saved lists, call `list_tags`, `list_marketing_methods`, or `list_contact_lists` in the selected account. Use only IDs returned by those current calls.
 3. Use `intersect_list_ids` for membership in every selected list, `union_list_ids` for membership in any selected list, and `not_in_list_ids` for exclusions.
 4. Paginate when the requested scope exceeds one page. Do not present a truncated page as a complete result or reuse a cursor after changing filters.
-5. Use only returned `padma_id` values with `get_contact` or `get_contact_history`; never invent or substitute an identifier.
+5. Use only returned `padma_id` values with `get_contact`, `get_contact_learn_activity_summary`, or `get_contact_history`; never invent or substitute an identifier.
 6. Treat email, phone, visits, status, coefficient, teacher, tags, and list membership as personal data. Return only fields needed for the user's request.
 7. State the selected account and material filters. Keep facts returned by CRM separate from interpretation.
+
+## Inspect Learn activity
+
+1. Resolve the contact in the selected account with a current `padma_id`.
+2. Call `get_contact_learn_activity_summary` with `account_name` and `padma_id`.
+3. Interpret the returned values using [references/learn-activity-summary.md](references/learn-activity-summary.md). In particular, treat deltas as ratios rather than percentage-point changes.
+4. Report only the returned activity, attendance, cancellation, and churn-risk signals. The summary is `null` when Learn has not calculated it.
+5. Treat the values as a snapshot calculated by Learn, not a prediction or diagnosis made by the agent.
 
 ## Analyze monthly statistics
 
