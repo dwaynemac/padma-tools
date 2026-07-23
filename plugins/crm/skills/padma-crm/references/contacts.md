@@ -11,7 +11,7 @@ Use the exact input names published by the tool schema:
 | General | `text`, `status`, `statuses` |
 | Identity and location | `first_name`, `last_name`, `email`, `telephone`, `identification`, `identification_label`, `gender`, `occupation`, `address`, `neighborhood`, `city`, `state`, `country`, `postal_code`, `younger_than`, `older_than` |
 | Current account relationship | `local_teacher`, `coefficient`, `level`, `access_type`, `filiation_tier`, `in_professional_training`, `professional_training_level`, `followed_by_user` |
-| Stored relationship dates | `student_on`, `first_enrolled_on_gte`, `first_enrolled_on_lte`, `first_communicated_at_gte`, `first_communicated_at_lte`, `last_communicated_at_gte`, `last_communicated_at_lte`, `last_seen_at_gte`, `last_seen_at_lte`, `last_seen_days_ago_gt`, `last_seen_days_ago_lte`, `last_booking_on_gte`, `last_booking_on_lte` |
+| Stored relationship dates | `student_on`, `first_enrolled_on_gte`, `first_enrolled_on_lte`, `last_enrolled_on_gte`, `last_enrolled_on_lte`, `first_communicated_at_gte`, `first_communicated_at_lte`, `last_communicated_at_gte`, `last_communicated_at_lte`, `last_seen_at_gte`, `last_seen_at_lte`, `last_seen_days_ago_gt`, `last_seen_days_ago_lte`, `last_booking_on_gte`, `last_booking_on_lte` |
 | Presence and integrations | `seen`, `never_seen`, `booked`, `never_booked`, `has_gympass`, `has_totalpass`, `has_learn`, `owe_medical_check` |
 | Communications | `communication_period`, `communication_period_start`, `communication_period_end`, `communication_direction`, `communication_media`, `contacts_closest_communication_media`, `communication_estimated_coefficient`, `communication_is_trial` |
 | Next actions | `next_action_quick_period`, `next_action_period_start`, `next_action_period_end`, `next_action_responsible`, `next_action_booked_by` |
@@ -21,6 +21,8 @@ Use the exact input names published by the tool schema:
 | Dropouts | `dropout_period`, `dropout_period_start`, `dropout_period_end`, `drop_out_access_type` |
 
 Explicit dates use `YYYY-MM-DD`. Named period values and other enums must come from the live tool schema. Boolean presence filters apply when sent as `true`; omit them when they should not constrain the search.
+
+`first_enrolled_on_gte` and `first_enrolled_on_lte` filter by the contact's first recorded enrollment. `last_enrolled_on_gte` and `last_enrolled_on_lte` filter by the most recent enrollment recorded in the selected account.
 
 ## Discover IDs before filtering
 
