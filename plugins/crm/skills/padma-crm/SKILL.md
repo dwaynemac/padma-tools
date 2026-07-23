@@ -15,8 +15,9 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 4. Keep the selected `account_name` on every account-scoped call in the workflow.
 5. Call `get_account_context` to obtain roles, valid contact statuses, capabilities, and current limits.
 6. Read [references/mcp-operations.md](references/mcp-operations.md) for connection, selection, tool, pagination, and error contracts.
-7. Read [references/contacts.md](references/contacts.md) for contact searches, detail handling, and privacy rules.
-8. Read [references/monthly-statistics.md](references/monthly-statistics.md) before answering metric, comparison, trend, or funnel questions.
+7. Read [references/objects-and-attributes.md](references/objects-and-attributes.md) for the product meaning of CRM objects.
+8. Read [references/contacts.md](references/contacts.md) for contact searches, detail handling, and privacy rules.
+9. Read [references/monthly-statistics.md](references/monthly-statistics.md) before answering metric, comparison, trend, or funnel questions.
 
 ## Search contacts
 
@@ -32,8 +33,8 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 
 1. Discover stable metric names with `list_monthly_stat_definitions`; do not invent a `stat_name` from a translated label.
 2. Use `get_monthly_stats` for exact series and freshness, `compare_monthly_stats` for shared dashboard comparison semantics, and `get_lead_funnel` for funnel aggregation.
-3. Preserve missing values as unknown. Never convert `value: null` into zero or calculate a missing statistic outside CRM.
-4. Interpret rate values and deltas as percentages and percentage points according to the statistics reference.
+3. Preserve missing absolute values as unknown. Never convert `value: null` into zero or calculate a missing absolute statistic outside CRM.
+4. Do not request deprecated rate `stat_name` values. Derive a requested percentage from the documented absolute numerator and denominator only when both are present and the denominator is greater than zero.
 5. State account, period, metric names, missing months, and freshness when they affect the answer.
 
 ## Protect authorization and scope

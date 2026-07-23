@@ -4,6 +4,8 @@
 
 Call `list_monthly_stat_definitions` before selecting metrics by name. Use the returned stable `stat_name`, not a translated label. Definitions include localized label and description, `value_type`, whether the account has persisted data, and its first and last available months.
 
+Read [monthly-stat-names.md](monthly-stat-names.md) for the system-wide meaning of every supported `stat_name`.
+
 Availability describes persisted school-level records for the selected account. Teacher-level statistics and cross-account rankings are outside this plugin.
 
 ## Read series
@@ -14,9 +16,13 @@ Series are dense: every requested month appears. A missing persisted record retu
 
 - `null` means unknown or not persisted.
 - `0` means a persisted zero value.
-- Never calculate or fill a missing value outside CRM.
+- Never calculate or fill a missing absolute value outside CRM.
 
-Rates are stored internally in hundredths but returned in human percentages. For example, stored `1234` is returned as `12.34` with `unit: "percent"`. Other values remain unchanged with their stored unit. Use `updated_at` to describe freshness when it matters.
+## Calculate percentages from absolute values
+
+Rate `stat_name` values are being deprecated. Do not request them. Request the documented absolute numerator and denominator together with `get_monthly_stats`, then calculate `numerator / denominator * 100` only when both returned values are non-null and the denominator is greater than zero.
+
+For example, calculate the percentage of male students as `male_students / students * 100`. See [monthly-stat-names.md](monthly-stat-names.md) for every numerator/denominator pair. If either value is missing, or the denominator is zero, report the percentage as unavailable rather than zero.
 
 ## Compare periods
 
@@ -27,7 +33,7 @@ Use `compare_monthly_stats` instead of reproducing dashboard comparison logic. I
 - the average of the available prior three months;
 - normalized delta and one of `improved`, `worsened`, `neutral`, or `missing`.
 
-Rate deltas are percentage points. Improvement direction depends on the metric: increases are normally better, while CRM treats metrics such as dropouts, dropout rates, cycle duration, and other configured lower-is-better metrics in the opposite direction. Report the server's state rather than reimplementing this list.
+For a derived percentage, use the underlying absolute series to calculate each month's percentage. Do not request a deprecated rate name merely to obtain a server-generated comparison.
 
 A prior-three-month average can use fewer than three records when some prior months are missing. State this limitation when it changes the interpretation.
 
