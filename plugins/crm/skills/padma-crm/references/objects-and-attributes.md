@@ -29,6 +29,12 @@ Interpret CRM records with these product semantics. The names shown are the MCP 
 - Contact history is the chronological activity feed for one contact. It can include communications, comments, enrollments, dropouts, sent campaigns, and tracked changes.
 - It records activity; it is not a complete profile of the person's intent or circumstances. Keep conclusions tied to the returned entries and dates.
 
+## Contact comments
+
+- A comment is a new account-visible `FollowUp` entry attached to one contact.
+- CRM records the authenticated user and current time. The agent supplies only the resolved contact and exact comment text.
+- Repeating `add_contact_comment` creates another entry; comments are not idempotent.
+
 ## Monthly statistics and lead funnel
 
 - Monthly statistics are persisted account metrics with system-wide standardized definitions, names, and localized labels.

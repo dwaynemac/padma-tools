@@ -29,11 +29,15 @@ Absence from one account or Business does not prove that the person does not exi
 4. Keep rate deltas as percentage points and financial values in their currencies.
 5. Explain changes with evidence from each product; do not manufacture per-contact attribution that the tools did not return.
 
-## Money writes in a combined workflow
+## Writes in a combined workflow
 
-CRM remains read-only. Money supports typed creates and updates for movements and selected financial configuration.
+CRM can add account-visible contact comments and exposes no other writes. Money supports typed creates and updates for movements and selected financial configuration.
 
-Before writing:
+### CRM contact comments
+
+Follow the `padma-crm` skill: resolve the account and contact, use the exact user-approved text, call `add_contact_comment` once, and inspect contact history before any retry after an uncertain result.
+
+### Money writes
 
 1. Search and fetch the intended Money records inside the selected Business.
 2. Resolve every related Money ID; never reuse a CRM identifier.

@@ -14,7 +14,7 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 2. Select by stable `account_name`; database IDs are not part of the public contract.
 3. Omit `account_name` only when one account is authorized. Pass it consistently once selected.
 4. With several authorized accounts, ask the user when their request does not identify one unambiguously.
-5. Call `get_account_context` after selection to inspect roles, valid statuses, read capability, and limits.
+5. Call `get_account_context` after selection to inspect roles, valid statuses, read/write capabilities, and limits.
 
 ## Tools
 
@@ -28,10 +28,20 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 | `search_contacts` | optional account, filters, `page_size`, `cursor` | Search account-scoped contact summaries using identity, relationship, activity, date, tag, marketing, and list filters. |
 | `get_contact` | optional `account_name`, required `padma_id` | Read one account-scoped contact detail. |
 | `get_contact_history` | optional account, required `padma_id`; optional `page_size`, `cursor` | Read the contact activity feed, newest entry first. |
+| `add_contact_comment` | optional account, required `padma_id` and `observations` | Add an account-visible follow-up comment as the authenticated user. |
 | `list_monthly_stat_definitions` | optional `account_name` | Discover stable metric names, localized metadata, types, and availability. |
 | `get_monthly_stats` | `stat_names`; optional account and month range | Read dense persisted monthly series. |
 | `compare_monthly_stats` | `stat_names`; optional account and month | Compare current, previous, and prior-three-month baselines. |
 | `get_lead_funnel` | optional account and month range | Aggregate persisted funnel stages and transitions. |
+
+## Contact-comment writes
+
+- Resolve the contact in the selected account before calling `add_contact_comment`.
+- Pass only `account_name`, `padma_id`, and the exact approved comment text as `observations`.
+- The server assigns the authenticated username, current timestamp, `FollowUp` type, and account visibility.
+- Each successful call creates a new comment. It is not idempotent.
+- On an uncertain result, inspect `get_contact_history` before retrying.
+- CRM exposes no other write operation in this release.
 
 ## Pagination and limits
 

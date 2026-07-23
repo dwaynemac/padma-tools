@@ -50,9 +50,9 @@ This plugin provides coordination instructions only. It does not declare MCP ser
 - Do not combine data from different organizations unless the user explicitly requests a clearly separated comparison and every organization is authorized.
 - Do not claim that a person returned by CRM is the same Money contact unless current MCP evidence or the user confirms the linkage.
 
-## Write only through Money
+## Write through supported product tools
 
-- CRM is read-only through the `crm` plugin. Do not promise contact, status, or statistic changes.
+- CRM can add account-visible contact comments. Follow the `padma-crm` skill and do not promise other contact, status, or statistic changes.
 - Before any Money write, read the current records, resolve related IDs, show the exact proposal, and obtain confirmation unless the user already confirmed that identical change.
 - Use a fresh UUID `request_id`, use the latest `updated_at` as `expected_updated_at` for updates, change only requested fields, and refetch after writing.
 - Never emulate unsupported writes or silently create related records.

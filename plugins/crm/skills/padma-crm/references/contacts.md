@@ -46,6 +46,18 @@ Each entry includes `id`, `type`, `content`, `username`, `account_name`, `activi
 
 History content can contain sensitive free text. Summarize only the entries relevant to the request, identify their activity dates, and avoid reproducing unrelated notes verbatim.
 
+## Add a comment
+
+Use `add_contact_comment` only after resolving the contact in the selected account and confirming the exact comment text from the user's request. Pass:
+
+- `account_name`: the current account returned by `list_accounts`;
+- `padma_id`: the resolved contact identifier;
+- `observations`: the exact comment text to record.
+
+The server creates an account-visible `FollowUp` comment under the authenticated username and current time. Do not supply or invent author, visibility, type, or timestamp values.
+
+The operation is non-idempotent. Call it once. If the response is lost or uncertain, read the contact history before retrying and compare the content, username, and activity time to avoid a duplicate.
+
 ## Privacy and presentation
 
 - Return the minimum personal data needed to answer the request.
@@ -55,4 +67,4 @@ History content can contain sensitive free text. Summarize only the entries rele
 - Treat `not_found` as absence from the selected authorized account, not proof that the person does not exist elsewhere.
 - Keep returned CRM facts separate from guesses about identity, intent, or personal characteristics.
 
-CRM is read-only through this plugin. Do not promise status changes, contact edits, imports, merges, or deletions.
+CRM can add contact comments through this plugin. Do not promise status changes, other contact edits, imports, merges, or deletions.

@@ -1,6 +1,6 @@
 ---
 name: padma-crm
-description: Use PADMA CRM through its remote read-only MCP server to find authorized accounts, discover contact tags, marketing methods, and saved lists, search contacts with account-scoped identity, relationship, activity, and list filters, inspect contact details and history, analyze persisted school monthly statistics, compare periods, and review lead funnels. Use for requests about CRM contacts, prospects, students, communication history, segmentation, contact status, enrollment and dropout metrics, monthly school performance, or commercial funnels stored in PADMA CRM.
+description: Use PADMA CRM through its remote MCP server to find authorized accounts, discover contact tags, marketing methods, and saved lists, search contacts with account-scoped identity, relationship, activity, and list filters, inspect contact details and history, add contact comments, analyze persisted school monthly statistics, compare periods, and review lead funnels. Use for requests about CRM contacts, prospects, students, comments, communication history, segmentation, contact status, enrollment and dropout metrics, monthly school performance, or commercial funnels stored in PADMA CRM.
 ---
 
 # Use PADMA CRM
@@ -37,6 +37,15 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 4. Do not request deprecated rate `stat_name` values. Derive a requested percentage from the documented absolute numerator and denominator only when both are present and the denominator is greater than zero.
 5. State account, period, metric names, missing months, and freshness when they affect the answer.
 
+## Add a contact comment
+
+1. Use `add_contact_comment` only when the user explicitly asks to record a comment and supplies or approves the exact text.
+2. Resolve the selected account and contact first. Use a current `padma_id` from `search_contacts`, and disambiguate same-name contacts before writing.
+3. State the selected account and contact before the write when identity could be ambiguous. Never send a comment to a merely similar contact.
+4. Call `add_contact_comment` once with `account_name`, `padma_id`, and `observations`. The server records the authenticated username and current time; the comment is visible to the selected account.
+5. Treat the tool as non-idempotent. If the result is uncertain, inspect `get_contact_history` before retrying so the same comment is not created twice.
+6. Report the created comment and contact. Do not claim success from intent or an OAuth login alone.
+
 ## Protect authorization and scope
 
 - Never ask the user to paste an OAuth authorization code or access token into a prompt.
@@ -45,9 +54,9 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 - Do not switch accounts during a workflow unless the user explicitly asks.
 - Do not combine contacts or statistics from different accounts unless the user explicitly requests a clearly separated comparison and each account is authorized.
 
-## Respect read-only limits
+## Respect write limits
 
-- CRM exposes no write tools in this release. Do not claim to update contacts, statuses, or statistics.
+- CRM can add contact comments. It cannot update contacts, statuses, or statistics.
 - Do not emulate writes through browser automation or unrelated tools.
 - Do not call missing-stat calculation paths or present derived values as persisted CRM statistics.
-- If a requested operation is unsupported, explain the read-only boundary and offer the closest available read operation.
+- If a requested operation is unsupported, explain the boundary and offer the closest available operation.

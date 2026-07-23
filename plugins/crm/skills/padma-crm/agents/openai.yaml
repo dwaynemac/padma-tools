@@ -1,12 +1,12 @@
 interface:
   display_name: "PADMA CRM"
-  short_description: "Consultar contactos y métricas de CRM"
-  default_prompt: "Usá $padma-crm para buscar un contacto autorizado en CRM."
+  short_description: "Consultar CRM y agregar comentarios"
+  default_prompt: "Usá $padma-crm para buscar un contacto autorizado o agregarle un comentario."
 
 dependencies:
   tools:
     - type: "mcp"
       value: "crm"
-      description: "Servidor MCP remoto read-only de PADMA CRM"
+      description: "Servidor MCP remoto de PADMA CRM"
       transport: "streamable_http"
       url: "https://crm.derose.app/mcp"

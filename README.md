@@ -126,7 +126,7 @@ cliente use DCR.
 ### CRM
 
 Conecta el agente con [PADMA CRM](https://crm.derose.app/) mediante su servidor
-MCP oficial read-only.
+MCP oficial.
 
 Permite:
 
@@ -135,6 +135,7 @@ Permite:
 - descubrir etiquetas, métodos de marketing y listas guardadas antes de usarlos como filtros;
 - consultar datos operativos del contacto dentro de la cuenta seleccionada;
 - recorrer el historial de actividad del contacto con paginación segura;
+- agregar comentarios visibles para la cuenta al contacto seleccionado;
 - leer series mensuales persistidas y su fecha de actualización;
 - comparar métricas con el mes anterior y el promedio de los tres meses previos;
 - analizar el funnel comercial de procura, visitas, visitas perfil y matrículas.
@@ -156,8 +157,8 @@ personales y distinguir estadísticas faltantes de valores cero.
    `Mostrame las definiciones de estadísticas mensuales de esta cuenta.`
 
 El plugin no requiere una API key ni una variable de entorno. El cliente
-administra la sesión OAuth. CRM no ofrece operaciones de escritura en esta
-versión.
+administra la sesión OAuth. La única escritura disponible en esta versión es
+agregar comentarios a contactos.
 
 ## Ejemplos
 
@@ -180,6 +181,7 @@ versión.
 
 - “Buscá a Ana por email en la cuenta de Cerviño.”
 - “Mostrame la actividad reciente de este contacto.”
+- “Agregá este comentario al contacto que acabo de seleccionar.”
 - “Mostrame alumnos y bajas mes a mes durante el último año.”
 - “Compará la efectividad de este mes con el mes anterior.”
 - “Analizá el funnel comercial de los últimos seis meses.”
@@ -191,7 +193,7 @@ versión.
 plugins/                          plugins instalables
   padma/                          skill coordinadora, sin servidores MCP
   money/                          integración MCP con PADMA Money
-  crm/                            integración MCP read-only con PADMA CRM
+  crm/                            integración MCP con PADMA CRM
 ```
 
 Las skills específicas de un producto viajan dentro de su plugin. Las skills independientes podrán publicarse bajo `skills/` cuando no necesiten MCP ni otro componente adicional.

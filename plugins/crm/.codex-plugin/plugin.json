@@ -1,7 +1,7 @@
 {
   "name": "crm",
-  "version": "0.1.2",
-  "description": "Consult authorized PADMA CRM contacts and school metrics safely through its remote MCP server.",
+  "version": "0.1.3+codex.20260723162512",
+  "description": "Consult authorized PADMA CRM contacts and school metrics, and add contact comments safely through its remote MCP server.",
   "author": {
     "name": "PADMA"
   },
@@ -17,19 +17,19 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "CRM",
-    "shortDescription": "Consultá contactos y métricas de CRM",
-    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para descubrir segmentos, buscar contactos con filtros operativos y analizar estadísticas mensuales y el funnel comercial en modo read-only.",
+    "shortDescription": "Consultá CRM y agregá comentarios",
+    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para descubrir segmentos, buscar contactos con filtros operativos, agregar comentarios y analizar estadísticas mensuales y el funnel comercial.",
     "developerName": "PADMA",
     "category": "Productivity",
     "capabilities": [
       "Interactive",
-      "Read"
+      "Write"
     ],
     "websiteURL": "https://crm.derose.app/",
     "defaultPrompt": [
       "Listá las cuentas de CRM que tengo autorizadas.",
       "Buscá un contacto por nombre, email o teléfono.",
-      "Compará las estadísticas de alumnos y bajas de los últimos meses."
+      "Agregá este comentario al contacto que acabo de seleccionar."
     ]
   },
   "mcpServers": "./.mcp.json"

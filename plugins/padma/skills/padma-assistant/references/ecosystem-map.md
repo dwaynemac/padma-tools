@@ -7,8 +7,8 @@ PADMA is a modular suite for operating schools and boutique studios. Each produc
 | Business question | Product | Available through companion plugin |
 |---|---|---|
 | Who can sign in and which organizations they may access | Accounts | Indirectly, through each MCP's OAuth grant |
-| Who is the person and what is their relationship/status with a school | CRM | Yes, read-only |
-| What communication data, including WhatsApp interactions, is recorded for a contact | CRM | Yes, read-only when exposed by CRM |
+| Who is the person and what is their relationship/status with a school | CRM | Yes, read plus contact comments |
+| What communication data, including WhatsApp interactions, is recorded for a contact | CRM | Yes, read plus contact comments |
 | How are contacts, commercial metrics, and lead funnels evolving | CRM | Yes, read-only |
 | What income, expenses, movements, plans, and financial rules exist | Money | Yes, read and supported writes |
 | What content, classes, bookings, or check-ins exist | Learn | No |
