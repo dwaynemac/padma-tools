@@ -1,7 +1,7 @@
 interface:
   display_name: "PADMA Money"
   short_description: "Consultar y administrar Money de forma segura"
-  default_prompt: "Usá $padma-money para analizar mis movimientos del último mes."
+  default_prompt: "Usá $padma-money para analizar mis movimientos o dividir un gasto en cuotas."
 
 dependencies:
   tools:

@@ -22,6 +22,17 @@ A financial record with a type, state, source account, amount, movement date, re
 
 Movement state controls balance timing. Reporting month controls report attribution. See `mcp-operations.md` for exact date behavior.
 
+## Split
+
+A split replaces one original movement with two or more target movements while preserving a PaperTrail snapshot of the original.
+
+- Proration creates equal installments from a non-Transfer movement in consecutive reporting months, beginning with the original `report_on`; the final installment receives any cent remainder.
+- Subdivision creates explicit positive parts that exactly total the original. Omitted description, category, and agent values inherit from the original.
+- A resulting movement exposes `split_id`, which can be passed to `get_split`.
+- Reversal is all-or-nothing: it restores the original and physically removes every target only when the complete target list and timestamps still match.
+
+Do not treat a split as duplication: after a successful split, the original is absent from normal movement reads and only the targets affect reports and balances.
+
 ## Category
 
 A hierarchical reporting classification, separate from an account. Child-category values roll up to parent totals. Categories have income or expense sections.

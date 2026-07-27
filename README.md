@@ -102,7 +102,8 @@ Permite:
 - descubrir y seleccionar entre los negocios autorizados por OAuth;
 - consultar cuentas, categorías, contactos y movimientos;
 - analizar gastos, ingresos, períodos y posibles anomalías;
-- crear y corregir movimientos financieros;
+- crear, corregir, dividir y eliminar movimientos financieros;
+- prorratear gastos en meses sucesivos, subdividir movimientos y revertir esas divisiones de forma segura;
 - administrar cuentas, categorías, movimientos recurrentes, planes y automatizaciones;
 - aplicar confirmación, idempotencia y verificación en operaciones de escritura.
 
@@ -175,6 +176,10 @@ agregar comentarios a contactos.
 - “¿Cuánto gastamos el mes pasado, separado por categoría?”
 - “Buscá movimientos sin categoría y proponé cómo clasificarlos.”
 - “Registrá este gasto después de mostrarme exactamente qué vas a crear.”
+- “Eliminá este movimiento después de mostrarme sus datos y pedirme confirmación.”
+- “Prorrateá este gasto en seis meses, empezando por su mes de reporte actual.”
+- “Dividí este movimiento entre materiales y honorarios, conservando el total.”
+- “Revertí esta división si ninguna de sus partes cambió.”
 - “Compará este mes con el anterior y explicá las variaciones relevantes.”
 - “Revisá esta cuenta contra el extracto y listá las diferencias sin modificar nada.”
 

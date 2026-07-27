@@ -7,6 +7,7 @@ Interpret Money records with these product semantics. The field names shown are 
 - Business
 - Account
 - Movement
+- Split
 - Category
 - Plan
 - Recurrent movement
@@ -48,7 +49,16 @@ Interpret Money records with these product semantics. The field names shown are 
 - `category_id` classifies the movement for reporting; it does not identify where money is held.
 - `contact_id` attributes the movement to a person and affects that contact's LTV.
 - `agent_id` attributes an instructor or agent. Do not confuse it with the contact.
+- `split_id` is null for an unsplit movement and identifies the owning split for a resulting movement. Use `get_split`; do not infer sibling movements from IDs or descriptions.
 - A transfer between accounts in different currencies may have a movement-specific exchange rate. That rate can differ from the reference rate for the month.
+
+## Split
+
+- `original_movement` is the immutable snapshot that existed before proration or subdivision.
+- `movements` contains every target created by the split, including targets later soft-deleted.
+- Each target exposes `updated_at` and `deleted_at`; preserve the exact IDs and `updated_at` values when proposing `revert_split`.
+- `revertible` reports whether current authorization, blocked-period rules, Business consistency, and target state permit reversal.
+- Reversal is conservative and atomic. It has no `force` or partial mode.
 
 ## Category
 

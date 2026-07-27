@@ -31,7 +31,7 @@ Absence from one account or Business does not prove that the person does not exi
 
 ## Writes in a combined workflow
 
-CRM can add account-visible contact comments and exposes no other writes. Money supports typed creates and updates for movements and selected financial configuration.
+CRM can add account-visible contact comments and exposes no other writes. Money supports typed creates and updates for movements and selected financial configuration, plus recoverable movement deletion.
 
 ### CRM contact comments
 
@@ -42,10 +42,10 @@ Follow the `padma-crm` skill: resolve the account and contact, use the exact use
 1. Search and fetch the intended Money records inside the selected Business.
 2. Resolve every related Money ID; never reuse a CRM identifier.
 3. Check plausible duplicates for new movements.
-4. Show Business, operation, account/currency, amount, dates, category, description, and only the fields that will change.
+4. Show Business, operation, account/currency, amount, dates, category, description, and, for updates, only the fields that will change.
 5. Obtain confirmation unless the identical proposal was already confirmed.
-6. Use one fresh UUID `request_id`; for updates, pass the latest `updated_at` as `expected_updated_at`.
-7. Refetch and report the persisted result. On conflict or uncertain timeout, inspect current state before retrying.
+6. Use one fresh UUID `request_id`; for updates and movement deletion, pass the latest `updated_at` as `expected_updated_at`.
+7. Verify and report the result. Refetch creates and updates; for a deleted movement, verify that normal Money reads return `not_found`. On conflict or uncertain timeout, inspect current state before retrying.
 
 Never create a missing account, category, contact, or other related record implicitly. Never present a CRM read as verification that a Money write persisted.
 

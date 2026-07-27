@@ -1,6 +1,6 @@
 ---
 name: padma-money
-description: Use PADMA Money through its remote MCP server to inspect accounts, categories, contacts, movements, financial reports, recurrent movements, plans, and automation rules, or to create and update supported records safely. Use for requests such as cuanto gastamos, ingresos del mes, flujo de caja, compara periodos, revisa pagos, registra un gasto, corrige o categoriza un movimiento, concilia una cuenta, detecta anomalias, or otherwise consults or manages an organization's financial information stored in Money.
+description: Use PADMA Money through its remote MCP server to inspect accounts, categories, contacts, movements and their splits, financial reports, recurrent movements, plans, and automation rules; create, update, prorate, subdivide, revert splits, or soft-delete movements safely. Use for requests such as cuanto gastamos, ingresos del mes, flujo de caja, compara periodos, revisa pagos, registra un gasto, corrige, categoriza, divide, prorratea o elimina un movimiento, revierte una division, concilia una cuenta, detecta anomalias, or otherwise consults or manages an organization's financial information stored in Money.
 ---
 
 # Use Money MCP
@@ -45,9 +45,10 @@ When the user requests a direct link to a movement:
 2. Show the exact proposed change, including business, record, amount and currency, dates, and related IDs. Obtain confirmation unless the user already confirmed that exact mutation in the current conversation.
 3. Never silently create a missing account, category, contact, or other related record. Search first and ask before creating a missing persistent record.
 4. Generate a fresh UUID `request_id` for each intended write. Reuse it only when retrying the identical operation after an uncertain response.
-5. For updates, fetch the record immediately before writing and pass its latest `updated_at` as `expected_updated_at`. On conflict, refetch, explain the intervening change, and reconfirm if the proposal changed.
+5. For updates, movement deletion, proration, and subdivision, fetch the movement immediately before writing and pass its latest `updated_at` as `expected_updated_at`. On conflict, refetch, explain the intervening change, and reconfirm if the proposal changed.
 6. Change only explicitly requested fields. Correct an existing record in place instead of creating a duplicate.
-7. Refetch or search after the write and report the persisted result. Do not treat a successful request alone as verification.
+7. Before `revert_split`, call `get_split` immediately before confirmation. Show the original and every resulting movement, then pass the exact returned target IDs and `updated_at` values as `expected_movements`. Never omit a target or bypass a conflict.
+8. Refetch or search after the write and report the persisted result. After splitting, verify with `get_split`; after `revert_split`, verify the restored original; after `delete_movement`, verify that normal reads return `not_found` and report the returned deletion timestamp. Do not treat a successful request alone as verification.
 
 ## Protect credentials and tenant scope
 
@@ -60,5 +61,5 @@ When the user requests a direct link to a movement:
 ## Handle unavailable or unsupported operations
 
 - If the server or expected tool is unavailable, report the missing capability plainly and provide connection checks from the operations reference.
-- Do not emulate deferred capabilities such as deletion, batch mutation, imports, automatic bank-statement matching, or contact mutation through unrelated tools.
+- Do not emulate deferred capabilities such as restoring an independently deleted movement, general physical deletion, deletion of other record types, batch mutation, imports, automatic bank-statement matching, or contact mutation through unrelated tools. `revert_split` is limited to atomically restoring the original movement and removing every unchanged target of that split.
 - For authentication, authorization, validation, conflict, or rate-limit errors, follow the response-specific recovery in the operations reference. Do not retry writes blindly.

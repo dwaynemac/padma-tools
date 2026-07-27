@@ -7,6 +7,8 @@
 - Review expenses or anomalies
 - Record a movement
 - Correct or categorize a movement
+- Delete a movement
+- Split or revert a movement
 - Manage recurrent movements, plans, and rules
 - Output conventions
 
@@ -59,6 +61,28 @@ The MCP's reconciliation capability is analytical, not automatic bank-statement 
 4. After confirmation, call `update_movement` with a fresh request ID and the latest `updated_at`.
 5. Refetch and verify. Preserve all unrelated fields.
 
+## Delete a movement
+
+1. Search and fetch the intended movement immediately before deletion.
+2. Present the exact movement, including Business, ID, type, account, amount and currency, dates, category, and description.
+3. Explain that deletion is recoverable inside Money: it removes the movement from normal reads while preserving its record and audit history.
+4. After explicit confirmation, call `delete_movement` with a fresh request ID and the latest `updated_at`.
+5. Verify that `get_movement` returns `not_found`, then report the returned deletion timestamp.
+
+Do not delete when an in-place correction satisfies the request. General restoration and physical deletion are not available through MCP; `revert_split` applies only to a complete, unchanged split.
+
+## Split or revert a movement
+
+Choose the operation from the intended outcome:
+
+- Use `prorate_movement` when one amount should be reported as equal installments in consecutive months.
+- Use `subdivide_movement` when explicit parts should preserve the same reporting month while totaling the original amount.
+- Use `revert_split` only to restore the original and remove every unchanged target created by one split.
+
+Before proration or subdivision, fetch the movement, ensure `split_id` is null, calculate and show every resulting part, and obtain confirmation. Use a fresh `request_id` and the latest `updated_at`, then verify the result with `get_split`.
+
+Before reversal, call `get_split`, require `revertible: true`, and show both the original to restore and all targets to remove. After confirmation, pass the exact returned target IDs and timestamps to `revert_split`. On conflict, refetch and reconfirm; never force or partially revert a split.
+
 ## Manage recurrent movements, plans, and rules
 
 Use the matching `search_*` and `get_*` tool before any create or update. Explain domain effects before confirmation:
@@ -98,10 +122,10 @@ Omit metrics the MCP data cannot support. Do not insert a fabricated zero.
 ### Proposed mutation
 
 ```markdown
-Voy a registrar o modificar:
+Voy a realizar esta operación:
 
 - Negocio: <business>
-- Operación: <create/update and record type>
+- Operación: <create/update/delete/prorate/subdivide/revert and record type>
 - Cuenta: <account and currency>
 - Monto: <currency and amount>
 - Fecha: <movement date>
