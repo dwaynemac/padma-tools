@@ -69,7 +69,7 @@ The MCP's reconciliation capability is analytical, not automatic bank-statement 
 4. After explicit confirmation, call `delete_movement` with a fresh request ID and the latest `updated_at`.
 5. Verify that `get_movement` returns `not_found`, then report the returned deletion timestamp.
 
-Do not delete when an in-place correction satisfies the request. General restoration and physical deletion are not available through MCP; `revert_split` applies only to a complete, unchanged split.
+Do not delete when an in-place correction satisfies the request. Movement restoration and general physical deletion are not available through MCP; recurrent movement rules use their separate permanent-deletion workflow, and `revert_split` applies only to a complete, unchanged split.
 
 ## Split or revert a movement
 
@@ -85,7 +85,7 @@ Before reversal, call `get_split`, require `revertible: true`, and show both the
 
 ## Manage recurrent movements, plans, and rules
 
-Use the matching `search_*` and `get_*` tool before any create or update. Explain domain effects before confirmation:
+Use the matching `search_*` and `get_*` tool before any create, update, or deletion. Explain domain effects before confirmation:
 
 - Recurrent movement callbacks may create a movement for the current month when recurrence rules allow it.
 - Deleting a recurrent movement permanently removes the rule and prevents future generation, but preserves movements it already created. Fetch the rule immediately before deletion, confirm the exact record, pass its latest `updated_at`, and verify that `get_recurrent_movement` returns `not_found`.

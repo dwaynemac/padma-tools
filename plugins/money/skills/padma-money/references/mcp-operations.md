@@ -187,7 +187,7 @@ If `expected_updated_at` is stale, do not overwrite. Refetch and reconcile with 
 5. Generate a UUID `request_id` and call `delete_movement` with the movement ID and latest `updated_at` as `expected_updated_at`.
 6. Verify that `get_movement` returns `not_found`, then report the returned `deleted_at` timestamp.
 
-Do not use deletion as a substitute for correcting an amount, date, category, or other editable field. General restoration and physical deletion are not exposed; `revert_split` applies only to a complete, unchanged split.
+Do not use deletion as a substitute for correcting an amount, date, category, or other editable field. Movement restoration and general physical deletion are not exposed; recurrent movement rules use the separate permanent-deletion workflow below, and `revert_split` applies only to a complete, unchanged split.
 
 ### Delete a recurrent movement
 
