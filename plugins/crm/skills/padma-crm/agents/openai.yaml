@@ -1,7 +1,7 @@
 interface:
   display_name: "PADMA CRM"
   short_description: "Consultar CRM y agregar comentarios"
-  default_prompt: "Usá $padma-crm para buscar un contacto autorizado o agregarle un comentario."
+  default_prompt: "Usá $padma-crm para buscar contactos autorizados, incluidos cumpleaños, o agregar un comentario."
 
 dependencies:
   tools:

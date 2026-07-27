@@ -132,7 +132,7 @@ MCP oficial.
 Permite:
 
 - descubrir y seleccionar cuentas autorizadas por OAuth;
-- buscar contactos por identidad, estado, vínculo con la cuenta, actividad y fechas;
+- buscar contactos por identidad, cumpleaños, estado, vínculo con la cuenta, actividad y fechas;
 - descubrir etiquetas, métodos de marketing y listas guardadas antes de usarlos como filtros;
 - consultar datos operativos del contacto dentro de la cuenta seleccionada;
 - consultar el resumen de actividad y riesgo de abandono calculado por Learn;
@@ -186,6 +186,7 @@ agregar comentarios a contactos.
 ### CRM
 
 - “Buscá a Ana por email en la cuenta de Cerviño.”
+- “¿Quién cumple años hoy en esta cuenta?”
 - “Mostrame la actividad reciente de este contacto.”
 - “Mostrame el resumen de actividad de Learn de este contacto.”
 - “Agregá este comentario al contacto que acabo de seleccionar.”

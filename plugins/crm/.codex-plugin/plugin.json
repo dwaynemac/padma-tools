@@ -1,6 +1,6 @@
 {
   "name": "crm",
-  "version": "0.1.6+codex.20260723184724",
+  "version": "0.1.7+codex.20260727103148",
   "description": "Consult authorized PADMA CRM contacts and school metrics, and add contact comments safely through its remote MCP server.",
   "author": {
     "name": "PADMA"

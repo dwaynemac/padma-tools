@@ -22,7 +22,7 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 
 ## Search contacts
 
-1. Use `search_contacts` with the narrowest useful identity, relationship, activity, and date filters.
+1. Use `search_contacts` with the narrowest useful identity, relationship, activity, and date filters. For birthdays, use `birthday_day` and `birthday_month`; add `birthday_year` only when the birth year must also match, or omit the day to search a whole birthday month.
 2. Before filtering by tags, marketing methods, or saved lists, call `list_tags`, `list_marketing_methods`, or `list_contact_lists` in the selected account. Use only IDs returned by those current calls.
 3. Use `intersect_list_ids` for membership in every selected list, `union_list_ids` for membership in any selected list, and `not_in_list_ids` for exclusions.
 4. Paginate when the requested scope exceeds one page. Do not present a truncated page as a complete result or reuse a cursor after changing filters.

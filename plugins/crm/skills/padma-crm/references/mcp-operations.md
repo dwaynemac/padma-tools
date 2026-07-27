@@ -25,7 +25,7 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 | `list_tags` | optional `account_name` | Discover account tag IDs and names for `tag_ids`. |
 | `list_marketing_methods` | optional `account_name` | Discover active account marketing method IDs and values. |
 | `list_contact_lists` | optional `account_name` | Discover saved contact-list IDs and names. |
-| `search_contacts` | optional account, filters, `page_size`, `cursor` | Search account-scoped contact summaries using identity, relationship, activity, date, tag, marketing, and list filters. |
+| `search_contacts` | optional account, filters, `page_size`, `cursor` | Search account-scoped contact summaries using identity, birthday, relationship, activity, date, tag, marketing, and list filters. |
 | `get_contact` | optional `account_name`, required `padma_id` | Read one account-scoped contact detail. |
 | `get_contact_learn_activity_summary` | optional `account_name`, required `padma_id` | Read the latest stored Learn activity and churn-risk summary for one account-scoped contact. |
 | `get_contact_history` | optional account, required `padma_id`; optional `page_size`, `cursor` | Read the contact activity feed, newest entry first. |
@@ -50,6 +50,7 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 - A returned contact cursor is signed and bound to its account and filters. Reuse it only for the next page of the identical search.
 - Contact-history pages use the same 1–200 page-size limit. Reuse their signed cursor only with the same account, `padma_id`, and page size.
 - Explicit contact-search dates use strict `YYYY-MM-DD` values.
+- Birthday filters use integer `birthday_day`, `birthday_month`, and optional `birthday_year`; omit any component that should not constrain the search.
 - `status` accepts one value; `statuses` accepts several. Do not send both.
 - Call the matching discovery tool before using `tag_ids`, `marketing_method_ids`, `intersect_list_ids`, `union_list_ids`, or `not_in_list_ids`. IDs from another account are rejected.
 - Monthly series default to 12 months ending with the current month and accept at most 36 months.
