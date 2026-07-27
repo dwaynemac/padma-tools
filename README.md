@@ -104,7 +104,7 @@ Permite:
 - analizar gastos, ingresos, períodos y posibles anomalías;
 - crear, corregir, dividir y eliminar movimientos financieros;
 - prorratear gastos en meses sucesivos, subdividir movimientos y revertir esas divisiones de forma segura;
-- administrar cuentas, categorías, movimientos recurrentes, planes y automatizaciones;
+- administrar cuentas, categorías, movimientos recurrentes, planes y automatizaciones, incluida la eliminación segura de reglas recurrentes;
 - aplicar confirmación, idempotencia y verificación en operaciones de escritura.
 
 El plugin incluye la skill `padma-money`, que enseña al agente el modelo financiero de Money, sus workflows seguros y las limitaciones reales de las herramientas disponibles.
@@ -177,6 +177,7 @@ agregar comentarios a contactos.
 - “Buscá movimientos sin categoría y proponé cómo clasificarlos.”
 - “Registrá este gasto después de mostrarme exactamente qué vas a crear.”
 - “Eliminá este movimiento después de mostrarme sus datos y pedirme confirmación.”
+- “Eliminá esta recurrencia después de mostrarme la regla y confirmar que los movimientos ya generados se conservan.”
 - “Prorrateá este gasto en seis meses, empezando por su mes de reporte actual.”
 - “Dividí este movimiento entre materiales y honorarios, conservando el total.”
 - “Revertí esta división si ninguna de sus partes cambió.”

@@ -17,7 +17,7 @@
   "interface": {
     "displayName": "Money",
     "shortDescription": "Consultá y administrá Money con MCP",
-    "longDescription": "Conecta Codex con los negocios autorizados de Money para consultar cuentas, categorías, contactos, movimientos y reportes, y realizar cambios financieros —incluido dividir, revertir divisiones y eliminar movimientos— con confirmación, idempotencia y verificación.",
+    "longDescription": "Conecta Codex con los negocios autorizados de Money para consultar cuentas, categorías, contactos, movimientos y reportes, y realizar cambios financieros —incluido dividir, revertir divisiones y eliminar movimientos o reglas recurrentes— con confirmación, idempotencia y verificación.",
     "developerName": "PADMA",
     "category": "Productivity",
     "capabilities": [

@@ -88,6 +88,7 @@ Before reversal, call `get_split`, require `revertible: true`, and show both the
 Use the matching `search_*` and `get_*` tool before any create or update. Explain domain effects before confirmation:
 
 - Recurrent movement callbacks may create a movement for the current month when recurrence rules allow it.
+- Deleting a recurrent movement permanently removes the rule and prevents future generation, but preserves movements it already created. Fetch the rule immediately before deletion, confirm the exact record, pass its latest `updated_at`, and verify that `get_recurrent_movement` returns `not_found`.
 - Plan changes affect forecasts and may trigger existing PADMA synchronization behavior.
 - Automation rules affect newly created movements, not historical records.
 
