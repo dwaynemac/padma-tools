@@ -36,11 +36,13 @@ This plugin provides coordination instructions only. It does not declare MCP ser
 
 1. Use the narrowest typed tool and exact period that answer the request.
 2. In CRM, discover tags, marketing methods, and saved lists with their account-scoped list tools before using their IDs in `search_contacts`.
-3. Paginate every search needed for complete coverage. Do not treat one page as a complete population.
-4. Preserve product semantics: CRM missing monthly values are unknown, not zero; Money amounts are integer cents with currency; Money reporting months differ from actual movement dates.
-5. Keep currencies separate and label derived calculations.
-6. Separate MCP-confirmed facts from interpretations and recommendations.
-7. For combined analysis, align periods explicitly but preserve each product's source, date basis, freshness, filters, and missing coverage.
+3. Treat a current CRM contact's `padma_id` as the cross-product identity bridge. Use it unchanged with Money `search_contacts(padma_id: ...)` or `search_movements(contact_padma_id: ...)`; never substitute a CRM-local or Money-local integer ID.
+4. A shared `padma_id` links identity only. Continue resolving CRM `account_name` and Money `business_id` independently through their OAuth discovery tools.
+5. Paginate every search needed for complete coverage. Do not treat one page as a complete population.
+6. Preserve product semantics: CRM missing monthly values are unknown, not zero; Money amounts are integer cents with currency; Money reporting months differ from actual movement dates.
+7. Keep currencies separate and label derived calculations.
+8. Separate MCP-confirmed facts from interpretations and recommendations.
+9. For combined analysis, align periods explicitly but preserve each product's source, date basis, freshness, filters, and missing coverage.
 
 ## Protect people, credentials, and tenants
 
@@ -48,7 +50,7 @@ This plugin provides coordination instructions only. It does not declare MCP ser
 - Never place emails, phones, OAuth codes, access tokens, or secrets in logs, files, URLs, or unrelated tools.
 - Treat selectors as choices inside an OAuth allowlist, never as authorization by themselves.
 - Do not combine data from different organizations unless the user explicitly requests a clearly separated comparison and every organization is authorized.
-- Do not claim that a person returned by CRM is the same Money contact unless current MCP evidence or the user confirms the linkage.
+- Do not claim that a person returned by CRM is linked to Money unless an exact lookup with the current CRM `padma_id` succeeds in the selected Money Business or the user confirms the linkage.
 
 ## Write through supported product tools
 

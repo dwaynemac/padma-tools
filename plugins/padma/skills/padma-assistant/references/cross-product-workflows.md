@@ -13,11 +13,24 @@ Do not imply that commercial changes caused financial changes solely because the
 
 ## Contact and payment questions
 
-1. Find the person in CRM within the selected account using the minimum personal data needed.
-2. Search Money contacts within the selected Business independently.
-3. Link the records only when a stable identifier returned by both current responses or explicit user confirmation supports the match.
-4. Search Money plans or movements using the Money contact returned by Money, not a CRM database identifier.
-5. Distinguish CRM relationship status from Money payment expectation and realized financial movements.
+1. Resolve the CRM account and Money Business independently through `list_accounts` and `list_businesses`. Keep `account_name` only on CRM calls and `business_id` only on Money calls.
+2. Find the person in CRM within the selected account using the minimum personal data needed. Confirm the intended result and retain its current `padma_id`.
+3. For Money contact metadata or membership verification, call `search_contacts(padma_id: crm_contact.padma_id)` inside the selected Money Business. This is an exact match and returns an empty collection when that contact is not connected to the Business.
+4. For realized movements, call `search_movements(contact_padma_id: crm_contact.padma_id, ...)` directly with an explicit date field and period. Do not perform an intermediate lookup merely to obtain Money's integer `contact_id`.
+5. Do not send `contact_id` together with `contact_padma_id`. An unknown or out-of-Business `contact_padma_id` returns `not_found`.
+6. Paginate Money movement results when `next_cursor` is present and preserve the same contact, period, page size, and Business filters on every page.
+7. Distinguish CRM relationship status from Money payment expectation and realized financial movements.
+
+The cross-product call shape is:
+
+```text
+CRM search_contacts(account_name: selected_crm_account, ...)
+  -> crm_contact.padma_id
+Money search_contacts(business_id: selected_money_business, padma_id: crm_contact.padma_id)
+Money search_movements(business_id: selected_money_business, contact_padma_id: crm_contact.padma_id, date_field: ..., from: ..., to: ...)
+```
+
+`padma_id` is the shared identity key. It does not authorize either product, select an organization, or prove that similarly named CRM and Money tenants correspond.
 
 Absence from one account or Business does not prove that the person does not exist elsewhere. A CRM student status does not prove payment, and a Money plan does not prove learning access.
 

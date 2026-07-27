@@ -21,6 +21,8 @@ CRM uses stable `account_name`. Money uses the integer `business_id` returned by
 - Similar display names are not proof that two tenants represent the same organization.
 - Do not probe names or IDs not returned by discovery.
 
+A contact `padma_id` is different from these organization selectors. A current CRM result may provide it as a stable identity bridge for an exact Money `padma_id` or `contact_padma_id` filter, but the Money call must still use a separately authorized and selected `business_id`.
+
 ## Availability and authorization
 
 - Missing tools: install or update the affected `crm` or `money` plugin, start a new task, and then reconnect that MCP.

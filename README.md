@@ -67,6 +67,7 @@ Permite:
 - ubicar cada pregunta en su fuente de verdad dentro de PADMA;
 - buscar contactos y analizar métricas comerciales mediante CRM;
 - consultar y administrar las operaciones financieras disponibles en Money;
+- relacionar un contacto confirmado en CRM con su registro y movimientos de Money mediante el `padma_id` compartido;
 - preparar panoramas combinados con períodos, organizaciones y fuentes claras;
 - reconocer cuándo una solicitud pertenece a Learn u otra app que
   todavía no está conectada por este plugin.
@@ -93,6 +94,23 @@ correcto y a no mezclar tenants, identificadores, monedas ni fechas.
 6. Para un análisis combinado, seleccioná la organización de cada producto de
    forma independiente; nombres parecidos no prueban que sean el mismo tenant.
 
+#### Relacionar un contacto entre CRM y Money
+
+1. Buscá el contacto dentro de la cuenta CRM seleccionada y conservá el
+   `padma_id` devuelto.
+2. Seleccioná el negocio Money de forma independiente mediante
+   `list_businesses`; el `padma_id` no reemplaza al `business_id`.
+3. Usá `search_contacts` de Money con `padma_id` para verificar una coincidencia
+   exacta dentro de ese negocio.
+4. Usá `search_movements` con `contact_padma_id`, un período explícito y el
+   mismo `business_id` para consultar directamente sus movimientos.
+5. No envíes `contact_id` y `contact_padma_id` juntos, y recorré
+   `next_cursor` cuando la búsqueda tenga más páginas.
+
+Que no haya coincidencia en un negocio no prueba que el contacto no exista en
+otro. CRM sigue siendo la fuente de relación y actividad del contacto; Money,
+la fuente de planes y movimientos financieros.
+
 ### Money
 
 Conecta el agente con [PADMA Money](https://money.derose.app/) mediante su servidor MCP oficial.
@@ -101,6 +119,7 @@ Permite:
 
 - descubrir y seleccionar entre los negocios autorizados por OAuth;
 - consultar cuentas, categorías, contactos y movimientos;
+- buscar contactos por `padma_id` exacto y movimientos por `contact_padma_id`;
 - analizar gastos, ingresos, períodos y posibles anomalías;
 - crear, corregir, dividir y eliminar movimientos financieros;
 - prorratear gastos en meses sucesivos, subdividir movimientos y revertir esas divisiones de forma segura;
@@ -169,6 +188,7 @@ agregar comentarios a contactos.
 - “Dame un panorama comercial y financiero de mi escuela este trimestre.”
 - “¿La mejora del funnel coincide con mayores ingresos? Separá hechos de interpretación.”
 - “Buscá este contacto en CRM y revisá si tiene movimientos relacionados en Money.”
+- “Tomá el `padma_id` de este contacto de CRM y listá sus movimientos de Money del último año.”
 - “¿Qué parte de esta consulta corresponde a CRM, Money o Learn?”
 
 ### Money

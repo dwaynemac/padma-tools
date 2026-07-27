@@ -102,6 +102,9 @@ It accepts no arguments and returns only locally usable Businesses authorized by
 
 Selection guidance:
 
+- Use `search_contacts(padma_id: ...)` for an exact PADMA ID match inside the selected Business. Its `text` filter remains a partial name-or-PADMA-ID search.
+- Use `search_movements(contact_padma_id: ...)` when the stable PADMA contact ID is already known, including when it came from a current CRM response. Do not first translate it into a Money-local integer ID.
+- `contact_id` and `contact_padma_id` are mutually exclusive movement filters. Supplying both returns `validation_failed`.
 - Use `search_movements` for audit, reconciliation, category review, finding a specific payment, duplicate checks, or explaining an aggregate.
 - Use `get_movement` immediately before updating, deleting, prorating, or subdividing one movement. A non-null `split_id` identifies the split that owns a resulting movement.
 - Use `get_split` to inspect the original snapshot, every resulting movement—including soft-deleted targets—and whether the split is currently revertible.
@@ -138,6 +141,7 @@ It also does not expose dedicated account-balance, payable, receivable, budget, 
 - `expected_updated_at` is the latest ISO 8601 timestamp from a read and protects updates, deletion, proration, and subdivision with optimistic concurrency.
 - `revert_split` requires the exact `expected_movements` list returned by `get_split`, containing every target `id` and `updated_at`. A changed, deleted, added, duplicated, or omitted target produces `conflict`.
 - Search responses are cursor-paginated. Default and maximum page sizes may vary by tool.
+- `search_contacts.padma_id` and `search_movements.contact_padma_id` are exact matches. An unknown `search_contacts.padma_id` returns an empty collection; an unknown or out-of-Business `contact_padma_id` returns `not_found`.
 - Related account, category, contact, agent, and target-account IDs must belong to the selected Business.
 - Records belonging to another business appear as `not_found` to avoid leaking their existence.
 - The rate limit is shared by the OAuth token across all its authorized Businesses.
