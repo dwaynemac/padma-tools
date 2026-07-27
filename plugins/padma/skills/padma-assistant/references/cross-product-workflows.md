@@ -44,11 +44,18 @@ Absence from one account or Business does not prove that the person does not exi
 
 ## Writes in a combined workflow
 
-CRM can add account-visible contact comments and exposes no other writes. Money supports typed creates and updates for movements and selected financial configuration, plus recoverable movement deletion.
+CRM can create or reuse contacts, add supported properties, record communications, and add account-visible contact comments. Money supports typed creates and updates for movements and selected financial configuration, plus recoverable movement deletion.
 
-### CRM contact comments
+### CRM contact and communication writes
 
-Follow the `padma-crm` skill: resolve the account and contact, use the exact user-approved text, call `add_contact_comment` once, and inspect contact history before any retry after an uncertain result.
+Follow the `padma-crm` skill and keep the selected `account_name`:
+
+- For a new person, call `create_contact` with a first name and exact email or phone. Stop on ambiguous identity instead of choosing a candidate.
+- For a contact property, resolve the contact, discover custom definitions when relevant, and call `add_contact_property` with only type-specific fields. Treat normalized duplicates as successful reuse.
+- For a communication, resolve the contact, discover any marketing methods, and use one fresh `request_id`. Reuse it only for an identical retry.
+- For a comment, use the exact user-approved text, call `add_contact_comment` once, and inspect contact history before retrying an uncertain result.
+
+Do not treat CRM contact creation as permission to create a related Money contact or record.
 
 ### Money writes
 

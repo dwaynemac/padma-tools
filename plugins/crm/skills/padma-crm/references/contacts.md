@@ -32,16 +32,44 @@ Birthday components are integers and can be combined independently. Use `birthda
 - Call `list_tags`, then pass returned `tag_id` values as `tag_ids`.
 - Call `list_marketing_methods`, then pass returned active `marketing_method_id` values as `marketing_method_ids`.
 - Call `list_contact_lists`, then pass returned `list_id` values as `intersect_list_ids`, `union_list_ids`, or `not_in_list_ids`.
+- Call `list_custom_property_definitions`, then pass returned `property_configuration_id` values only as response selectors, never as contact filters.
 
 List conjunction semantics are explicit: intersection requires membership in every selected list, union requires membership in any selected list, and exclusion removes members of every selected list. Never copy an ID from another account or reuse discovery results after switching accounts.
 
-Search results are account-scoped summaries. Paginate until the requested scope is complete, or state clearly that the answer covers only the returned page. Do not reuse a cursor after changing the account, any filter, or page size.
+Search results are account-scoped summaries. Paginate until the requested scope is complete, or state clearly that the answer covers only the returned page. Do not reuse a cursor after changing the account, any filter, property selector, or page size.
 
 ## Detail
 
 Use `get_contact` only with a `padma_id` returned by a current CRM call or supplied by the user and confirmed in the selected account. Detail can include name, email, phone, status, teacher, coefficient, last visit, and update timestamp.
 
 Email and phone are resolved from properties belonging to the selected account. Do not infer that another account has the same contact state or operational properties.
+
+To receive additional properties from `get_contact` or `search_contacts`, pass one or both selectors:
+
+- `property_types`: `email`, `telephone`, `birthday`, `identification`, `address`, or `occupation`;
+- `property_configuration_ids`: IDs returned by `list_custom_property_definitions` for the selected account.
+
+Selectors control response projection only. They do not filter search matches. When supplied, each contact has a flat `properties` array containing every matching account-owned value in deterministic order. Without selectors, responses retain their compact shape, including the existing top-level email and phone on `get_contact`.
+
+Custom definitions have `String`, `Date`, `Integer`, or `Contact` data types. Custom values include their definition ID, label, and type. Relationships expose only a nested related contact's `padma_id` and `friendly_name`; a target outside the selected account is omitted.
+
+## Create or reuse a contact
+
+Use `create_contact` with `first_name` and at least one of `email` or `phone`. Optional inputs are `last_name`, a two-letter `phone_country`, and `status`: `prospect`, `student`, or `former_student`.
+
+CRM normalizes email and phone using its contact rules and matches only properties owned by the selected account. It never matches by name. When one contact matches, existing values are preserved and only a missing last name, email, phone, or local status is added. Read `created`, `matched_by`, and `enriched_fields` from the response instead of assuming a new person was created.
+
+If multiple candidates exist, or the supplied email and phone identify different contacts, CRM returns `identity_conflict` without writing. Ask the user to resolve the identity; do not select a candidate or alter the identifiers automatically.
+
+## Add a contact property
+
+Use `add_contact_property` only for a contact confirmed in the selected account. Required inputs are `padma_id`, `property_type`, and `value`. Supported property types are `email`, `telephone`, `birthday`, `identification`, `address`, `occupation`, and `custom`.
+
+Send only metadata relevant to the selected type. Telephone accepts a two-letter `phone_country`; identification requires `identification_type` (`dni`, `cpf`, `rg`, or `passport`); address accepts `address_label`, postal code, city, state, neighborhood, and country; custom requires `custom_label`. Do not send `public` or `primary`.
+
+Call `list_custom_property_definitions` before selecting a custom label. This write supports String custom values only. A missing String definition is created, an existing String definition is reused, and a label configured with another data type is rejected.
+
+The operation is idempotent after CRM normalization. Report the returned property and status: `created`, `existing`, `birthday_assigned`, `birthday_unchanged`, or `birthday_preserved_as_custom`. A conflicting incoming birthday is preserved as a custom value and does not replace the contact's canonical birthday.
 
 ## Learn activity summary
 
@@ -71,6 +99,19 @@ The server creates an account-visible `FollowUp` comment under the authenticated
 
 The operation is non-idempotent. Call it once. If the response is lost or uncertain, read the contact history before retrying and compare the content, username, and activity time to avoid a duplicate.
 
+## Record a communication
+
+Use `create_communication` only for a `padma_id` confirmed in the selected account. Required inputs are:
+
+- `request_id`: an opaque client-generated key of 1–64 characters;
+- `padma_id`: the resolved contact;
+- `observations`: the exact communication text;
+- `media`: `social`, `website_contact`, `email`, `messaging`, `phone_call`, or `interview`.
+
+Optional inputs are ISO 8601 `communicated_at` (default current time), `incoming` (default `true`), `estimated_coefficient` (`unknown`, `fp`, `pmenos`, `perfil`, or `pmas`), and `marketing_method_ids`. Discover active marketing methods in the selected account before sending their IDs.
+
+CRM derives the username from the authenticated principal and sanitizes observations. Generate a fresh `request_id` for each new communication. Reuse it only to retry the identical payload: a valid replay returns the original record with `created: false`, while changed data returns `idempotency_conflict`.
+
 ## Privacy and presentation
 
 - Return the minimum personal data needed to answer the request.
@@ -80,4 +121,4 @@ The operation is non-idempotent. Call it once. If the response is lost or uncert
 - Treat `not_found` as absence from the selected authorized account, not proof that the person does not exist elsewhere.
 - Keep returned CRM facts separate from guesses about identity, intent, or personal characteristics.
 
-CRM can add contact comments through this plugin. Do not promise status changes, other contact edits, imports, merges, or deletions.
+CRM can create or reuse contacts, add supported contact properties, record communications, and add contact comments through this plugin. Contact creation enriches only missing fields, and property writes only add normalized values. Do not promise status changes, other contact edits, imports, merges, or deletions.

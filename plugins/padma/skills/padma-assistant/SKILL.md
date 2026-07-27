@@ -1,6 +1,6 @@
 ---
 name: padma-assistant
-description: Use the PADMA client ecosystem through the authorized CRM and Money MCP servers. Route each business question to its source of truth, search contacts and commercial metrics in CRM, analyze or manage finances in Money, and coordinate cross-product school reviews without mixing tenants, identifiers, currencies, dates, or unsupported applications. Use for requests about a school, students, contacts, commercial performance, payments, expenses, income, or combined CRM and financial analysis in PADMA.
+description: Use the PADMA client ecosystem through the authorized CRM and Money MCP servers. Route each business question to its source of truth, search contacts or register their properties and activity in CRM, analyze or manage finances in Money, and coordinate cross-product school reviews without mixing tenants, identifiers, currencies, dates, or unsupported applications. Use for requests about a school, students, contacts, commercial performance, payments, expenses, income, or combined CRM and financial analysis in PADMA.
 ---
 
 # Coordinate PADMA CRM and Money
@@ -35,7 +35,7 @@ This plugin provides coordination instructions only. It does not declare MCP ser
 ## Work with evidence
 
 1. Use the narrowest typed tool and exact period that answer the request.
-2. In CRM, discover tags, marketing methods, and saved lists with their account-scoped list tools before using their IDs in `search_contacts`.
+2. In CRM, discover tags, marketing methods, saved lists, and custom property definitions with their account-scoped list tools before using their IDs.
 3. Treat a current CRM contact's `padma_id` as the cross-product identity bridge. Use it unchanged with Money `search_contacts(padma_id: ...)` or `search_movements(contact_padma_id: ...)`; never substitute a CRM-local or Money-local integer ID.
 4. A shared `padma_id` links identity only. Continue resolving CRM `account_name` and Money `business_id` independently through their OAuth discovery tools.
 5. Paginate every search needed for complete coverage. Do not treat one page as a complete population.
@@ -54,7 +54,8 @@ This plugin provides coordination instructions only. It does not declare MCP ser
 
 ## Write through supported product tools
 
-- CRM can add account-visible contact comments. Follow the `padma-crm` skill and do not promise other contact, status, or statistic changes.
+- CRM can create or reuse contacts, add supported contact properties, record communications, and add account-visible comments. Follow the `padma-crm` skill for account scope, identity conflicts, idempotency, and exact inputs.
+- CRM contact creation only enriches missing fields, and property writes only add normalized values. Do not promise other contact, status, or statistic changes.
 - Before any Money write, read the current records, resolve related IDs, show the exact proposal, and obtain confirmation unless the user already confirmed that identical change.
 - Use a fresh UUID `request_id`, use the latest `updated_at` as `expected_updated_at` for updates, change only requested fields, and refetch after writing.
 - Never emulate unsupported writes or silently create related records.

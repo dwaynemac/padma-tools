@@ -1,7 +1,7 @@
 {
   "name": "crm",
-  "version": "0.1.7+codex.20260727103148",
-  "description": "Consult authorized PADMA CRM contacts and school metrics, and add contact comments safely through its remote MCP server.",
+  "version": "0.1.9+codex.20260727220447",
+  "description": "Consult authorized PADMA CRM data and safely create contacts, properties, communications, and comments through its remote MCP server.",
   "author": {
     "name": "PADMA"
   },
@@ -17,8 +17,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "CRM",
-    "shortDescription": "Consultá CRM y agregá comentarios",
-    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para descubrir segmentos, buscar contactos con filtros operativos, agregar comentarios y analizar estadísticas mensuales y el funnel comercial.",
+    "shortDescription": "Consult\u00e1 y registr\u00e1 actividad en CRM",
+    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para buscar o crear contactos, consultar o agregar propiedades, registrar actividad, descubrir segmentos y analizar estad\u00edsticas mensuales y el funnel comercial.",
     "developerName": "PADMA",
     "category": "Productivity",
     "capabilities": [
@@ -27,10 +27,14 @@
     ],
     "websiteURL": "https://crm.derose.app/",
     "defaultPrompt": [
-      "Listá las cuentas de CRM que tengo autorizadas.",
-      "Buscá un contacto por nombre, email o teléfono.",
+      "List\u00e1 las cuentas de CRM que tengo autorizadas.",
+      "Busc\u00e1 un contacto por nombre, email o tel\u00e9fono.",
+      "Mostrame las propiedades configuradas y los valores de este contacto.",
+      "Agreg\u00e1 esta propiedad al contacto que acabo de seleccionar.",
+      "Registr\u00e1 este nuevo contacto sin reemplazar datos existentes.",
+      "Guard\u00e1 esta comunicaci\u00f3n en el contacto que acabo de seleccionar.",
       "Mostrame el resumen de actividad de Learn de este contacto.",
-      "Agregá este comentario al contacto que acabo de seleccionar."
+      "Agreg\u00e1 este comentario al contacto que acabo de seleccionar."
     ]
   },
   "mcpServers": "./.mcp.json"

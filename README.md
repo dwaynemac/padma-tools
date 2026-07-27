@@ -65,7 +65,7 @@ plugins `crm` y `money`.
 Permite:
 
 - ubicar cada pregunta en su fuente de verdad dentro de PADMA;
-- buscar contactos y analizar métricas comerciales mediante CRM;
+- buscar o registrar contactos y comunicaciones, y analizar métricas comerciales mediante CRM;
 - consultar y administrar las operaciones financieras disponibles en Money;
 - relacionar un contacto confirmado en CRM con su registro y movimientos de Money mediante el `padma_id` compartido;
 - preparar panoramas combinados con períodos, organizaciones y fuentes claras;
@@ -153,9 +153,13 @@ Permite:
 - descubrir y seleccionar cuentas autorizadas por OAuth;
 - buscar contactos por identidad, cumpleaños, estado, vínculo con la cuenta, actividad y fechas;
 - descubrir etiquetas, métodos de marketing y listas guardadas antes de usarlos como filtros;
+- descubrir propiedades personalizadas y consultar valores seleccionados del contacto;
 - consultar datos operativos del contacto dentro de la cuenta seleccionada;
 - consultar el resumen de actividad y riesgo de abandono calculado por Learn;
 - recorrer el historial de actividad del contacto con paginación segura;
+- crear contactos o reutilizar coincidencias exactas de email o teléfono sin reemplazar datos existentes;
+- agregar propiedades de sistema o de texto personalizadas sin duplicar valores normalizados;
+- registrar comunicaciones idempotentes bajo el usuario autenticado;
 - agregar comentarios visibles para la cuenta al contacto seleccionado;
 - leer series mensuales persistidas y su fecha de actualización;
 - comparar métricas con el mes anterior y el promedio de los tres meses previos;
@@ -178,8 +182,9 @@ personales y distinguir estadísticas faltantes de valores cero.
    `Mostrame las definiciones de estadísticas mensuales de esta cuenta.`
 
 El plugin no requiere una API key ni una variable de entorno. El cliente
-administra la sesión OAuth. La única escritura disponible en esta versión es
-agregar comentarios a contactos.
+administra la sesión OAuth. Las escrituras disponibles permiten crear o
+reutilizar contactos, agregar propiedades, registrar comunicaciones y agregar
+comentarios.
 
 ## Ejemplos
 
@@ -210,6 +215,10 @@ agregar comentarios a contactos.
 - “¿Quién cumple años hoy en esta cuenta?”
 - “Mostrame la actividad reciente de este contacto.”
 - “Mostrame el resumen de actividad de Learn de este contacto.”
+- “Listá las propiedades personalizadas disponibles y mostrame el apodo de este contacto.”
+- “Agregá este teléfono al contacto que acabo de seleccionar.”
+- “Registrá a Ana como prospect con este email y teléfono.”
+- “Guardá esta llamada saliente en el contacto que acabo de seleccionar.”
 - “Agregá este comentario al contacto que acabo de seleccionar.”
 - “Mostrame alumnos y bajas mes a mes durante el último año.”
 - “Compará la efectividad de este mes con el mes anterior.”

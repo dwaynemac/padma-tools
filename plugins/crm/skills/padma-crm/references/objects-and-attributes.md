@@ -7,6 +7,14 @@ Interpret CRM records with these product semantics. The names shown are the MCP 
 - A contact is a person related to the school, such as a prospect, student, former student, teacher, or another relationship represented by that school's configured statuses.
 - Contact details, status, activity, assigned teacher, tags, marketing methods, and list membership are scoped to the selected account. Do not infer that another school has the same information for the person.
 
+## Contact properties
+
+- System properties represent email, telephone, birthday, identification, address, and occupation values owned by the selected account.
+- Custom property definitions are account-scoped labels with `String`, `Date`, `Integer`, or `Contact` data types. Their numeric IDs are selectors, not portable identifiers across accounts.
+- Property selectors on contact reads control projection only; they do not filter the contacts returned by a search.
+- A `Contact` custom property is a relationship. CRM exposes the related person's stable `padma_id` and friendly name only when that person is also connected to the selected account.
+- `add_contact_property` supports String custom writes. Existing Date, Integer, and Contact definitions remain readable but are not writable through that tool.
+
 ## Tags
 
 - Tags (`tag_ids`) are free-form labels created by each school to organize or segment its contacts.
@@ -34,6 +42,14 @@ Interpret CRM records with these product semantics. The names shown are the MCP 
 - A comment is a new account-visible `FollowUp` entry attached to one contact.
 - CRM records the authenticated user and current time. The agent supplies only the resolved contact and exact comment text.
 - Repeating `add_contact_comment` creates another entry; comments are not idempotent.
+
+## Communications
+
+- A communication records an interaction with one existing contact in the selected account.
+- CRM owns author attribution and sanitizes the supplied observations.
+- `media` describes the channel; `incoming` describes its direction; `communicated_at` is the activity timestamp.
+- Marketing methods are account-scoped acquisition or campaign references and must be discovered before use.
+- `request_id` is an idempotency key scoped to the selected account. It is not a communication ID or contact identifier.
 
 ## Monthly statistics and lead funnel
 

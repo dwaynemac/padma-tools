@@ -25,29 +25,69 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 | `list_tags` | optional `account_name` | Discover account tag IDs and names for `tag_ids`. |
 | `list_marketing_methods` | optional `account_name` | Discover active account marketing method IDs and values. |
 | `list_contact_lists` | optional `account_name` | Discover saved contact-list IDs and names. |
-| `search_contacts` | optional account, filters, `page_size`, `cursor` | Search account-scoped contact summaries using identity, birthday, relationship, activity, date, tag, marketing, and list filters. |
-| `get_contact` | optional `account_name`, required `padma_id` | Read one account-scoped contact detail. |
+| `list_custom_property_definitions` | optional `account_name` | Discover account-owned custom property IDs, labels, and data types. |
+| `search_contacts` | optional account, filters, property selectors, `page_size`, `cursor` | Search account-scoped contact summaries and optionally project selected properties. |
+| `get_contact` | optional `account_name`, required `padma_id`; optional property selectors | Read one account-scoped contact detail and optionally project selected properties. |
 | `get_contact_learn_activity_summary` | optional `account_name`, required `padma_id` | Read the latest stored Learn activity and churn-risk summary for one account-scoped contact. |
 | `get_contact_history` | optional account, required `padma_id`; optional `page_size`, `cursor` | Read the contact activity feed, newest entry first. |
 | `add_contact_comment` | optional account, required `padma_id` and `observations` | Add an account-visible follow-up comment as the authenticated user. |
+| `create_contact` | optional account; required `first_name` plus `email` or `phone` | Create a contact or reuse an exact account-owned identity, enriching only missing fields. |
+| `add_contact_property` | optional account; required `padma_id`, `property_type`, and `value` | Idempotently add a supported account-owned system or custom contact property. |
+| `create_communication` | optional account; required `request_id`, `padma_id`, `observations`, and `media` | Record an idempotent account-scoped communication as the authenticated user. |
 | `list_monthly_stat_definitions` | optional `account_name` | Discover stable metric names, localized metadata, types, and availability. |
 | `get_monthly_stats` | `stat_names`; optional account and month range | Read dense persisted monthly series. |
 | `compare_monthly_stats` | `stat_names`; optional account and month | Compare current, previous, and prior-three-month baselines. |
 | `get_lead_funnel` | optional account and month range | Aggregate persisted funnel stages and transitions. |
 
-## Contact-comment writes
+## Contact property projection
 
-- Resolve the contact in the selected account before calling `add_contact_comment`.
-- Pass only `account_name`, `padma_id`, and the exact approved comment text as `observations`.
-- The server assigns the authenticated username, current timestamp, `FollowUp` type, and account visibility.
-- Each successful call creates a new comment. It is not idempotent.
-- On an uncertain result, inspect `get_contact_history` before retrying.
-- CRM exposes no other write operation in this release.
+`list_custom_property_definitions` returns every definition available to the selected account, ordered by label. Each item contains `property_configuration_id`, `label`, and `data_type`: `String`, `Date`, `Integer`, or `Contact`.
+
+Both `get_contact` and `search_contacts` accept these optional selectors:
+
+- `property_types`: unique values from `email`, `telephone`, `birthday`, `identification`, `address`, and `occupation`;
+- `property_configuration_ids`: unique positive IDs from the current account's definition list.
+
+When either selector is present, each contact includes a flat `properties` array with every matching account-owned value. The selectors change only response projection, never search matching. Without selectors, the existing compact response is unchanged. Search cursors are bound to the selectors and cannot be reused after changing them.
+
+System values include their applicable phone, identification, address, or birthday metadata. Custom values identify their definition, label, and data type. A `Contact` value returns a nested related contact with only `padma_id` and `friendly_name`; CRM omits a relationship when its target is unavailable in the selected account.
+
+## Contact and communication writes
+
+`create_contact` requires `first_name` and at least one exact identity:
+
+- `email` and `phone` are normalized by CRM and matched only against properties owned by the selected account.
+- Optional inputs are `last_name`, two-letter `phone_country`, and `status`: `prospect`, `student`, or `former_student`.
+- A unique match is reused without replacing existing values. CRM only fills a missing last name, email, phone, or local status.
+- Ambiguous matches or an email and phone belonging to different contacts return `identity_conflict` without writing.
+- The response reports `created`, `matched_by`, and `enriched_fields`.
+
+For `add_contact_property`:
+
+- Resolve an existing account-scoped contact and pass `padma_id`, `property_type`, and `value`.
+- `property_type` accepts `email`, `telephone`, `birthday`, `identification`, `address`, `occupation`, or `custom`.
+- Telephone accepts `phone_country`; identification requires `identification_type`: `dni`, `cpf`, `rg`, or `passport`; address accepts its label and postal/location fields; custom requires `custom_label`.
+- Do not send type-specific fields to another type, and do not send `public` or `primary`.
+- Custom properties are String-only for this write. CRM creates or reuses an account-scoped String definition and rejects a label already configured with another data type.
+- Exact normalized matches return `existing`. Other successful statuses are `created`, `birthday_assigned`, `birthday_unchanged`, and `birthday_preserved_as_custom`.
+- A conflicting birthday remains canonical and the incoming value is preserved as the `incoming_birthday` custom property.
+
+For `create_communication`:
+
+- Resolve `padma_id` with `search_contacts` or `create_contact`.
+- Pass a fresh opaque `request_id` of 1–64 characters for a new communication.
+- `media` must be `social`, `website_contact`, `email`, `messaging`, `phone_call`, or `interview`.
+- Optional inputs are ISO 8601 `communicated_at`, `incoming`, `estimated_coefficient`, and active account-owned `marketing_method_ids`.
+- `estimated_coefficient` accepts `unknown`, `fp`, `pmenos`, `perfil`, or `pmas`.
+- CRM derives the username from OAuth and sanitizes `observations`.
+- Replaying the same key and payload returns the original communication with `created: false`. The same key with different data returns `idempotency_conflict`.
+
+For `add_contact_comment`, pass only the resolved `padma_id` and exact approved `observations`. Each call creates a new comment, so inspect `get_contact_history` before retrying an uncertain result.
 
 ## Pagination and limits
 
 - Contact pages default to 50 and accept at most 200 records.
-- A returned contact cursor is signed and bound to its account and filters. Reuse it only for the next page of the identical search.
+- A returned contact cursor is signed and bound to its account, filters, and property projection. Reuse it only for the next page of the identical search.
 - Contact-history pages use the same 1–200 page-size limit. Reuse their signed cursor only with the same account, `padma_id`, and page size.
 - Explicit contact-search dates use strict `YYYY-MM-DD` values.
 - Birthday filters use integer `birthday_day`, `birthday_month`, and optional `birthday_year`; omit any component that should not constrain the search.
@@ -65,6 +105,8 @@ Tool-level domain errors return `isError: true` with a stable code:
 - `forbidden`: do not retry with invented account names; refresh authorization and account discovery.
 - `not_found`: confirm the current account and identifier.
 - `validation_failed`: correct names, dates, statuses, cursor, or other input.
+- `identity_conflict`: stop and resolve the ambiguous email or phone identity before retrying.
+- `idempotency_conflict`: do not retry the changed payload with the same `request_id`.
 - `limit_exceeded`: narrow the page, date range, or metric list.
 - `internal_error`: report the correlation ID and avoid blind retries.
 
