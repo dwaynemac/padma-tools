@@ -37,7 +37,25 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 | `list_monthly_stat_definitions` | optional `account_name` | Discover stable metric names, localized metadata, types, and availability. |
 | `get_monthly_stats` | `stat_names`; optional account and month range | Read dense persisted monthly series. |
 | `compare_monthly_stats` | `stat_names`; optional account and month | Compare current, previous, and prior-three-month baselines. |
-| `get_lead_funnel` | optional account and month range | Aggregate persisted funnel stages and transitions. |
+| `get_lead_funnel` | optional account and month range | Analyze the historical four-stage conversion funnel from persisted monthly statistics. |
+| `get_commercial_funnel` | optional `account_name` | Read the five live operational follow-up stages with localized labels, descriptions, contact counts, and actionable saved-list IDs. |
+
+## Choose the correct funnel
+
+Use `get_commercial_funnel` for current operational work. It answers “Which
+contacts need follow-up now?” and returns acquisition, qualified, booked,
+trialed, and enrolled stages. Each stage includes a `list_id`; pass that ID to
+`get_contact_list` and follow its cursor when the user asks for the contacts.
+The stage counts are live saved-search populations, not a historical cohort, so
+do not derive conversion percentages from them. Like the web dashboard, the
+first call may initialize missing internal system searches without modifying
+contacts.
+
+Use `get_lead_funnel` for historical analysis. It answers “How did demand
+convert into enrollments over this monthly range?” and returns demand, visits,
+profile visits, and enrollments with percent-of-initial and transition
+conversion values. Query the corresponding monthly series when the difference
+between a persisted zero and missing source data matters.
 
 ## Saved contact lists
 

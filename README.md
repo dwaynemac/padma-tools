@@ -164,7 +164,8 @@ Permite:
 - agregar comentarios visibles para la cuenta al contacto seleccionado;
 - leer series mensuales persistidas y su fecha de actualización;
 - comparar métricas con el mes anterior y el promedio de los tres meses previos;
-- analizar el funnel comercial de procura, visitas, visitas perfil y matrículas.
+- revisar las cinco etapas actuales de seguimiento comercial y abrir la lista de contactos de cada etapa;
+- analizar el funnel histórico de procura, visitas, visitas perfil y matrículas durante un período.
 
 El plugin incluye la skill `padma-crm`, que enseña al agente a preservar el
 aislamiento entre cuentas, paginar búsquedas, minimizar la exposición de datos
@@ -224,7 +225,8 @@ comentarios.
 - “Agregá este comentario al contacto que acabo de seleccionar.”
 - “Mostrame alumnos y bajas mes a mes durante el último año.”
 - “Compará la efectividad de este mes con el mes anterior.”
-- “Analizá el funnel comercial de los últimos seis meses.”
+- “Mostrame cuántos contactos necesitan seguimiento ahora en cada etapa y abrí la lista de Perfil.”
+- “Analizá el funnel histórico de conversión de los últimos seis meses.”
 
 ## Estructura
 

@@ -1,6 +1,6 @@
 ---
 name: padma-crm
-description: Use PADMA CRM through its remote MCP server to find authorized accounts, discover contact metadata, search or create account-scoped contacts, retrieve saved contact lists with their configured properties, inspect or add contact properties, read Learn user IDs, activity summaries, and history, record communications and comments, analyze persisted school monthly statistics, compare periods, and review lead funnels. Use for requests about CRM contacts, prospects, students, saved lists, custom properties, Learn links, activity or churn risk, comments, communications, segmentation, contact status, enrollment and dropout metrics, monthly school performance, or commercial funnels stored in PADMA CRM.
+description: Use PADMA CRM through its remote MCP server to find authorized accounts, discover contact metadata, search or create account-scoped contacts, retrieve saved contact lists with their configured properties, inspect or add contact properties, read Learn user IDs, activity summaries, and history, record communications and comments, analyze persisted school monthly statistics, compare periods, and review live commercial follow-up or historical lead funnels. Use for requests about CRM contacts, prospects, students, saved lists, custom properties, Learn links, activity or churn risk, comments, communications, segmentation, contact status, enrollment and dropout metrics, monthly school performance, or commercial funnels stored in PADMA CRM.
 ---
 
 # Use PADMA CRM
@@ -18,7 +18,7 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 7. Read [references/objects-and-attributes.md](references/objects-and-attributes.md) for the product meaning of CRM objects.
 8. Read [references/contacts.md](references/contacts.md) for contact searches, detail handling, and privacy rules.
 9. Read [references/learn-activity-summary.md](references/learn-activity-summary.md) before interpreting Learn activity deltas, flags, timestamps, or churn risk.
-10. Read [references/monthly-statistics.md](references/monthly-statistics.md) before answering metric, comparison, trend, or funnel questions.
+10. Read [references/monthly-statistics.md](references/monthly-statistics.md) before answering metric, comparison, trend, or either funnel question.
 
 ## Search contacts
 
@@ -57,13 +57,17 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 4. Report only the returned activity, attendance, cancellation, and churn-risk signals. The summary is `null` when Learn has not calculated it.
 5. Treat the values as a snapshot calculated by Learn, not a prediction or diagnosis made by the agent.
 
-## Analyze monthly statistics
+## Analyze statistics and funnels
 
 1. Discover stable metric names with `list_monthly_stat_definitions`; do not invent a `stat_name` from a translated label.
-2. Use `get_monthly_stats` for exact series and freshness, `compare_monthly_stats` for shared dashboard comparison semantics, and `get_lead_funnel` for funnel aggregation.
-3. Preserve missing absolute values as unknown. Never convert `value: null` into zero or calculate a missing absolute statistic outside CRM.
-4. Do not request deprecated rate `stat_name` values. Derive a requested percentage from the documented absolute numerator and denominator only when both are present and the denominator is greater than zero.
-5. State account, period, metric names, missing months, and freshness when they affect the answer.
+2. Use `get_monthly_stats` for exact series and freshness and `compare_monthly_stats` for shared dashboard comparison semantics.
+3. Use `get_commercial_funnel` when the question is operational: which prospects need attention now, how many contacts are in each current follow-up stage, or which stage list to work. Use a returned `list_id` with `get_contact_list` and paginate that list when contacts are requested.
+4. Use `get_lead_funnel` when the question is analytical: how demand converted through visits and profile visits into enrollments over a monthly range.
+5. Never treat commercial-funnel stage counts as a historical conversion series or calculate conversion rates from them. They are live saved contact searches, not one period cohort.
+6. The first `get_commercial_funnel` call may initialize missing internal system searches, as the CRM dashboard does; it does not modify contacts.
+7. Preserve missing absolute values as unknown. Never convert `value: null` into zero or calculate a missing absolute statistic outside CRM.
+8. Do not request deprecated rate `stat_name` values. Derive a requested percentage from the documented absolute numerator and denominator only when both are present and the denominator is greater than zero.
+9. For a commercial funnel, state the account and that the counts are a current snapshot. For a lead funnel, state the account and monthly range. Include missing months and freshness when they affect an analytical answer.
 
 ## Add a contact comment
 

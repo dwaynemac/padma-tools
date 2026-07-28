@@ -1,6 +1,6 @@
 {
   "name": "crm",
-  "version": "0.1.11+codex.20260728154418",
+  "version": "0.1.12+codex.20260728162912",
   "description": "Consult authorized PADMA CRM contacts, Learn links, properties, activity, and statistics, and safely record supported changes through its remote MCP server.",
   "author": {
     "name": "PADMA"
@@ -18,7 +18,7 @@
   "interface": {
     "displayName": "CRM",
     "shortDescription": "Consult\u00e1 y registr\u00e1 actividad en CRM",
-    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para buscar o crear contactos, consultar sus v\u00ednculos con Learn y listas guardadas, administrar propiedades, registrar actividad y analizar estad\u00edsticas mensuales y el funnel comercial.",
+    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para buscar o crear contactos, consultar sus v\u00ednculos con Learn y listas guardadas, administrar propiedades, registrar actividad y analizar estad\u00edsticas mensuales, seguimiento comercial actual y conversi\u00f3n hist\u00f3rica.",
     "developerName": "PADMA",
     "category": "Productivity",
     "capabilities": [
@@ -36,7 +36,9 @@
       "Registr\u00e1 este nuevo contacto sin reemplazar datos existentes.",
       "Guard\u00e1 esta comunicaci\u00f3n en el contacto que acabo de seleccionar.",
       "Mostrame el resumen de actividad de Learn de este contacto.",
-      "Agreg\u00e1 este comentario al contacto que acabo de seleccionar."
+      "Agreg\u00e1 este comentario al contacto que acabo de seleccionar.",
+      "Mostrame qu\u00e9 contactos necesitan seguimiento ahora en cada etapa comercial.",
+      "Analiz\u00e1 la conversi\u00f3n hist\u00f3rica del funnel de los \u00faltimos seis meses."
     ]
   },
   "mcpServers": "./.mcp.json"

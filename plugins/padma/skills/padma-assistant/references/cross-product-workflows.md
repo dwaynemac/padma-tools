@@ -4,7 +4,7 @@
 
 1. Resolve the CRM account and Money Business independently.
 2. Confirm one common calendar period.
-3. In CRM, use persisted monthly statistics, comparisons, or the lead funnel for commercial context.
+3. In CRM, use persisted monthly statistics, comparisons, or `get_lead_funnel` for historical commercial context. Use `get_commercial_funnel` only when the overview also needs the contacts requiring follow-up now.
 4. In Money, use category subtotals and deterministic movement analysis for financial context.
 5. Present separate CRM and Money evidence before offering a combined interpretation.
 6. Label CRM missing months, Money date basis, pagination, currencies, freshness, and material filters.
@@ -41,6 +41,12 @@ Absence from one account or Business does not prove that the person does not exi
 3. Use Money reporting-period aggregates for income or expense comparisons; specify `report_on` when the question is about an accounting month.
 4. Keep rate deltas as percentage points and financial values in their currencies.
 5. Explain changes with evidence from each product; do not manufacture per-contact attribution that the tools did not return.
+
+`get_commercial_funnel` answers a different question: it is a current
+operational snapshot of acquisition, qualified, booked, trialed, and enrolled
+contact lists. Use it when the user wants present follow-up workload, then open
+a returned `list_id` with `get_contact_list`. Do not compare those live list
+counts with historical Money periods as if they were conversion metrics.
 
 ## Writes in a combined workflow
 

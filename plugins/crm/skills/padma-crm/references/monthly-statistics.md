@@ -37,7 +37,36 @@ For a derived percentage, use the underlying absolute series to calculate each m
 
 A prior-three-month average can use fewer than three records when some prior months are missing. State this limitation when it changes the interpretation.
 
-## Lead funnel
+## Choose the funnel
+
+The two CRM funnels serve different jobs:
+
+| Question | Tool | Data |
+|---|---|---|
+| Which contacts need follow-up now? | `get_commercial_funnel` | Five live saved contact searches with counts and `list_id` values. |
+| How did demand convert into enrollments over a period? | `get_lead_funnel` | Four persisted monthly-stat stages and their conversion transitions. |
+
+Do not use the live commercial funnel as a historical series or infer
+conversion rates from its current stage populations. Do not use the lead funnel
+to identify individual contacts: it deliberately returns no internal IDs or UI
+URLs.
+
+## Commercial follow-up funnel
+
+Call `get_commercial_funnel` without a month range. It returns acquisition,
+qualified, booked, trialed, and enrolled stages for the selected account. Each
+stage contains a localized label and description, its current `contact_count`,
+and a `list_id`.
+
+When the user wants to work one stage, call `get_contact_list` with that
+`list_id` and paginate with `next_cursor`. Do not recreate the stage filters
+with `search_contacts`; the saved system search is authoritative.
+
+Treat the response as a current operational snapshot. The first call may
+initialize missing internal system searches, just like opening the CRM
+dashboard, but it does not modify contacts.
+
+## Historical lead funnel
 
 Use `get_lead_funnel` to aggregate demand, visits, profile visits, and enrollments for a period. It returns stages with percent of initial demand and transitions with conversion percentages, without internal IDs or UI URLs.
 

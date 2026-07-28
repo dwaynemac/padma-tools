@@ -1,6 +1,6 @@
 {
   "name": "padma",
-  "version": "0.1.5+codex.20260727220448",
+  "version": "0.1.6+codex.20260728162913",
   "description": "Coordinate safe CRM and Money read/write workflows through one client-oriented skill.",
   "author": {
     "name": "PADMA"
@@ -18,7 +18,7 @@
   "interface": {
     "displayName": "PADMA",
     "shortDescription": "Trabaj\u00e1 con CRM y Money desde un agente",
-    "longDescription": "Ense\u00f1a a Codex cu\u00e1ndo usar los plugins CRM y Money y c\u00f3mo relacionar contactos mediante su PADMA ID sin mezclar cuentas, identificadores locales ni fuentes de verdad.",
+    "longDescription": "Ense\u00f1a a Codex cu\u00e1ndo usar los plugins CRM y Money, c\u00f3mo elegir entre seguimiento comercial actual y conversi\u00f3n hist\u00f3rica, y c\u00f3mo relacionar contactos mediante su PADMA ID sin mezclar cuentas, identificadores locales ni fuentes de verdad.",
     "developerName": "PADMA",
     "category": "Productivity",
     "capabilities": [
@@ -28,7 +28,8 @@
     "defaultPrompt": [
       "Dame un panorama comercial y financiero de mi escuela este mes.",
       "Busc\u00e1 un contacto en CRM y revis\u00e1 sus movimientos en Money.",
-      "Compar\u00e1 el funnel comercial con los ingresos del \u00faltimo trimestre."
+      "Compar\u00e1 el funnel hist\u00f3rico de conversi\u00f3n con los ingresos del \u00faltimo trimestre.",
+      "Mostrame las etapas actuales de seguimiento comercial y sus contactos."
     ]
   }
 }

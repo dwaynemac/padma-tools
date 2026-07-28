@@ -1,6 +1,6 @@
 ---
 name: padma-assistant
-description: Use the PADMA client ecosystem through the authorized CRM and Money MCP servers. Route each business question to its source of truth, search contacts or register their properties and activity in CRM, analyze or manage finances in Money, and coordinate cross-product school reviews without mixing tenants, identifiers, currencies, dates, or unsupported applications. Use for requests about a school, students, contacts, commercial performance, payments, expenses, income, or combined CRM and financial analysis in PADMA.
+description: Use the PADMA client ecosystem through the authorized CRM and Money MCP servers. Route each business question to its source of truth, search contacts or register their properties and activity in CRM, choose the correct operational or historical CRM funnel, analyze or manage finances in Money, and coordinate cross-product school reviews without mixing tenants, identifiers, currencies, dates, or unsupported applications. Use for requests about a school, students, contacts, commercial performance, payments, expenses, income, or combined CRM and financial analysis in PADMA.
 ---
 
 # Coordinate PADMA CRM and Money
@@ -18,7 +18,7 @@ This plugin provides coordination instructions only. It does not declare MCP ser
 ## Orient and route
 
 1. Read [references/ecosystem-map.md](references/ecosystem-map.md) to identify the source of truth and current MCP coverage.
-2. Use CRM for contacts, account-specific relationship data, contact history and communications, persisted school statistics, comparisons, and lead funnels.
+2. Use CRM for contacts, account-specific relationship data, contact history and communications, persisted school statistics, comparisons, live commercial follow-up stages, and historical lead funnels.
 3. Use Money for accounts, categories, movements, financial reports, plans, recurrent movements, and automation rules.
 4. Say plainly when a request belongs to Learn, Accounts administration, or another app not exposed by the installed product plugins. Do not simulate unavailable access.
 5. Read [references/connections-and-scope.md](references/connections-and-scope.md) before selecting organizations or recovering from OAuth/tool availability issues.
@@ -43,6 +43,7 @@ This plugin provides coordination instructions only. It does not declare MCP ser
 7. Keep currencies separate and label derived calculations.
 8. Separate MCP-confirmed facts from interpretations and recommendations.
 9. For combined analysis, align periods explicitly but preserve each product's source, date basis, freshness, filters, and missing coverage.
+10. Use CRM `get_commercial_funnel` for current actionable follow-up lists and `get_lead_funnel` for historical monthly conversion. Never treat the live stage counts as a conversion series.
 
 ## Protect people, credentials, and tenants
 

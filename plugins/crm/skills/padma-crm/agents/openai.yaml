@@ -1,7 +1,7 @@
 interface:
   display_name: "PADMA CRM"
-  short_description: "Consultar CRM y registrar datos de contactos"
-  default_prompt: "Usá $padma-crm para buscar contactos autorizados, consultar vínculos y actividad de Learn, administrar propiedades y registrar actividad."
+  short_description: "Consultar contactos, actividad, métricas y funnels"
+  default_prompt: "Usá $padma-crm para buscar contactos autorizados, registrar actividad y elegir entre el funnel operativo actual o el funnel histórico de conversión."
 
 dependencies:
   tools:

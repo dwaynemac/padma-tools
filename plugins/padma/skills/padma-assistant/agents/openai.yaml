@@ -1,7 +1,7 @@
 interface:
   display_name: "PADMA Assistant"
-  short_description: "Operar CRM y Money con contexto compartido"
-  default_prompt: "Usá $padma-assistant para buscar un contacto en CRM y revisar sus movimientos relacionados en Money."
+  short_description: "Coordinar CRM, Money y análisis comerciales"
+  default_prompt: "Usá $padma-assistant para elegir el funnel de CRM adecuado y relacionar métricas históricas con Money sin mezclar fuentes."
 
 dependencies:
   tools:
