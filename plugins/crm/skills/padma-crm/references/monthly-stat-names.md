@@ -59,6 +59,7 @@ All counts refer to the reference month unless stated otherwise.
 | `male_p_interviews` | P-coefficient visits for contacts whose recorded gender is male. |
 | `fp_interviews` | Visits with an FP coefficient. |
 | `unknown_interviews` | Visits without a recognized coefficient. |
+| `trial_interviews` | Trial lessons, regardless of coefficient. |
 | `trial_p_interviews` | Trial lessons with a P coefficient. |
 | `trial_enrollment_count` | Profile trial lessons that resulted in an enrollment. |
 

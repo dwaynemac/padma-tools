@@ -1,6 +1,6 @@
 {
   "name": "crm",
-  "version": "0.1.10+codex.20260728085217",
+  "version": "0.1.10+codex.20260728113500",
   "description": "Consult authorized PADMA CRM data and safely create contacts, properties, communications, and comments through its remote MCP server.",
   "author": {
     "name": "PADMA"

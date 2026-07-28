@@ -36,7 +36,7 @@ Birthday components are integers and can be combined independently. Use `birthda
 
 List conjunction semantics are explicit: intersection requires membership in every selected list, union requires membership in any selected list, and exclusion removes members of every selected list. Never copy an ID from another account or reuse discovery results after switching accounts.
 
-Search results are account-scoped summaries. Paginate until the requested scope is complete, or state clearly that the answer covers only the returned page. Do not reuse a cursor after changing the account, any filter, property selector, or page size.
+Search results are account-scoped summaries. Paginate until the requested scope is complete, or state clearly that the answer covers only the returned page. Do not reuse a cursor after changing the account, any filter, response selector, or page size.
 
 ## Saved lists
 
@@ -56,12 +56,13 @@ Use `get_contact` only with a `padma_id` returned by a current CRM call or suppl
 
 Email and phone are resolved from properties belonging to the selected account. Do not infer that another account has the same contact state or operational properties.
 
-To receive additional properties from `get_contact` or `search_contacts`, pass one or both selectors:
+To expand contacts returned by `get_contact` or `search_contacts`, pass any needed response selectors:
 
+- `response_fields`: currently accepts `learn_activity_summary`, which adds the stored Learn snapshot as a top-level contact field;
 - `property_types`: `email`, `telephone`, `birthday`, `identification`, `address`, or `occupation`;
 - `property_configuration_ids`: IDs returned by `list_custom_property_definitions` for the selected account.
 
-Selectors control response projection only. They do not filter search matches. When supplied, each contact has a flat `properties` array containing every matching account-owned value in deterministic order. Without selectors, responses retain their compact shape, including the existing top-level email and phone on `get_contact`.
+Selectors control response projection only and can be combined. They do not filter search matches. Property selectors add a flat `properties` array containing every matching account-owned value in deterministic order. Without selectors, responses retain their compact shape, including the existing top-level email and phone on `get_contact`.
 
 Custom definitions have `String`, `Date`, `Integer`, or `Contact` data types. Custom values include their definition ID, label, and type. Relationships expose only a nested related contact's `padma_id` and `friendly_name`; a target outside the selected account is omitted.
 
@@ -85,7 +86,7 @@ The operation is idempotent after CRM normalization. Report the returned propert
 
 ## Learn activity summary
 
-Use `get_contact_learn_activity_summary` only with a `padma_id` confirmed in the selected account. It returns the latest normalized Learn snapshot stored on that account-contact relationship, including available attendance, activity-change, cancellation, last-seen, and churn-risk signals.
+Use `get_contact` with `response_fields: ["learn_activity_summary"]` only for a `padma_id` confirmed in the selected account. For several contacts, use the same selector with `search_contacts`. Each returned contact includes the latest normalized Learn snapshot stored on that account-contact relationship, including available attendance, activity-change, cancellation, last-seen, and churn-risk signals.
 
 Read [learn-activity-summary.md](learn-activity-summary.md) before interpreting its fields. Deltas are ratios calculated by Learn, not differences or percentage-point changes.
 

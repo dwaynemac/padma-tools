@@ -27,9 +27,8 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 | `list_contact_lists` | optional `account_name` | Discover saved contact-list IDs and names. |
 | `get_contact_list` | optional account, required `list_id`; optional `page_size`, `cursor` | Execute one saved list and return its contacts with properties derived from its configured columns. |
 | `list_custom_property_definitions` | optional `account_name` | Discover account-owned custom property IDs, labels, and data types. |
-| `search_contacts` | optional account, filters, property selectors, `page_size`, `cursor` | Search account-scoped contact summaries and optionally project selected properties. |
-| `get_contact` | optional `account_name`, required `padma_id`; optional property selectors | Read one account-scoped contact detail and optionally project selected properties. |
-| `get_contact_learn_activity_summary` | optional `account_name`, required `padma_id` | Read the latest stored Learn activity and churn-risk summary for one account-scoped contact. |
+| `search_contacts` | optional account, filters, response selectors, `page_size`, `cursor` | Search account-scoped contact summaries and optionally project selected properties or Learn activity summaries. |
+| `get_contact` | optional `account_name`, required `padma_id`; optional response selectors | Read one account-scoped contact detail and optionally project selected properties or its Learn activity summary. |
 | `get_contact_history` | optional account, required `padma_id`; optional `page_size`, `cursor` | Read the contact activity feed, newest entry first. |
 | `add_contact_comment` | optional account, required `padma_id` and `observations` | Add an account-visible follow-up comment as the authenticated user. |
 | `create_contact` | optional account; required `first_name` plus `email` or `phone` | Create a contact or reuse an exact account-owned identity, enriching only missing fields. |
@@ -55,16 +54,17 @@ CRM derives projection from the saved columns:
 
 Computed, operational, duplicate, and stale columns remain visible in `list.columns` but do not add unsupported properties. The saved list is authoritative, so `get_contact_list` does not accept caller property selectors.
 
-## Contact property projection
+## Contact response projection
 
 `list_custom_property_definitions` returns every definition available to the selected account, ordered by label. Each item contains `property_configuration_id`, `label`, and `data_type`: `String`, `Date`, `Integer`, or `Contact`.
 
 Both `get_contact` and `search_contacts` accept these optional selectors:
 
+- `response_fields`: unique values from the additional top-level fields currently supported: `learn_activity_summary`;
 - `property_types`: unique values from `email`, `telephone`, `birthday`, `identification`, `address`, and `occupation`;
 - `property_configuration_ids`: unique positive IDs from the current account's definition list.
 
-When either selector is present, each contact includes a flat `properties` array with every matching account-owned value. The selectors change only response projection, never search matching. Without selectors, the existing compact response is unchanged. Search cursors are bound to the selectors and cannot be reused after changing them.
+When either property selector is present, each contact includes a flat `properties` array with every matching account-owned value. Selecting `learn_activity_summary` adds the latest normalized Learn snapshot as a top-level contact field; it is `null` when Learn has not calculated one. The selectors can be combined and change only response projection, never search matching. Without selectors, the existing compact response is unchanged. Search cursors are bound to all selectors and cannot be reused after changing them.
 
 System values include their applicable phone, identification, address, or birthday metadata. Custom values identify their definition, label, and data type. A `Contact` value returns a nested related contact with only `padma_id` and `friendly_name`; CRM omits a relationship when its target is unavailable in the selected account.
 
@@ -103,7 +103,7 @@ For `add_contact_comment`, pass only the resolved `padma_id` and exact approved 
 ## Pagination and limits
 
 - Contact pages default to 50 and accept at most 200 records.
-- A returned contact cursor is signed and bound to its account, filters, and property projection. Reuse it only for the next page of the identical search.
+- A returned contact cursor is signed and bound to its account, filters, and response projection. Reuse it only for the next page of the identical search.
 - A saved-list cursor is signed and bound to its account, list ID, and page size. Reuse it only for the next page of that same list request.
 - Contact-history pages use the same 1–200 page-size limit. Reuse their signed cursor only with the same account, `padma_id`, and page size.
 - Explicit contact-search dates use strict `YYYY-MM-DD` values.

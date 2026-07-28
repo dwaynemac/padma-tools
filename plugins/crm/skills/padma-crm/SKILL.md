@@ -26,7 +26,7 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 2. Before filtering by tags, marketing methods, or saved lists, call `list_tags`, `list_marketing_methods`, or `list_contact_lists` in the selected account. Use only IDs returned by those current calls.
 3. Use `intersect_list_ids` for membership in every selected list, `union_list_ids` for membership in any selected list, and `not_in_list_ids` for exclusions.
 4. Paginate when the requested scope exceeds one page. Do not present a truncated page as a complete result or reuse a cursor after changing filters.
-5. Use only returned `padma_id` values with `get_contact`, `get_contact_learn_activity_summary`, or `get_contact_history`; never invent or substitute an identifier.
+5. Use only returned `padma_id` values with `get_contact` or `get_contact_history`; never invent or substitute an identifier.
 6. Treat email, phone, visits, status, coefficient, teacher, tags, and list membership as personal data. Return only fields needed for the user's request.
 7. State the selected account and material filters. Keep facts returned by CRM separate from interpretation.
 
@@ -38,19 +38,20 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 4. Use `list.columns` to report the saved configuration and `list.property_selection` to explain which system property types and custom definitions CRM projected. Computed, operational, and stale columns can remain in `columns` without producing properties.
 5. Paginate with `next_cursor` until the requested scope is complete. Reuse the cursor only with the same account, list ID, and page size.
 
-## Inspect contact properties
+## Select contact response fields
 
-1. Without property selectors, preserve the compact default projection from `search_contacts` and `get_contact`.
-2. For system properties, pass only the needed `property_types`: `email`, `telephone`, `birthday`, `identification`, `address`, or `occupation`.
-3. For custom properties, call `list_custom_property_definitions` in the selected account, then pass only returned `property_configuration_id` values as `property_configuration_ids`.
-4. Treat both selectors as response projection. They do not filter which contacts match a search, and changing them invalidates an existing search cursor.
-5. Expect every matching account-owned value in `properties`, not only the primary one. A selected type or definition with no value returns an empty array.
-6. For a `Contact` definition, use only the nested `related_contact.padma_id` and `friendly_name`. CRM omits relationships whose target is not connected to the selected account.
+1. Without response selectors, preserve the compact default projection from `search_contacts` and `get_contact`.
+2. Use `response_fields: ["learn_activity_summary"]` to add the stored Learn snapshot as a top-level field on every returned contact.
+3. For system properties, pass only the needed `property_types`: `email`, `telephone`, `birthday`, `identification`, `address`, or `occupation`.
+4. For custom properties, call `list_custom_property_definitions` in the selected account, then pass only returned `property_configuration_id` values as `property_configuration_ids`.
+5. Treat all three selectors as response projection. They do not filter which contacts match a search, and changing them invalidates an existing search cursor.
+6. Expect every matching account-owned property value in `properties`, not only the primary one. A selected type or definition with no value returns an empty array.
+7. For a `Contact` definition, use only the nested `related_contact.padma_id` and `friendly_name`. CRM omits relationships whose target is not connected to the selected account.
 
 ## Inspect Learn activity
 
 1. Resolve the contact in the selected account with a current `padma_id`.
-2. Call `get_contact_learn_activity_summary` with `account_name` and `padma_id`.
+2. Call `get_contact` with `account_name`, `padma_id`, and `response_fields: ["learn_activity_summary"]`. Use the same `response_fields` selector with `search_contacts` when summaries are needed for several matching contacts.
 3. Interpret the returned values using [references/learn-activity-summary.md](references/learn-activity-summary.md). In particular, treat deltas as ratios rather than percentage-point changes.
 4. Report only the returned activity, attendance, cancellation, and churn-risk signals. The summary is `null` when Learn has not calculated it.
 5. Treat the values as a snapshot calculated by Learn, not a prediction or diagnosis made by the agent.

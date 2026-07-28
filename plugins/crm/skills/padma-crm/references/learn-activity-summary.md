@@ -1,6 +1,6 @@
 # Learn activity summary
 
-`get_contact_learn_activity_summary` returns the latest snapshot calculated by Learn and stored by CRM for the selected account-contact relationship. CRM normalizes numeric and boolean types but does not recalculate these values.
+`get_contact` and `search_contacts` return the latest snapshot calculated by Learn when called with `response_fields: ["learn_activity_summary"]`. The summary belongs to the selected account-contact relationship. CRM normalizes numeric and boolean types but does not recalculate these values.
 
 Use `calculated_at` as the snapshot time. Activity may have changed after that timestamp.
 
