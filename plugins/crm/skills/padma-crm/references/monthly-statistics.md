@@ -37,6 +37,26 @@ For a derived percentage, use the underlying absolute series to calculate each m
 
 A prior-three-month average can use fewer than three records when some prior months are missing. State this limitation when it changes the interpretation.
 
+## Analyze marketing methods and dropout reasons
+
+Use `get_marketing_method_statistics` for acquisition and conversion grouped by
+the account's marketing methods. It returns distinct contact counts for
+communications, qualified communications, qualified interviews, and
+enrollments, plus CRM-calculated conversion percentages. Archived methods can
+appear when they had activity in the selected range. A null method ID is the
+unattributed row.
+
+Use `get_dropout_reason_statistics` for distinct dropout contact counts grouped
+by the account's reasons. Discover current reason IDs and labels with
+`list_dropout_reasons` before matching a user-supplied reason. A null reason ID
+is the unattributed row.
+
+Both tools accept optional `start_month` and `end_month` in strict `YYYY-MM`,
+default to the 12 months ending with the current account-local month, and accept
+at most 36 months. These rankings are calculated from CRM event records; unlike
+`get_monthly_stats`, they are not dense persisted monthly series and do not
+return `updated_at` freshness.
+
 ## Choose the funnel
 
 The two CRM funnels serve different jobs:

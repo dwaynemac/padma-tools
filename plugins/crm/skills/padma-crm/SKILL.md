@@ -1,6 +1,6 @@
 ---
 name: padma-crm
-description: Use PADMA CRM through its remote MCP server to find authorized accounts, discover contact metadata, search or create account-scoped contacts, retrieve saved contact lists with their configured properties, inspect or add contact properties, read Learn user IDs, activity summaries, and history, record communications and comments, analyze persisted school monthly statistics, compare periods, and review live commercial follow-up or historical lead funnels. Use for requests about CRM contacts, prospects, students, saved lists, custom properties, Learn links, activity or churn risk, comments, communications, segmentation, contact status, enrollment and dropout metrics, monthly school performance, or commercial funnels stored in PADMA CRM.
+description: Use PADMA CRM through its remote MCP server to find authorized accounts, discover contact metadata and dropout reasons, search or create account-scoped contacts, retrieve saved contact lists with their configured properties, inspect or add contact properties, read Learn user IDs, activity summaries, and history, record communications and comments, analyze persisted school monthly statistics, compare periods, rank marketing-method conversion and dropout reasons, and review live commercial follow-up or historical lead funnels. Use for requests about CRM contacts, prospects, students, saved lists, custom properties, Learn links, activity or churn risk, dropout-reason segmentation, comments, communications, contact status, enrollment and dropout metrics, acquisition performance, monthly school performance, or commercial funnels stored in PADMA CRM.
 ---
 
 # Use PADMA CRM
@@ -23,7 +23,7 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 ## Search contacts
 
 1. Use `search_contacts` with the narrowest useful identity, relationship, activity, and date filters. For birthdays, use `birthday_day` and `birthday_month`; add `birthday_year` only when the birth year must also match, or omit the day to search a whole birthday month.
-2. Before filtering by tags, marketing methods, or saved lists, call `list_tags`, `list_marketing_methods`, or `list_contact_lists` in the selected account. Use only IDs returned by those current calls.
+2. Before filtering by tags, marketing methods, dropout reasons, or saved lists, call `list_tags`, `list_marketing_methods`, `list_dropout_reasons`, or `list_contact_lists` in the selected account. Use only IDs returned by those current calls.
 3. Use `intersect_list_ids` for membership in every selected list, `union_list_ids` for membership in any selected list, and `not_in_list_ids` for exclusions.
 4. Paginate when the requested scope exceeds one page. Do not present a truncated page as a complete result or reuse a cursor after changing filters.
 5. Use only returned `padma_id` values with `get_contact` or `get_contact_history`; never invent or substitute an identifier.
@@ -61,13 +61,16 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 
 1. Discover stable metric names with `list_monthly_stat_definitions`; do not invent a `stat_name` from a translated label.
 2. Use `get_monthly_stats` for exact series and freshness and `compare_monthly_stats` for shared dashboard comparison semantics.
-3. Use `get_commercial_funnel` when the question is operational: which prospects need attention now, how many contacts are in each current follow-up stage, or which stage list to work. Use a returned `list_id` with `get_contact_list` and paginate that list when contacts are requested.
-4. Use `get_lead_funnel` when the question is analytical: how demand converted through visits and profile visits into enrollments over a monthly range.
-5. Never treat commercial-funnel stage counts as a historical conversion series or calculate conversion rates from them. They are live saved contact searches, not one period cohort.
-6. The first `get_commercial_funnel` call may initialize missing internal system searches, as the CRM dashboard does; it does not modify contacts.
-7. Preserve missing absolute values as unknown. Never convert `value: null` into zero or calculate a missing absolute statistic outside CRM.
-8. Do not request deprecated rate `stat_name` values. Derive a requested percentage from the documented absolute numerator and denominator only when both are present and the denominator is greater than zero.
-9. For a commercial funnel, state the account and that the counts are a current snapshot. For a lead funnel, state the account and monthly range. Include missing months and freshness when they affect an analytical answer.
+3. Use `get_marketing_method_statistics` for distinct communication, qualified communication, qualified interview, and enrollment contact counts by marketing method, with CRM-calculated conversion percentages.
+4. Use `get_dropout_reason_statistics` for distinct dropout contact counts by account-defined reason. Call `list_dropout_reasons` first when the user names a reason or needs its current ID.
+5. Both ranking tools accept optional strict `start_month` and `end_month` values, default to the 12 months ending with the current account-local month, and accept at most 36 months.
+6. Use `get_commercial_funnel` when the question is operational: which prospects need attention now, how many contacts are in each current follow-up stage, or which stage list to work. Use a returned `list_id` with `get_contact_list` and paginate that list when contacts are requested.
+7. Use `get_lead_funnel` when the question is analytical: how demand converted through visits and profile visits into enrollments over a monthly range.
+8. Never treat commercial-funnel stage counts as a historical conversion series or calculate conversion rates from them. They are live saved contact searches, not one period cohort.
+9. The first `get_commercial_funnel` call may initialize missing internal system searches, as the CRM dashboard does; it does not modify contacts.
+10. Preserve missing absolute values as unknown. Never convert `value: null` into zero or calculate a missing absolute statistic outside CRM.
+11. Do not request deprecated rate `stat_name` values. Derive a requested percentage from the documented absolute numerator and denominator only when both are present and the denominator is greater than zero.
+12. State the selected account and resolved monthly range for ranking and historical-funnel results. For a commercial funnel, state that the counts are a current snapshot. Include missing months and freshness when they affect an analytical answer.
 
 ## Add a contact comment
 

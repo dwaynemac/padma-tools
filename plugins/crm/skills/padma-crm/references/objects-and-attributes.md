@@ -26,6 +26,11 @@ Interpret CRM records with these product semantics. The names shown are the MCP 
 - Marketing methods (`marketing_method_ids`) represent the school's marketing campaigns or acquisition methods, for example a specific campaign.
 - Each school defines the methods it uses, so their names and exact scope are account-specific. Confirm the current values with `list_marketing_methods` before interpreting or filtering them.
 
+## Dropout reasons
+
+- Dropout reasons (`dropout_reason_ids`) are the account-defined reasons recorded on dropout events.
+- Discover current reasons with `list_dropout_reasons` before filtering. Their IDs and meanings belong only to the selected account.
+
 ## Contact lists
 
 - Contact lists are saved groups of contacts that the school can reuse for segmentation.

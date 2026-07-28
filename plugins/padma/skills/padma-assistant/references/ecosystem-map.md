@@ -9,7 +9,7 @@ PADMA is a modular suite for operating schools and boutique studios. Each produc
 | Who can sign in and which organizations they may access | Accounts | Indirectly, through each MCP's OAuth grant |
 | Who is the person and what is their relationship/status with a school | CRM | Yes, read plus safe contact and property creation and comments |
 | What communication data, including WhatsApp interactions, is recorded for a contact | CRM | Yes, read plus communication creation |
-| Which contacts need follow-up now, and how are historical commercial metrics evolving | CRM | Yes, through live commercial stages and monthly lead-funnel analysis |
+| Which contacts need follow-up now, and how are acquisition, dropout, and historical commercial metrics evolving | CRM | Yes, through live commercial stages, marketing-method and dropout-reason rankings, and monthly lead-funnel analysis |
 | What income, expenses, movements, plans, and financial rules exist | Money | Yes, read and supported writes |
 | What content, classes, bookings, or check-ins exist | Learn | No |
 | Certificates, office stock/sales, manuals, or branded links | Specialized DeROSE Apps | No |

@@ -24,6 +24,7 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 | `get_account_context` | optional `account_name` | Get selected account, user, roles, statuses, capabilities, and limits. |
 | `list_tags` | optional `account_name` | Discover account tag IDs and names for `tag_ids`. |
 | `list_marketing_methods` | optional `account_name` | Discover active account marketing method IDs and values. |
+| `list_dropout_reasons` | optional `account_name` | Discover account dropout reason IDs and values for `dropout_reason_ids`. |
 | `list_contact_lists` | optional `account_name` | Discover saved contact-list IDs and names. |
 | `get_contact_list` | optional account, required `list_id`; optional `page_size`, `cursor` | Execute one saved list and return its contacts with properties derived from its configured columns. |
 | `list_custom_property_definitions` | optional `account_name` | Discover account-owned custom property IDs, labels, and data types. |
@@ -39,6 +40,30 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 | `compare_monthly_stats` | `stat_names`; optional account and month | Compare current, previous, and prior-three-month baselines. |
 | `get_lead_funnel` | optional account and month range | Analyze the historical four-stage conversion funnel from persisted monthly statistics. |
 | `get_commercial_funnel` | optional `account_name` | Read the five live operational follow-up stages with localized labels, descriptions, contact counts, and actionable saved-list IDs. |
+| `get_marketing_method_statistics` | optional account, `start_month`, `end_month` | Count distinct communication and enrollment contacts by marketing method and return conversion percentages. |
+| `get_dropout_reason_statistics` | optional account, `start_month`, `end_month` | Count distinct dropout contacts by account-defined reason. |
+
+## Ranking statistics
+
+Use `get_marketing_method_statistics` to compare account-defined acquisition
+methods over a resolved monthly range. Each row identifies the current
+marketing method, whether it is archived, distinct contact counts for
+communications, qualified communications, qualified interviews, and
+enrollments, plus CRM-calculated communication-to-enrollment and
+interview-to-enrollment percentages. A percentage can be `null` when its
+denominator is zero.
+
+Use `get_dropout_reason_statistics` to compare distinct dropout contacts by
+reason. Call `list_dropout_reasons` first when the user names a reason or needs
+the current account-owned ID. Reasons are account-defined; do not infer a
+standard meaning from their label.
+
+Both tools accept optional strict `start_month` and `end_month` values in
+`YYYY-MM`. They default to the 12 months ending with the current account-local
+month, reject reversed ranges, and accept at most 36 months. Their results are
+calculated from CRM communication, enrollment, and dropout records for the
+selected range; they are not persisted monthly-stat series. Keep accounts
+separate and report the resolved range from the response.
 
 ## Choose the correct funnel
 
@@ -127,8 +152,8 @@ For `add_contact_comment`, pass only the resolved `padma_id` and exact approved 
 - Explicit contact-search dates use strict `YYYY-MM-DD` values.
 - Birthday filters use integer `birthday_day`, `birthday_month`, and optional `birthday_year`; omit any component that should not constrain the search.
 - `status` accepts one value; `statuses` accepts several. Do not send both.
-- Call the matching discovery tool before using `tag_ids`, `marketing_method_ids`, `intersect_list_ids`, `union_list_ids`, or `not_in_list_ids`. IDs from another account are rejected.
-- Monthly series default to 12 months ending with the current month and accept at most 36 months.
+- Call the matching discovery tool before using `tag_ids`, `marketing_method_ids`, `dropout_reason_ids`, `intersect_list_ids`, `union_list_ids`, or `not_in_list_ids`. IDs from another account are rejected.
+- Monthly series and ranking-statistics ranges default to 12 months ending with the current account-local month and accept at most 36 months.
 - Statistics tools accept 1–20 supported `stat_names` per call.
 - Month strings are strict `YYYY-MM` values.
 

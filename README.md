@@ -151,8 +151,8 @@ MCP oficial.
 Permite:
 
 - descubrir y seleccionar cuentas autorizadas por OAuth;
-- buscar contactos por identidad, cumpleaños, estado, vínculo con la cuenta, actividad y fechas;
-- descubrir etiquetas, métodos de marketing y listas guardadas antes de usarlos;
+- buscar contactos por identidad, cumpleaños, estado, vínculo con la cuenta, actividad, fechas y motivos de baja;
+- descubrir etiquetas, métodos de marketing, motivos de baja y listas guardadas antes de usarlos;
 - consultar una lista guardada respetando sus filtros, orden y columnas de propiedades configuradas;
 - descubrir propiedades personalizadas y consultar valores seleccionados del contacto;
 - consultar datos operativos del contacto dentro de la cuenta seleccionada;
@@ -164,6 +164,8 @@ Permite:
 - agregar comentarios visibles para la cuenta al contacto seleccionado;
 - leer series mensuales persistidas y su fecha de actualización;
 - comparar métricas con el mes anterior y el promedio de los tres meses previos;
+- analizar contactos y conversión por método de marketing durante un rango mensual;
+- analizar bajas por motivo durante un rango mensual;
 - revisar las cinco etapas actuales de seguimiento comercial y abrir la lista de contactos de cada etapa;
 - analizar el funnel histórico de procura, visitas, visitas perfil y matrículas durante un período.
 
@@ -215,6 +217,7 @@ comentarios.
 
 - “Buscá a Ana por email en la cuenta de Cerviño.”
 - “¿Quién cumple años hoy en esta cuenta?”
+- “Mostrame los contactos dados de baja por mudanza.”
 - “Mostrame los contactos de esta lista guardada con sus columnas configuradas.”
 - “Mostrame la actividad reciente de este contacto.”
 - “Mostrame el resumen de actividad de Learn de este contacto.”
@@ -225,6 +228,8 @@ comentarios.
 - “Agregá este comentario al contacto que acabo de seleccionar.”
 - “Mostrame alumnos y bajas mes a mes durante el último año.”
 - “Compará la efectividad de este mes con el mes anterior.”
+- “Compará la conversión por método de marketing de los últimos seis meses.”
+- “Mostrame las bajas agrupadas por motivo durante el último año.”
 - “Mostrame cuántos contactos necesitan seguimiento ahora en cada etapa y abrí la lista de Perfil.”
 - “Analizá el funnel histórico de conversión de los últimos seis meses.”
 

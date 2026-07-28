@@ -19,7 +19,7 @@ Use the exact input names published by the tool schema:
 | Visits and remote visits | `televisit_period_start`, `televisit_period_end`, `televisit_usernames`, `visit_period_start`, `visit_period_end`, `visit_usernames`, `has_visits`, `has_no_visits` |
 | Trial lessons | `trial_on_lt`, `trial_on_gt`, `with_trial_gt_ago`, `with_trial_lt_ago`, `assisted`, `didnt_trial` |
 | Enrollments | `enrolled_days_ago_gt`, `enrolled_days_ago_lt`, `enrollment_period`, `enrollment_period_start`, `enrollment_period_end`, `enrollment_month`, `enrollment_usernames`, `enrollment_access_type` |
-| Dropouts | `dropout_period`, `dropout_period_start`, `dropout_period_end`, `drop_out_access_type` |
+| Dropouts | `dropout_period`, `dropout_period_start`, `dropout_period_end`, `drop_out_access_type`, `dropout_reason_ids` |
 
 Explicit dates use `YYYY-MM-DD`. Named period values and other enums must come from the live tool schema. Boolean presence filters apply when sent as `true`; omit them when they should not constrain the search.
 
@@ -31,6 +31,7 @@ Birthday components are integers and can be combined independently. Use `birthda
 
 - Call `list_tags`, then pass returned `tag_id` values as `tag_ids`.
 - Call `list_marketing_methods`, then pass returned active `marketing_method_id` values as `marketing_method_ids`.
+- Call `list_dropout_reasons`, then pass returned `dropout_reason_id` values as `dropout_reason_ids`.
 - Call `list_contact_lists`, then pass returned `list_id` values as `intersect_list_ids`, `union_list_ids`, or `not_in_list_ids`.
 - Call `list_custom_property_definitions`, then pass returned `property_configuration_id` values only as response selectors, never as contact filters.
 
