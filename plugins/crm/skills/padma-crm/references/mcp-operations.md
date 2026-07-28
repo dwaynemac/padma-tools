@@ -25,6 +25,7 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 | `list_tags` | optional `account_name` | Discover account tag IDs and names for `tag_ids`. |
 | `list_marketing_methods` | optional `account_name` | Discover active account marketing method IDs and values. |
 | `list_contact_lists` | optional `account_name` | Discover saved contact-list IDs and names. |
+| `get_contact_list` | optional account, required `list_id`; optional `page_size`, `cursor` | Execute one saved list and return its contacts with properties derived from its configured columns. |
 | `list_custom_property_definitions` | optional `account_name` | Discover account-owned custom property IDs, labels, and data types. |
 | `search_contacts` | optional account, filters, property selectors, `page_size`, `cursor` | Search account-scoped contact summaries and optionally project selected properties. |
 | `get_contact` | optional `account_name`, required `padma_id`; optional property selectors | Read one account-scoped contact detail and optionally project selected properties. |
@@ -38,6 +39,21 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 | `get_monthly_stats` | `stat_names`; optional account and month range | Read dense persisted monthly series. |
 | `compare_monthly_stats` | `stat_names`; optional account and month | Compare current, previous, and prior-three-month baselines. |
 | `get_lead_funnel` | optional account and month range | Aggregate persisted funnel stages and transitions. |
+
+## Saved contact lists
+
+Use `list_contact_lists` for lightweight discovery. Use `get_contact_list` with one returned `list_id` when the user wants that saved list's contacts. CRM executes the saved filters, ordering, and membership semantics; do not attempt to reconstruct the list with `search_contacts`.
+
+The response contains the selected `account_name`, list metadata, contact summaries, and `next_cursor`. List metadata includes the ordered normalized `columns` and a derived `property_selection`. Each contact always has a `properties` array, including an empty array when no configured property has a value.
+
+CRM derives projection from the saved columns:
+
+- `email`, `telephone`, `birthday`, `identification`, and `occupation` select the matching system type;
+- `age` selects `birthday`;
+- `primary_address` and each `primary_*` address component select `address` once;
+- a column exactly matching an account-owned custom-property label selects that definition once.
+
+Computed, operational, duplicate, and stale columns remain visible in `list.columns` but do not add unsupported properties. The saved list is authoritative, so `get_contact_list` does not accept caller property selectors.
 
 ## Contact property projection
 
@@ -88,6 +104,7 @@ For `add_contact_comment`, pass only the resolved `padma_id` and exact approved 
 
 - Contact pages default to 50 and accept at most 200 records.
 - A returned contact cursor is signed and bound to its account, filters, and property projection. Reuse it only for the next page of the identical search.
+- A saved-list cursor is signed and bound to its account, list ID, and page size. Reuse it only for the next page of that same list request.
 - Contact-history pages use the same 1–200 page-size limit. Reuse their signed cursor only with the same account, `padma_id`, and page size.
 - Explicit contact-search dates use strict `YYYY-MM-DD` values.
 - Birthday filters use integer `birthday_day`, `birthday_month`, and optional `birthday_year`; omit any component that should not constrain the search.

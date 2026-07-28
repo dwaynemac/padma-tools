@@ -1,6 +1,6 @@
 ---
 name: padma-crm
-description: Use PADMA CRM through its remote MCP server to find authorized accounts, discover contact metadata, search or create account-scoped contacts, inspect or add contact properties, read Learn activity summaries and history, record communications and comments, analyze persisted school monthly statistics, compare periods, and review lead funnels. Use for requests about CRM contacts, prospects, students, custom properties, Learn activity or churn risk, comments, communications, segmentation, contact status, enrollment and dropout metrics, monthly school performance, or commercial funnels stored in PADMA CRM.
+description: Use PADMA CRM through its remote MCP server to find authorized accounts, discover contact metadata, search or create account-scoped contacts, retrieve saved contact lists with their configured properties, inspect or add contact properties, read Learn activity summaries and history, record communications and comments, analyze persisted school monthly statistics, compare periods, and review lead funnels. Use for requests about CRM contacts, prospects, students, saved lists, custom properties, Learn activity or churn risk, comments, communications, segmentation, contact status, enrollment and dropout metrics, monthly school performance, or commercial funnels stored in PADMA CRM.
 ---
 
 # Use PADMA CRM
@@ -29,6 +29,14 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 5. Use only returned `padma_id` values with `get_contact`, `get_contact_learn_activity_summary`, or `get_contact_history`; never invent or substitute an identifier.
 6. Treat email, phone, visits, status, coefficient, teacher, tags, and list membership as personal data. Return only fields needed for the user's request.
 7. State the selected account and material filters. Keep facts returned by CRM separate from interpretation.
+
+## Retrieve a saved contact list
+
+1. Call `list_contact_lists` in the selected account and resolve the requested list to a current `list_id`.
+2. Call `get_contact_list` when the user wants the contacts produced by that saved list. Do not recreate it with `search_contacts`: CRM applies the list's persisted filters, ordering, and membership semantics.
+3. Do not send property selectors. The saved list controls projection through its configured UI columns, and every returned contact includes a `properties` array even when it is empty.
+4. Use `list.columns` to report the saved configuration and `list.property_selection` to explain which system property types and custom definitions CRM projected. Computed, operational, and stale columns can remain in `columns` without producing properties.
+5. Paginate with `next_cursor` until the requested scope is complete. Reuse the cursor only with the same account, list ID, and page size.
 
 ## Inspect contact properties
 

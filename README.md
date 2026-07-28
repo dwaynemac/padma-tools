@@ -152,7 +152,8 @@ Permite:
 
 - descubrir y seleccionar cuentas autorizadas por OAuth;
 - buscar contactos por identidad, cumpleaños, estado, vínculo con la cuenta, actividad y fechas;
-- descubrir etiquetas, métodos de marketing y listas guardadas antes de usarlos como filtros;
+- descubrir etiquetas, métodos de marketing y listas guardadas antes de usarlos;
+- consultar una lista guardada respetando sus filtros, orden y columnas de propiedades configuradas;
 - descubrir propiedades personalizadas y consultar valores seleccionados del contacto;
 - consultar datos operativos del contacto dentro de la cuenta seleccionada;
 - consultar el resumen de actividad y riesgo de abandono calculado por Learn;
@@ -213,6 +214,7 @@ comentarios.
 
 - “Buscá a Ana por email en la cuenta de Cerviño.”
 - “¿Quién cumple años hoy en esta cuenta?”
+- “Mostrame los contactos de esta lista guardada con sus columnas configuradas.”
 - “Mostrame la actividad reciente de este contacto.”
 - “Mostrame el resumen de actividad de Learn de este contacto.”
 - “Listá las propiedades personalizadas disponibles y mostrame el apodo de este contacto.”

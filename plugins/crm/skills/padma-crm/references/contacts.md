@@ -38,6 +38,18 @@ List conjunction semantics are explicit: intersection requires membership in eve
 
 Search results are account-scoped summaries. Paginate until the requested scope is complete, or state clearly that the answer covers only the returned page. Do not reuse a cursor after changing the account, any filter, property selector, or page size.
 
+## Saved lists
+
+`list_contact_lists` discovers current list IDs and names. To retrieve one saved list, pass its `list_id` to `get_contact_list`; do not translate the list into `search_contacts` filters. The saved list's persisted filters and ordering determine which contacts are returned.
+
+`get_contact_list` projects properties automatically from the list's saved UI columns. It maps the system columns for email, telephone, birthday, identification, and occupation directly; maps `age` to birthday; maps `primary_address` and `primary_*` address components to address once; and maps exact account-owned custom-property labels to their definition IDs. Callers cannot add property selectors.
+
+The response preserves all configured column names in `list.columns`, including computed, operational, or stale columns that do not project a contact property. `list.property_selection` reports the property types and custom definition IDs that were derived.
+
+Every returned contact has the same base summary shape as `search_contacts` plus a `properties` array, which can be empty. Custom contact relationships remain visible only when the related contact belongs to the selected account.
+
+Paginate with `next_cursor` when needed. A cursor is valid only for the same selected account, list ID, and page size.
+
 ## Detail
 
 Use `get_contact` only with a `padma_id` returned by a current CRM call or supplied by the user and confirmed in the selected account. Detail can include name, email, phone, status, teacher, coefficient, last visit, and update timestamp.

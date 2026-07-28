@@ -30,7 +30,9 @@ Interpret CRM records with these product semantics. The names shown are the MCP 
 
 - Contact lists are saved groups of contacts that the school can reuse for segmentation.
 - List membership is not equivalent to a contact status, tag, or marketing method. Use list filters only when the requested segment is explicitly defined by the saved list.
-- Discover lists with `list_contact_lists` before filtering, then use intersection, union, or exclusion according to the requested membership rule.
+- Discover lists with `list_contact_lists`. Use intersection, union, or exclusion filters when combining list memberships in `search_contacts`.
+- Use `get_contact_list` to execute one list with its persisted filters and ordering. Its saved UI columns control the returned property projection.
+- A configured list column can remain visible without projecting a property when it is computed, operational, or stale.
 
 ## Contact history
 
