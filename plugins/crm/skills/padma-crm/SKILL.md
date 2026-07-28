@@ -1,6 +1,6 @@
 ---
 name: padma-crm
-description: Use PADMA CRM through its remote MCP server to find authorized accounts, discover contact metadata, search or create account-scoped contacts, retrieve saved contact lists with their configured properties, inspect or add contact properties, read Learn activity summaries and history, record communications and comments, analyze persisted school monthly statistics, compare periods, and review lead funnels. Use for requests about CRM contacts, prospects, students, saved lists, custom properties, Learn activity or churn risk, comments, communications, segmentation, contact status, enrollment and dropout metrics, monthly school performance, or commercial funnels stored in PADMA CRM.
+description: Use PADMA CRM through its remote MCP server to find authorized accounts, discover contact metadata, search or create account-scoped contacts, retrieve saved contact lists with their configured properties, inspect or add contact properties, read Learn user IDs, activity summaries, and history, record communications and comments, analyze persisted school monthly statistics, compare periods, and review lead funnels. Use for requests about CRM contacts, prospects, students, saved lists, custom properties, Learn links, activity or churn risk, comments, communications, segmentation, contact status, enrollment and dropout metrics, monthly school performance, or commercial funnels stored in PADMA CRM.
 ---
 
 # Use PADMA CRM
@@ -27,7 +27,7 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 3. Use `intersect_list_ids` for membership in every selected list, `union_list_ids` for membership in any selected list, and `not_in_list_ids` for exclusions.
 4. Paginate when the requested scope exceeds one page. Do not present a truncated page as a complete result or reuse a cursor after changing filters.
 5. Use only returned `padma_id` values with `get_contact` or `get_contact_history`; never invent or substitute an identifier.
-6. Treat email, phone, visits, status, coefficient, teacher, tags, and list membership as personal data. Return only fields needed for the user's request.
+6. Treat email, phone, Learn user IDs, visits, status, coefficient, teacher, tags, and list membership as personal data. Return only fields needed for the user's request.
 7. State the selected account and material filters. Keep facts returned by CRM separate from interpretation.
 
 ## Retrieve a saved contact list
@@ -41,12 +41,13 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 ## Select contact response fields
 
 1. Without response selectors, preserve the compact default projection from `search_contacts` and `get_contact`.
-2. Use `response_fields: ["learn_activity_summary"]` to add the stored Learn snapshot as a top-level field on every returned contact.
-3. For system properties, pass only the needed `property_types`: `email`, `telephone`, `birthday`, `identification`, `address`, or `occupation`.
-4. For custom properties, call `list_custom_property_definitions` in the selected account, then pass only returned `property_configuration_id` values as `property_configuration_ids`.
-5. Treat all three selectors as response projection. They do not filter which contacts match a search, and changing them invalidates an existing search cursor.
-6. Expect every matching account-owned property value in `properties`, not only the primary one. A selected type or definition with no value returns an empty array.
-7. For a `Contact` definition, use only the nested `related_contact.padma_id` and `friendly_name`. CRM omits relationships whose target is not connected to the selected account.
+2. Use `response_fields: ["learn_user_id"]` only when the workflow needs the contact's Learn identifier. The field is `null` when the contact is not linked to Learn.
+3. Use `response_fields: ["learn_activity_summary"]` to add the stored Learn snapshot as a top-level field on every returned contact. Combine both values in one `response_fields` array when both are needed.
+4. For system properties, pass only the needed `property_types`: `email`, `telephone`, `birthday`, `identification`, `address`, or `occupation`.
+5. For custom properties, call `list_custom_property_definitions` in the selected account, then pass only returned `property_configuration_id` values as `property_configuration_ids`.
+6. Treat all three selectors as response projection. They do not filter which contacts match a search, and changing them invalidates an existing search cursor.
+7. Expect every matching account-owned property value in `properties`, not only the primary one. A selected type or definition with no value returns an empty array.
+8. For a `Contact` definition, use only the nested `related_contact.padma_id` and `friendly_name`. CRM omits relationships whose target is not connected to the selected account.
 
 ## Inspect Learn activity
 

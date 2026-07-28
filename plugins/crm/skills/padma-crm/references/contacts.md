@@ -58,11 +58,13 @@ Email and phone are resolved from properties belonging to the selected account. 
 
 To expand contacts returned by `get_contact` or `search_contacts`, pass any needed response selectors:
 
-- `response_fields`: currently accepts `learn_activity_summary`, which adds the stored Learn snapshot as a top-level contact field;
+- `response_fields`: accepts `learn_user_id` for the contact's Learn identifier and `learn_activity_summary` for the stored Learn snapshot;
 - `property_types`: `email`, `telephone`, `birthday`, `identification`, `address`, or `occupation`;
 - `property_configuration_ids`: IDs returned by `list_custom_property_definitions` for the selected account.
 
 Selectors control response projection only and can be combined. They do not filter search matches. Property selectors add a flat `properties` array containing every matching account-owned value in deterministic order. Without selectors, responses retain their compact shape, including the existing top-level email and phone on `get_contact`.
+
+Selecting `learn_user_id` adds that identifier as a top-level field. It is `null` when the contact is not linked to Learn. Request it only when the workflow requires the Learn identity; selecting it does not grant access to Learn or prove that Learn tools are available.
 
 Custom definitions have `String`, `Date`, `Integer`, or `Contact` data types. Custom values include their definition ID, label, and type. Relationships expose only a nested related contact's `padma_id` and `friendly_name`; a target outside the selected account is omitted.
 
@@ -128,6 +130,7 @@ CRM derives the username from the authenticated principal and sanitizes observat
 ## Privacy and presentation
 
 - Return the minimum personal data needed to answer the request.
+- Treat `learn_user_id` as a personal integration identifier and omit it unless the requested workflow needs it.
 - Do not enumerate contact details when an aggregate or count is sufficient.
 - Avoid copying emails or phones into logs, filenames, URLs, or unrelated tools.
 - State the selected account when contact identity could be ambiguous.

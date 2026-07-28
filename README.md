@@ -156,7 +156,7 @@ Permite:
 - consultar una lista guardada respetando sus filtros, orden y columnas de propiedades configuradas;
 - descubrir propiedades personalizadas y consultar valores seleccionados del contacto;
 - consultar datos operativos del contacto dentro de la cuenta seleccionada;
-- consultar el resumen de actividad y riesgo de abandono calculado por Learn;
+- consultar bajo demanda el identificador de usuario de Learn y el resumen de actividad y riesgo de abandono calculado por Learn;
 - recorrer el historial de actividad del contacto con paginación segura;
 - crear contactos o reutilizar coincidencias exactas de email o teléfono sin reemplazar datos existentes;
 - agregar propiedades de sistema o de texto personalizadas sin duplicar valores normalizados;

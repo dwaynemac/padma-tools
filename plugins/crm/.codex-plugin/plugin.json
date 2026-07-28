@@ -1,7 +1,7 @@
 {
   "name": "crm",
-  "version": "0.1.10+codex.20260728113500",
-  "description": "Consult authorized PADMA CRM data and safely create contacts, properties, communications, and comments through its remote MCP server.",
+  "version": "0.1.11+codex.20260728154418",
+  "description": "Consult authorized PADMA CRM contacts, Learn links, properties, activity, and statistics, and safely record supported changes through its remote MCP server.",
   "author": {
     "name": "PADMA"
   },
@@ -18,7 +18,7 @@
   "interface": {
     "displayName": "CRM",
     "shortDescription": "Consult\u00e1 y registr\u00e1 actividad en CRM",
-    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para buscar o crear contactos, consultar listas guardadas con sus columnas configuradas, administrar propiedades, registrar actividad y analizar estad\u00edsticas mensuales y el funnel comercial.",
+    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para buscar o crear contactos, consultar sus v\u00ednculos con Learn y listas guardadas, administrar propiedades, registrar actividad y analizar estad\u00edsticas mensuales y el funnel comercial.",
     "developerName": "PADMA",
     "category": "Productivity",
     "capabilities": [
@@ -31,6 +31,7 @@
       "Busc\u00e1 un contacto por nombre, email o tel\u00e9fono.",
       "Mostrame los contactos de esta lista guardada con sus columnas configuradas.",
       "Mostrame las propiedades configuradas y los valores de este contacto.",
+      "Mostrame el identificador de Learn de este contacto.",
       "Agreg\u00e1 esta propiedad al contacto que acabo de seleccionar.",
       "Registr\u00e1 este nuevo contacto sin reemplazar datos existentes.",
       "Guard\u00e1 esta comunicaci\u00f3n en el contacto que acabo de seleccionar.",
