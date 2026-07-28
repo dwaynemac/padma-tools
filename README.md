@@ -159,9 +159,10 @@ Permite:
 - consultar bajo demanda el identificador de usuario de Learn y el resumen de actividad y riesgo de abandono calculado por Learn;
 - recorrer el historial de actividad del contacto con paginación segura;
 - crear contactos o reutilizar coincidencias exactas de email o teléfono sin reemplazar datos existentes;
-- agregar propiedades de sistema o de texto personalizadas sin duplicar valores normalizados;
-- registrar comunicaciones idempotentes bajo el usuario autenticado;
-- agregar comentarios visibles para la cuenta al contacto seleccionado;
+- crear propiedades de sistema o de texto personalizadas sin duplicar valores normalizados;
+- crear comunicaciones idempotentes bajo el usuario autenticado;
+- corregir campos editables de una comunicación existente sin cambiar su contacto, autor ni metadatos de idempotencia;
+- crear comentarios visibles para la cuenta en el contacto seleccionado;
 - leer series mensuales persistidas y su fecha de actualización;
 - comparar métricas con el mes anterior y el promedio de los tres meses previos;
 - analizar contactos y conversión por método de marketing durante un rango mensual;
@@ -187,8 +188,8 @@ personales y distinguir estadísticas faltantes de valores cero.
 
 El plugin no requiere una API key ni una variable de entorno. El cliente
 administra la sesión OAuth. Las escrituras disponibles permiten crear o
-reutilizar contactos, agregar propiedades, registrar comunicaciones y agregar
-comentarios.
+reutilizar contactos, crear propiedades, crear o corregir comunicaciones y
+crear comentarios.
 
 ## Ejemplos
 
@@ -225,6 +226,7 @@ comentarios.
 - “Agregá este teléfono al contacto que acabo de seleccionar.”
 - “Registrá a Ana como prospect con este email y teléfono.”
 - “Guardá esta llamada saliente en el contacto que acabo de seleccionar.”
+- “Corregí el medio y la fecha de esta comunicación.”
 - “Agregá este comentario al contacto que acabo de seleccionar.”
 - “Mostrame alumnos y bajas mes a mes durante el último año.”
 - “Compará la efectividad de este mes con el mes anterior.”

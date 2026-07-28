@@ -1,7 +1,7 @@
 interface:
   display_name: "PADMA Assistant"
-  short_description: "Coordinar CRM, Money, rankings y funnels"
-  default_prompt: "Usá $padma-assistant para analizar rankings y funnels de CRM y relacionarlos con Money sin mezclar fuentes."
+  short_description: "Coordinar CRM, Money, actividad y funnels"
+  default_prompt: "Usá $padma-assistant para trabajar con actividad y funnels de CRM y relacionarlos con Money sin mezclar fuentes."
 
 dependencies:
   tools:

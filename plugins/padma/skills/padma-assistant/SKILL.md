@@ -56,8 +56,8 @@ This plugin provides coordination instructions only. It does not declare MCP ser
 
 ## Write through supported product tools
 
-- CRM can create or reuse contacts, add supported contact properties, record communications, and add account-visible comments. Follow the `padma-crm` skill for account scope, identity conflicts, idempotency, and exact inputs.
+- CRM can create or reuse contacts, create supported contact properties, create or update communications, and create account-visible comments. Follow the `padma-crm` skill for account scope, identity conflicts, idempotency, and exact inputs.
 - CRM contact creation only enriches missing fields, and property writes only add normalized values. Do not promise other contact, status, or statistic changes.
 - Before any Money write, read the current records, resolve related IDs, show the exact proposal, and obtain confirmation unless the user already confirmed that identical change.
-- Use a fresh UUID `request_id`, use the latest `updated_at` as `expected_updated_at` for updates, change only requested fields, and refetch after writing.
+- For Money, use a fresh UUID `request_id`, use the latest `updated_at` as `expected_updated_at` for updates, change only requested fields, and refetch after writing.
 - Never emulate unsupported writes or silently create related records.

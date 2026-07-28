@@ -13,7 +13,7 @@ Interpret CRM records with these product semantics. The names shown are the MCP 
 - Custom property definitions are account-scoped labels with `String`, `Date`, `Integer`, or `Contact` data types. Their numeric IDs are selectors, not portable identifiers across accounts.
 - Property selectors on contact reads control projection only; they do not filter the contacts returned by a search.
 - A `Contact` custom property is a relationship. CRM exposes the related person's stable `padma_id` and friendly name only when that person is also connected to the selected account.
-- `add_contact_property` supports String custom writes. Existing Date, Integer, and Contact definitions remain readable but are not writable through that tool.
+- `create_contact_property` supports String custom writes. Existing Date, Integer, and Contact definitions remain readable but are not writable through that tool.
 
 ## Tags
 
@@ -48,7 +48,7 @@ Interpret CRM records with these product semantics. The names shown are the MCP 
 
 - A comment is a new account-visible `FollowUp` entry attached to one contact.
 - CRM records the authenticated user and current time. The agent supplies only the resolved contact and exact comment text.
-- Repeating `add_contact_comment` creates another entry; comments are not idempotent.
+- Repeating `create_contact_comment` creates another entry; comments are not idempotent.
 
 ## Communications
 
@@ -57,6 +57,8 @@ Interpret CRM records with these product semantics. The names shown are the MCP 
 - `media` describes the channel; `incoming` describes its direction; `communicated_at` is the activity timestamp.
 - Marketing methods are account-scoped acquisition or campaign references and must be discovered before use.
 - `request_id` is an idempotency key scoped to the selected account. It is not a communication ID or contact identifier.
+- A communication history entry's `object_id`, or the `id` returned on creation, identifies the record accepted by `update_contact_communication`.
+- Communication updates can replace approved activity fields and marketing methods, but cannot move the record to another account or contact or change its author or idempotency metadata.
 
 ## Monthly statistics and lead funnel
 

@@ -1,7 +1,7 @@
 {
   "name": "crm",
-  "version": "0.1.13+codex.20260728211609",
-  "description": "Consult authorized PADMA CRM contacts, acquisition and dropout rankings, Learn links, properties, activity, and statistics, and safely record supported changes through its remote MCP server.",
+  "version": "0.1.14+codex.20260728213802",
+  "description": "Consult authorized PADMA CRM contacts, acquisition and dropout rankings, Learn links, properties, activity, and statistics, and safely create or update supported records through its remote MCP server.",
   "author": {
     "name": "PADMA"
   },
@@ -18,7 +18,7 @@
   "interface": {
     "displayName": "CRM",
     "shortDescription": "Consult\u00e1 y registr\u00e1 actividad en CRM",
-    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para buscar o crear contactos, segmentarlos por motivos de baja, consultar sus v\u00ednculos con Learn y listas guardadas, administrar propiedades, registrar actividad y analizar rankings de marketing y bajas, estad\u00edsticas mensuales, seguimiento comercial actual y conversi\u00f3n hist\u00f3rica.",
+    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para buscar o crear contactos, segmentarlos por motivos de baja, consultar sus v\u00ednculos con Learn y listas guardadas, administrar propiedades, crear o corregir actividad y analizar rankings de marketing y bajas, estad\u00edsticas mensuales, seguimiento comercial actual y conversi\u00f3n hist\u00f3rica.",
     "developerName": "PADMA",
     "category": "Productivity",
     "capabilities": [
@@ -36,6 +36,7 @@
       "Agreg\u00e1 esta propiedad al contacto que acabo de seleccionar.",
       "Registr\u00e1 este nuevo contacto sin reemplazar datos existentes.",
       "Guard\u00e1 esta comunicaci\u00f3n en el contacto que acabo de seleccionar.",
+      "Correg\u00ed el medio y la fecha de esta comunicaci\u00f3n del contacto.",
       "Mostrame el resumen de actividad de Learn de este contacto.",
       "Agreg\u00e1 este comentario al contacto que acabo de seleccionar.",
       "Compar\u00e1 la conversi\u00f3n por m\u00e9todo de marketing de los \u00faltimos seis meses.",

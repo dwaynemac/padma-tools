@@ -1,6 +1,6 @@
 ---
 name: padma-crm
-description: Use PADMA CRM through its remote MCP server to find authorized accounts, discover contact metadata and dropout reasons, search or create account-scoped contacts, retrieve saved contact lists with their configured properties, inspect or add contact properties, read Learn user IDs, activity summaries, and history, record communications and comments, analyze persisted school monthly statistics, compare periods, rank marketing-method conversion and dropout reasons, and review live commercial follow-up or historical lead funnels. Use for requests about CRM contacts, prospects, students, saved lists, custom properties, Learn links, activity or churn risk, dropout-reason segmentation, comments, communications, contact status, enrollment and dropout metrics, acquisition performance, monthly school performance, or commercial funnels stored in PADMA CRM.
+description: Use PADMA CRM through its remote MCP server to find authorized accounts, discover contact metadata and dropout reasons, search or create account-scoped contacts, retrieve saved contact lists with their configured properties, inspect or create contact properties, read Learn user IDs, activity summaries, and history, create or update communications, record comments, analyze persisted school monthly statistics, compare periods, rank marketing-method conversion and dropout reasons, and review live commercial follow-up or historical lead funnels. Use for requests about CRM contacts, prospects, students, saved lists, custom properties, Learn links, activity or churn risk, dropout-reason segmentation, comments, communications, contact status, enrollment and dropout metrics, acquisition performance, monthly school performance, or commercial funnels stored in PADMA CRM.
 ---
 
 # Use PADMA CRM
@@ -72,12 +72,12 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 11. Do not request deprecated rate `stat_name` values. Derive a requested percentage from the documented absolute numerator and denominator only when both are present and the denominator is greater than zero.
 12. State the selected account and resolved monthly range for ranking and historical-funnel results. For a commercial funnel, state that the counts are a current snapshot. Include missing months and freshness when they affect an analytical answer.
 
-## Add a contact comment
+## Create a contact comment
 
-1. Use `add_contact_comment` only when the user explicitly asks to record a comment and supplies or approves the exact text.
+1. Use `create_contact_comment` only when the user explicitly asks to record a comment and supplies or approves the exact text.
 2. Resolve the selected account and contact first. Use a current `padma_id` from `search_contacts`, and disambiguate same-name contacts before writing.
 3. State the selected account and contact before the write when identity could be ambiguous. Never send a comment to a merely similar contact.
-4. Call `add_contact_comment` once with `account_name`, `padma_id`, and `observations`. The server records the authenticated username and current time; the comment is visible to the selected account.
+4. Call `create_contact_comment` once with `account_name`, `padma_id`, and `observations`. The server records the authenticated username and current time; the comment is visible to the selected account.
 5. Treat the tool as non-idempotent. If the result is uncertain, inspect `get_contact_history` before retrying so the same comment is not created twice.
 6. Report the created comment and contact. Do not claim success from intent or an OAuth login alone.
 
@@ -90,9 +90,9 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 5. If `created` is false, report `matched_by` and `enriched_fields`. Existing names and values are preserved; the tool only fills missing fields.
 6. Stop on `identity_conflict`. Do not choose between ambiguous contacts or retry with altered identity data unless the user resolves the conflict.
 
-## Add a contact property
+## Create a contact property
 
-1. Resolve the selected account and contact before writing, and call `add_contact_property` only when the user asks to add the value.
+1. Resolve the selected account and contact before writing, and call `create_contact_property` only when the user asks to add the value.
 2. Pass `padma_id`, `property_type`, and `value`. Supported types are `email`, `telephone`, `birthday`, `identification`, `address`, `occupation`, and `custom`.
 3. Include only metadata accepted by that type: `phone_country`; `identification_type`; address label and location fields; or `custom_label` for a custom string property.
 4. Before using a custom label, call `list_custom_property_definitions`. CRM creates a missing String definition, reuses a matching one, and rejects a label configured with another data type.
@@ -104,10 +104,19 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 1. Resolve the existing contact in the selected account with `search_contacts` or `create_contact`.
 2. Call `list_marketing_methods` before sending `marketing_method_ids`, and use only active IDs returned for the selected account.
 3. Generate a fresh opaque `request_id` of at most 64 characters for each new communication. Reuse that exact key only when retrying the same payload.
-4. Pass the exact approved `observations`, a supported `media`, and only the optional direction, timestamp, coefficient, or marketing methods supplied by the user.
+4. Call `create_contact_communication` with the exact approved `observations`, a supported `media`, and only the optional direction, timestamp, coefficient, or marketing methods supplied by the user.
 5. Do not supply a username. CRM records the authenticated principal and sanitizes the observations.
 6. A replay of the same key and payload returns the original record with `created: false`. Stop on `idempotency_conflict`; use a new key only for a genuinely new communication.
 7. Report the persisted communication and contact. Use `get_contact_history` when the user asks to verify its visibility.
+
+## Update a contact communication
+
+1. Use `update_contact_communication` only when the user explicitly asks to correct an existing communication.
+2. Resolve the selected account and exact communication first. Use the `object_id` from its `Communication` entry in `get_contact_history`, or the `id` returned by `create_contact_communication`.
+3. Pass `communication_id` and only the approved editable fields: `observations`, `media`, `communicated_at`, `incoming`, `estimated_coefficient`, or `marketing_method_ids`. Omitted fields are preserved.
+4. Treat `marketing_method_ids` as a complete replacement. Call `list_marketing_methods` first, use only active IDs from the selected account, and send an empty array only when the user explicitly wants to clear every method.
+5. Do not attempt to change the account, contact, author, request ID, or idempotency metadata; the tool does not accept them.
+6. Repeating the same update is idempotent and returns `updated: false`. Report whether CRM changed the record.
 
 ## Protect authorization and scope
 
@@ -119,7 +128,7 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 
 ## Respect write limits
 
-- CRM can create or reuse contacts, add supported system or custom contact properties, record communications, and add contact comments.
+- CRM can create or reuse contacts, create supported system or custom contact properties, create or update communications, and create contact comments.
 - Contact creation only enriches missing identity and relationship fields; it does not overwrite existing contact data.
 - Property writes add values and preserve birthday conflicts; they do not expose `public` or `primary` controls.
 - CRM cannot otherwise update contacts, statuses, or statistics.

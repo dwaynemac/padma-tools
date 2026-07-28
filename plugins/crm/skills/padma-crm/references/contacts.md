@@ -77,9 +77,9 @@ CRM normalizes email and phone using its contact rules and matches only properti
 
 If multiple candidates exist, or the supplied email and phone identify different contacts, CRM returns `identity_conflict` without writing. Ask the user to resolve the identity; do not select a candidate or alter the identifiers automatically.
 
-## Add a contact property
+## Create a contact property
 
-Use `add_contact_property` only for a contact confirmed in the selected account. Required inputs are `padma_id`, `property_type`, and `value`. Supported property types are `email`, `telephone`, `birthday`, `identification`, `address`, `occupation`, and `custom`.
+Use `create_contact_property` only for a contact confirmed in the selected account. Required inputs are `padma_id`, `property_type`, and `value`. Supported property types are `email`, `telephone`, `birthday`, `identification`, `address`, `occupation`, and `custom`.
 
 Send only metadata relevant to the selected type. Telephone accepts a two-letter `phone_country`; identification requires `identification_type` (`dni`, `cpf`, `rg`, or `passport`); address accepts `address_label`, postal code, city, state, neighborhood, and country; custom requires `custom_label`. Do not send `public` or `primary`.
 
@@ -99,13 +99,13 @@ The `learn_activity_summary` value is `null` when Learn has not calculated a sum
 
 Use `get_contact_history` only with a `padma_id` confirmed in the selected account. It returns the newest activity first and can include communications, comments visible to the current user, enrollments, dropouts, sent campaigns, and tracked contact changes.
 
-Each entry includes `id`, `type`, `content`, `username`, `account_name`, `activity_at`, `created_at`, and `updated_at`. Paginate with the returned `next_cursor` when the requested history exceeds one page. Do not reuse that cursor after changing the account, `padma_id`, or page size.
+Each entry includes `id`, `type`, `object_id`, `content`, `username`, `account_name`, `activity_at`, `created_at`, and `updated_at`. `object_id` identifies the underlying activity record when available; use it as `communication_id` only for an entry whose type is `Communication`. Paginate with the returned `next_cursor` when the requested history exceeds one page. Do not reuse that cursor after changing the account, `padma_id`, or page size.
 
 History content can contain sensitive free text. Summarize only the entries relevant to the request, identify their activity dates, and avoid reproducing unrelated notes verbatim.
 
-## Add a comment
+## Create a contact comment
 
-Use `add_contact_comment` only after resolving the contact in the selected account and confirming the exact comment text from the user's request. Pass:
+Use `create_contact_comment` only after resolving the contact in the selected account and confirming the exact comment text from the user's request. Pass:
 
 - `account_name`: the current account returned by `list_accounts`;
 - `padma_id`: the resolved contact identifier;
@@ -117,7 +117,7 @@ The operation is non-idempotent. Call it once. If the response is lost or uncert
 
 ## Record a communication
 
-Use `create_communication` only for a `padma_id` confirmed in the selected account. Required inputs are:
+Use `create_contact_communication` only for a `padma_id` confirmed in the selected account. Required inputs are:
 
 - `request_id`: an opaque client-generated key of 1–64 characters;
 - `padma_id`: the resolved contact;
@@ -127,6 +127,14 @@ Use `create_communication` only for a `padma_id` confirmed in the selected accou
 Optional inputs are ISO 8601 `communicated_at` (default current time), `incoming` (default `true`), `estimated_coefficient` (`unknown`, `fp`, `pmenos`, `perfil`, or `pmas`), and `marketing_method_ids`. Discover active marketing methods in the selected account before sending their IDs.
 
 CRM derives the username from the authenticated principal and sanitizes observations. Generate a fresh `request_id` for each new communication. Reuse it only to retry the identical payload: a valid replay returns the original record with `created: false`, while changed data returns `idempotency_conflict`.
+
+## Update a contact communication
+
+Use `update_contact_communication` only after identifying the exact communication in the selected account. Pass its `object_id` from a `Communication` entry returned by `get_contact_history`, or its `id` from `create_contact_communication`, as `communication_id`.
+
+Supply at least one editable field: `observations`, `media`, ISO 8601 `communicated_at`, `incoming`, `estimated_coefficient`, or `marketing_method_ids`. Omitted fields remain unchanged. Marketing methods are a complete replacement, so discover active IDs first and send an empty array only to clear every method.
+
+The tool preserves the account, contact, author, request ID, and idempotency metadata. Repeating values already stored is safe and returns `updated: false`.
 
 ## Privacy and presentation
 
@@ -138,4 +146,4 @@ CRM derives the username from the authenticated principal and sanitizes observat
 - Treat `not_found` as absence from the selected authorized account, not proof that the person does not exist elsewhere.
 - Keep returned CRM facts separate from guesses about identity, intent, or personal characteristics.
 
-CRM can create or reuse contacts, add supported contact properties, record communications, and add contact comments through this plugin. Contact creation enriches only missing fields, and property writes only add normalized values. Do not promise status changes, other contact edits, imports, merges, or deletions.
+CRM can create or reuse contacts, create supported contact properties, create or update communications, and create contact comments through this plugin. Contact creation enriches only missing fields, and property writes only add normalized values. Do not promise status changes, other contact edits, imports, merges, or deletions.

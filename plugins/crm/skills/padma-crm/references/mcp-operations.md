@@ -31,10 +31,11 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 | `search_contacts` | optional account, filters, response selectors, `page_size`, `cursor` | Search account-scoped contact summaries and optionally project selected properties, Learn user IDs, or activity summaries. |
 | `get_contact` | optional `account_name`, required `padma_id`; optional response selectors | Read one account-scoped contact detail and optionally project selected properties, its Learn user ID, or activity summary. |
 | `get_contact_history` | optional account, required `padma_id`; optional `page_size`, `cursor` | Read the contact activity feed, newest entry first. |
-| `add_contact_comment` | optional account, required `padma_id` and `observations` | Add an account-visible follow-up comment as the authenticated user. |
 | `create_contact` | optional account; required `first_name` plus `email` or `phone` | Create a contact or reuse an exact account-owned identity, enriching only missing fields. |
-| `add_contact_property` | optional account; required `padma_id`, `property_type`, and `value` | Idempotently add a supported account-owned system or custom contact property. |
-| `create_communication` | optional account; required `request_id`, `padma_id`, `observations`, and `media` | Record an idempotent account-scoped communication as the authenticated user. |
+| `create_contact_comment` | optional account, required `padma_id` and `observations` | Create an account-visible follow-up comment as the authenticated user. |
+| `create_contact_property` | optional account; required `padma_id`, `property_type`, and `value` | Idempotently create a supported account-owned system or custom contact property. |
+| `create_contact_communication` | optional account; required `request_id`, `padma_id`, `observations`, and `media` | Create an idempotent account-scoped communication as the authenticated user. |
+| `update_contact_communication` | optional account; required `communication_id` and at least one editable field | Update approved fields on an account-scoped communication. |
 | `list_monthly_stat_definitions` | optional `account_name` | Discover stable metric names, localized metadata, types, and availability. |
 | `get_monthly_stats` | `stat_names`; optional account and month range | Read dense persisted monthly series. |
 | `compare_monthly_stats` | `stat_names`; optional account and month | Compare current, previous, and prior-three-month baselines. |
@@ -121,7 +122,7 @@ System values include their applicable phone, identification, address, or birthd
 - Ambiguous matches or an email and phone belonging to different contacts return `identity_conflict` without writing.
 - The response reports `created`, `matched_by`, and `enriched_fields`.
 
-For `add_contact_property`:
+For `create_contact_property`:
 
 - Resolve an existing account-scoped contact and pass `padma_id`, `property_type`, and `value`.
 - `property_type` accepts `email`, `telephone`, `birthday`, `identification`, `address`, `occupation`, or `custom`.
@@ -131,7 +132,7 @@ For `add_contact_property`:
 - Exact normalized matches return `existing`. Other successful statuses are `created`, `birthday_assigned`, `birthday_unchanged`, and `birthday_preserved_as_custom`.
 - A conflicting birthday remains canonical and the incoming value is preserved as the `incoming_birthday` custom property.
 
-For `create_communication`:
+For `create_contact_communication`:
 
 - Resolve `padma_id` with `search_contacts` or `create_contact`.
 - Pass a fresh opaque `request_id` of 1–64 characters for a new communication.
@@ -141,7 +142,15 @@ For `create_communication`:
 - CRM derives the username from OAuth and sanitizes `observations`.
 - Replaying the same key and payload returns the original communication with `created: false`. The same key with different data returns `idempotency_conflict`.
 
-For `add_contact_comment`, pass only the resolved `padma_id` and exact approved `observations`. Each call creates a new comment, so inspect `get_contact_history` before retrying an uncertain result.
+For `update_contact_communication`:
+
+- Resolve the exact communication in the selected account. Use the `object_id` from its `Communication` history entry or the `id` returned by `create_contact_communication`.
+- Pass `communication_id` and at least one of `observations`, `media`, ISO 8601 `communicated_at`, `incoming`, `estimated_coefficient`, or `marketing_method_ids`.
+- Omitted fields are preserved. `marketing_method_ids` is a complete replacement; an empty array clears every method.
+- Account, contact, username, request ID, and idempotency fingerprint cannot be changed.
+- Repeating an identical update returns `updated: false`.
+
+For `create_contact_comment`, pass only the resolved `padma_id` and exact approved `observations`. Each call creates a new comment, so inspect `get_contact_history` before retrying an uncertain result.
 
 ## Pagination and limits
 

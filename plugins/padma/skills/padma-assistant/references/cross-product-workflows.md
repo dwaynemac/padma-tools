@@ -52,16 +52,17 @@ counts with historical Money periods as if they were conversion metrics.
 
 ## Writes in a combined workflow
 
-CRM can create or reuse contacts, add supported properties, record communications, and add account-visible contact comments. Money supports typed creates and updates for movements and selected financial configuration, plus recoverable movement deletion.
+CRM can create or reuse contacts, create supported properties, create or update communications, and create account-visible contact comments. Money supports typed creates and updates for movements and selected financial configuration, plus recoverable movement deletion.
 
 ### CRM contact and communication writes
 
 Follow the `padma-crm` skill and keep the selected `account_name`:
 
 - For a new person, call `create_contact` with a first name and exact email or phone. Stop on ambiguous identity instead of choosing a candidate.
-- For a contact property, resolve the contact, discover custom definitions when relevant, and call `add_contact_property` with only type-specific fields. Treat normalized duplicates as successful reuse.
-- For a communication, resolve the contact, discover any marketing methods, and use one fresh `request_id`. Reuse it only for an identical retry.
-- For a comment, use the exact user-approved text, call `add_contact_comment` once, and inspect contact history before retrying an uncertain result.
+- For a contact property, resolve the contact, discover custom definitions when relevant, and call `create_contact_property` with only type-specific fields. Treat normalized duplicates as successful reuse.
+- For a new communication, resolve the contact, discover any marketing methods, and call `create_contact_communication` with one fresh `request_id`. Reuse it only for an identical retry.
+- To correct a communication, identify its `object_id` in contact history and call `update_contact_communication` with only the approved fields. Treat marketing methods as a complete replacement.
+- For a comment, use the exact user-approved text, call `create_contact_comment` once, and inspect contact history before retrying an uncertain result.
 
 Do not treat CRM contact creation as permission to create a related Money contact or record.
 
