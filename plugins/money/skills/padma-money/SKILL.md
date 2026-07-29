@@ -26,13 +26,14 @@ Use the `money` MCP server as the only execution path for Money data. OAuth dete
 2. Use `search_contacts` with `padma_id` for an exact Money contact lookup. Keep `text` for partial name-or-PADMA-ID discovery.
 3. When a confirmed PADMA contact ID is already available, pass it directly as `contact_padma_id` to `search_movements`; do not make an extra lookup only to translate it into Money's integer `contact_id`.
 4. Never send `contact_id` and `contact_padma_id` together. They are mutually exclusive filters.
-5. Paginate when the requested scope exceeds one page. Do not infer a complete result from a truncated page.
-6. Preserve Money semantics: `report_on` selects reporting months; `movement_at` and `reconciled_at` select actual dates.
-7. Prefer `category_subtotals` for category totals and `analyze_movements` for deterministic findings. Use movement search for detail, audit, categorization, reconciliation, or explaining an aggregate.
-8. Calculate from structured integer values, never from formatted display text. Do not add unlike currencies or silently convert them.
-9. Present monetary values in human units with their currency while retaining exact integer cents when precision matters.
-10. State the business or account scope, period, date basis, currency, filters, and material exclusions.
-11. Separate MCP-confirmed facts from interpretation or recommendations. Do not label derived output as an official accounting statement.
+5. Use `category_tree_ids` on `search_movements` when the request covers one or more categories plus all their descendants. Resolve every root ID with `search_categories`; keep `category_id` for one exact category.
+6. Paginate when the requested scope exceeds one page. Do not infer a complete result from a truncated page.
+7. Preserve Money semantics: `report_on` selects reporting months; `movement_at` and `reconciled_at` select actual dates.
+8. Prefer `category_subtotals` for category totals and `analyze_movements` for deterministic findings. Use movement search for detail, audit, categorization, reconciliation, or explaining an aggregate.
+9. Calculate from structured integer values, never from formatted display text. Do not add unlike currencies or silently convert them.
+10. Present monetary values in human units with their currency while retaining exact integer cents when precision matters.
+11. State the business or account scope, period, date basis, currency, filters, and material exclusions.
+12. Separate MCP-confirmed facts from interpretation or recommendations. Do not label derived output as an official accounting statement.
 
 ## Movement permalinks
 

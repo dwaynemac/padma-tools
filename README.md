@@ -120,6 +120,7 @@ Permite:
 - descubrir y seleccionar entre los negocios autorizados por OAuth;
 - consultar cuentas, categorías, contactos y movimientos;
 - buscar contactos por `padma_id` exacto y movimientos por `contact_padma_id`;
+- filtrar movimientos por una o más categorías junto con todas sus subcategorías;
 - analizar gastos, ingresos, períodos y posibles anomalías;
 - crear, corregir, dividir y eliminar movimientos financieros;
 - prorratear gastos en meses sucesivos, subdividir movimientos y revertir esas divisiones de forma segura;
@@ -204,6 +205,7 @@ crear comentarios.
 ### Money
 
 - “¿Cuánto gastamos el mes pasado, separado por categoría?”
+- “Mostrame los movimientos de esta categoría y todas sus subcategorías.”
 - “Buscá movimientos sin categoría y proponé cómo clasificarlos.”
 - “Registrá este gasto después de mostrarme exactamente qué vas a crear.”
 - “Eliminá este movimiento después de mostrarme sus datos y pedirme confirmación.”

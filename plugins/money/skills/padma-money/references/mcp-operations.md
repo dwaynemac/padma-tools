@@ -105,6 +105,7 @@ Selection guidance:
 - Use `search_contacts(padma_id: ...)` for an exact PADMA ID match inside the selected Business. Its `text` filter remains a partial name-or-PADMA-ID search.
 - Use `search_movements(contact_padma_id: ...)` when the stable PADMA contact ID is already known, including when it came from a current CRM response. Do not first translate it into a Money-local integer ID.
 - `contact_id` and `contact_padma_id` are mutually exclusive movement filters. Supplying both returns `validation_failed`.
+- Use `search_movements(category_tree_ids: [...])` to include movements assigned to any selected category or its descendants. Resolve every root with `search_categories`; use `category_id` for an exact category. If both filters are supplied, Money returns their intersection.
 - Use `search_movements` for audit, reconciliation, category review, finding a specific payment, duplicate checks, or explaining an aggregate.
 - Use `get_movement` immediately before updating, deleting, prorating, or subdividing one movement. A non-null `split_id` identifies the split that owns a resulting movement.
 - Use `get_split` to inspect the original snapshot, every resulting movement—including soft-deleted targets—and whether the split is currently revertible.
@@ -142,6 +143,7 @@ It also does not expose dedicated account-balance, payable, receivable, budget, 
 - `revert_split` requires the exact `expected_movements` list returned by `get_split`, containing every target `id` and `updated_at`. A changed, deleted, added, duplicated, or omitted target produces `conflict`.
 - Search responses are cursor-paginated. Default and maximum page sizes may vary by tool.
 - `search_contacts.padma_id` and `search_movements.contact_padma_id` are exact matches. An unknown `search_contacts.padma_id` returns an empty collection; an unknown or out-of-Business `contact_padma_id` returns `not_found`.
+- `search_movements.category_tree_ids` is an array of category roots from the selected Business. Each root includes itself and all descendants; an unknown or out-of-Business root returns `not_found`.
 - Related account, category, contact, agent, and target-account IDs must belong to the selected Business.
 - Records belonging to another business appear as `not_found` to avoid leaking their existence.
 - The rate limit is shared by the OAuth token across all its authorized Businesses.
@@ -250,4 +252,4 @@ Reuse a `request_id` only when the prior response was uncertain and the payload 
 - No tools: verify that the URL ends in `/mcp`, reconnect Money, complete OAuth authorization, and start a new task.
 - Intended Business missing from `list_businesses`: reconnect Money and grant the corresponding account in OAuth.
 
-Source: [Money MCP documentation in Notion](https://app.notion.com/p/39e3160bddf28027a1fbec7a5102e070), fetched 2026-07-16, reconciled with the implemented Money MCP contract. Authentication and multi-Business selection updated on 2026-07-21; split tool catalog updated on 2026-07-27.
+Source: [Money MCP documentation in Notion](https://app.notion.com/p/39e3160bddf28027a1fbec7a5102e070), fetched 2026-07-16, reconciled with the implemented Money MCP contract. Authentication and multi-Business selection updated on 2026-07-21; split tool catalog updated on 2026-07-27; category-tree movement filtering updated on 2026-07-29.
