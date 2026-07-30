@@ -1,0 +1,25 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "padma-tools",
+  "description": "Plugins for working safely with PADMA CRM and Money from Claude Code.",
+  "owner": {
+    "name": "PADMA"
+  },
+  "plugins": [
+    {
+      "name": "money",
+      "source": "./plugins/money",
+      "description": "Consult and manage authorized PADMA Money businesses safely through its remote MCP server."
+    },
+    {
+      "name": "crm",
+      "source": "./plugins/crm",
+      "description": "Consult authorized PADMA CRM contacts, activity, statistics, and funnel data, and safely create or update supported records."
+    },
+    {
+      "name": "padma",
+      "source": "./plugins/padma",
+      "description": "Coordinate safe CRM and Money read/write workflows through one client-oriented skill."
+    }
+  ]
+}

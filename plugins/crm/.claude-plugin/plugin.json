@@ -1,0 +1,12 @@
+{
+  "name": "crm",
+  "version": "0.1.15+codex.20260729230348",
+  "description": "Consult authorized PADMA CRM contacts, acquisition and dropout rankings, Learn links, properties, activity, and statistics, and safely create or update supported records through its remote MCP server.",
+  "author": {
+    "name": "PADMA"
+  },
+  "homepage": "https://crm.derose.app/",
+  "repository": "https://github.com/dwaynemac/padma-tools",
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

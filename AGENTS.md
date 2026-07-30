@@ -11,8 +11,11 @@ delgados: describen conexiones, contexto y workflows seguros.
 
 ## Estructura
 
-- `.agents/plugins/marketplace.json`: catálogo público del marketplace.
-- `plugins/<nombre>/.codex-plugin/plugin.json`: manifiesto publicado del plugin.
+- `.agents/plugins/marketplace.json`: catálogo público para Codex.
+- `.claude-plugin/marketplace.json`: catálogo público para Claude Code.
+- `plugins/<nombre>/.codex-plugin/plugin.json`: manifiesto publicado para Codex.
+- `plugins/<nombre>/.claude-plugin/plugin.json`: manifiesto publicado para
+  Claude Code.
 - `plugins/<nombre>/.mcp.json`: servidores MCP declarados por el plugin.
 - `plugins/<nombre>/skills/<skill>/SKILL.md`: instrucciones principales.
 - `plugins/<nombre>/skills/<skill>/agents/openai.yaml`: metadatos y
@@ -46,6 +49,7 @@ delgados: describen conexiones, contexto y workflows seguros.
    - el `SKILL.md` y sus referencias;
    - `agents/openai.yaml`;
    - `.codex-plugin/plugin.json`;
+   - `.claude-plugin/plugin.json`;
    - `.mcp.json`, si cambia la conexión;
    - `README.md`, si cambia la experiencia del usuario.
 5. Al modificar el contenido publicado de un plugin, incrementá su versión.
@@ -88,13 +92,20 @@ delgados: describen conexiones, contexto y workflows seguros.
 
 ## Validación
 
-El repositorio no tiene una suite de tests ni dependencias de desarrollo. No
-instales paquetes únicamente para validar estos archivos.
+El repositorio sólo tiene una prueba de compatibilidad basada en la biblioteca
+estándar de Ruby y no tiene dependencias de desarrollo. No instales paquetes
+únicamente para validar estos archivos.
+
+Ejecutá primero la prueba:
+
+```bash
+rbenv exec ruby test/marketplace_compatibility_test.rb
+```
 
 Validá todos los JSON:
 
 ```bash
-find .agents plugins -name '*.json' -print0 |
+find .agents .claude-plugin plugins -name '*.json' -print0 |
   xargs -0 -n1 jq empty
 ```
 
@@ -102,7 +113,8 @@ Para validar YAML, usá una versión de Ruby instalada y seleccionada con rbenv;
 el repositorio no fija una versión en `.ruby-version`:
 
 ```bash
-ruby -rpsych -e 'ARGV.each { |path| Psych.safe_load_file(path, aliases: false) }' \
+rbenv exec ruby -rpsych \
+  -e 'ARGV.each { |path| Psych.safe_load_file(path, aliases: false) }' \
   plugins/*/skills/*/agents/openai.yaml
 ```
 
@@ -115,17 +127,21 @@ git status --short
 
 Además, revisá manualmente que:
 
-- cada entrada del marketplace apunte a un plugin existente;
+- ambos marketplaces publiquen el mismo conjunto de plugins;
+- cada entrada del marketplace apunte a un plugin existente con el formato de
+  fuente correspondiente al cliente;
 - cada manifiesto apunte a skills y archivos MCP existentes;
+- los manifiestos Codex y Claude de cada plugin tengan el mismo nombre y
+  versión;
 - los nombres y URLs MCP coincidan entre `.mcp.json` y `agents/openai.yaml`;
 - `padma` siga sin declarar `mcpServers`;
 - todos los enlaces Markdown modificados resuelvan;
 - no haya placeholders, credenciales ni datos personales;
 - README, manifiestos, skills y referencias describan el mismo contrato.
 
-Si está disponible un validador oficial o una instalación aislada de Codex,
-usala como verificación adicional. No ocultes que esa validación o una prueba
-MCP en vivo quedó pendiente.
+Si está disponible un validador oficial o una instalación aislada de Codex o
+Claude Code, usala como verificación adicional. No ocultes que esa validación o
+una prueba MCP en vivo quedó pendiente.
 
 ## Alcance de entrega
 

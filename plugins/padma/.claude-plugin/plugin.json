@@ -1,0 +1,11 @@
+{
+  "name": "padma",
+  "version": "0.1.9+codex.20260729230348",
+  "description": "Coordinate safe CRM and Money read/write workflows through one client-oriented skill.",
+  "author": {
+    "name": "PADMA"
+  },
+  "homepage": "https://derose.app/",
+  "repository": "https://github.com/dwaynemac/padma-tools",
+  "skills": "./skills/"
+}

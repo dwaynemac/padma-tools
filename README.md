@@ -1,8 +1,11 @@
 # PADMA Tools
 
-Plugins y skills para que los usuarios de [PADMA](https://derose.app/) puedan trabajar con sus datos desde agentes compatibles con Codex.
+Plugins y skills para que los usuarios de [PADMA](https://derose.app/) puedan
+trabajar con sus datos desde Codex y Claude Code.
 
-Este repositorio funciona como un marketplace de Codex. Cada plugin puede combinar instrucciones especializadas, documentación y conexiones MCP con las aplicaciones de PADMA.
+Este repositorio publica catálogos específicos para cada cliente. Ambos
+instalan los mismos plugins, skills y conexiones MCP con las aplicaciones de
+PADMA.
 
 ## Instalar el marketplace en Codex
 
@@ -240,14 +243,23 @@ crear comentarios.
 ## Estructura
 
 ```text
-.agents/plugins/marketplace.json  catálogo que descubre Codex
-plugins/                          plugins instalables
-  padma/                          skill coordinadora, sin servidores MCP
-  money/                          integración MCP con PADMA Money
-  crm/                            integración MCP con PADMA CRM
+.agents/plugins/marketplace.json   catálogo de Codex
+.claude-plugin/marketplace.json    catálogo de Claude Code
+plugins/                           plugins instalables
+  padma/
+    .codex-plugin/plugin.json      manifiesto de Codex
+    .claude-plugin/plugin.json     manifiesto de Claude Code
+  money/                           integración MCP con PADMA Money
+  crm/                             integración MCP con PADMA CRM
 ```
 
-Las skills específicas de un producto viajan dentro de su plugin. Las skills independientes podrán publicarse bajo `skills/` cuando no necesiten MCP ni otro componente adicional.
+Los catálogos no son intercambiables: cada cliente usa un esquema de
+`marketplace.json` distinto. Los manifiestos específicos sólo describen el
+empaquetado; el contenido compartido permanece en `skills/` y `.mcp.json`.
+
+Las skills específicas de un producto viajan dentro de su plugin. Las skills
+independientes podrán publicarse bajo `skills/` cuando no necesiten MCP ni otro
+componente adicional.
 
 ## Seguridad y alcance
 
@@ -265,3 +277,5 @@ Consultá [CONTRIBUTING.md](CONTRIBUTING.md) para agregar o actualizar un plugin
 
 - [Plugins de Codex](https://developers.openai.com/codex/plugins)
 - [Crear y distribuir plugins](https://developers.openai.com/codex/plugins/build)
+- [Plugins de Claude Code](https://code.claude.com/docs/en/plugins)
+- [Marketplaces de Claude Code](https://code.claude.com/docs/en/plugin-marketplaces)
