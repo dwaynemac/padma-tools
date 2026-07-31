@@ -35,7 +35,7 @@ Do not treat a split as duplication: after a successful split, the original is a
 
 ## Category
 
-A hierarchical reporting classification, separate from an account. Child-category values roll up to parent totals. Categories have income or expense sections.
+A hierarchical reporting classification, separate from an account. Child-category values roll up to parent totals. Categories have income or expense sections and may define one monthly budget in the Business base currency. A configured category budget is not a balance or the monthly budget report; only one category in an ancestor-descendant branch may carry a budget.
 
 ## Contact and agent
 
@@ -66,4 +66,4 @@ A rule applied only when a movement is created. It can assign metadata or conver
 - Do not mix realized movements with plan forecasts without labeling them separately.
 - Do not add different currencies unless an explicit supported conversion basis is available.
 - Do not infer a missing payment until the relevant accounts, date basis, period, pagination, and filters have been checked.
-- Do not invent commitments, payables, receivables, budgets, or balances: the current MCP does not expose dedicated tools for them.
+- Do not invent commitments, payables, receivables, balances, or monthly budget report results: the MCP exposes configured category budgets but no dedicated tools for those other concepts.

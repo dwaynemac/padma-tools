@@ -1,6 +1,6 @@
 {
   "name": "money",
-  "version": "0.1.3+codex.20260729230348",
+  "version": "0.1.4+codex.20260731173826",
   "description": "Consult and manage authorized PADMA Money businesses safely through its remote MCP server.",
   "author": {
     "name": "PADMA"
@@ -17,7 +17,7 @@
   "interface": {
     "displayName": "Money",
     "shortDescription": "Consultá y administrá Money con MCP",
-    "longDescription": "Conecta Codex con los negocios autorizados de Money para consultar cuentas, categorías y sus árboles, contactos por PADMA ID, movimientos y reportes, y realizar cambios financieros —incluido dividir, revertir divisiones y eliminar movimientos o reglas recurrentes— con confirmación, idempotencia y verificación.",
+    "longDescription": "Conecta Codex con los negocios autorizados de Money para consultar cuentas, categorías, sus árboles y presupuestos mensuales, contactos por PADMA ID, movimientos y reportes, y realizar cambios financieros —incluido configurar presupuestos, dividir, revertir divisiones y eliminar movimientos o reglas recurrentes— con confirmación, idempotencia y verificación.",
     "developerName": "PADMA",
     "category": "Productivity",
     "capabilities": [
@@ -31,6 +31,7 @@
       "Analizá los movimientos del último mes.",
       "Buscá los movimientos asociados a este PADMA ID.",
       "Mostrame los movimientos de esta categoría y todas sus subcategorías.",
+      "Configurá un presupuesto mensual para esta categoría después de mostrarme el cambio.",
       "Prorrateá un gasto en varios meses después de mostrarme las cuotas."
     ],
     "brandColor": "#22C55E"

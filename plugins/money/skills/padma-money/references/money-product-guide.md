@@ -55,7 +55,9 @@ Categories organize reports and subtotals. They form a hierarchy: movements assi
 
 Category notes document the team's classification standard. A category linked to movements, recurrent movements, or plans should be archived rather than deleted when its history must remain. Archived categories leave existing data intact but disappear from forms and reports according to the documented product behavior.
 
-The MCP supports creating, renaming, reparenting, archiving, and unarchiving categories. It does not expose deletion or category-note editing.
+Categories may define a monthly budget in the Business base currency. A budget can be zero, but cannot be negative; ancestors and descendants cannot both define budgets in the same branch.
+
+The MCP supports creating, renaming, reparenting, archiving, unarchiving, and setting or removing category budgets. `search_categories`, `create_category`, and `update_category` return the configured budget with integer cents and base currency. It does not expose the monthly budget report, category deletion, or category-note editing.
 
 ## Plans and recurrent movements
 

@@ -106,6 +106,7 @@ Selection guidance:
 - Use `search_movements(contact_padma_id: ...)` when the stable PADMA contact ID is already known, including when it came from a current CRM response. Do not first translate it into a Money-local integer ID.
 - `contact_id` and `contact_padma_id` are mutually exclusive movement filters. Supplying both returns `validation_failed`.
 - Use `search_movements(category_tree_ids: [...])` to include movements assigned to any selected category or its descendants. Resolve every root with `search_categories`; use `category_id` for an exact category. If both filters are supplied, Money returns their intersection.
+- `search_categories` returns `monthly_budget` as null or `{cents, currency}`. The currency is always the selected Business's base currency.
 - Use `search_movements` for audit, reconciliation, category review, finding a specific payment, duplicate checks, or explaining an aggregate.
 - Use `get_movement` immediately before updating, deleting, prorating, or subdividing one movement. A non-null `split_id` identifies the split that owns a resulting movement.
 - Use `get_split` to inspect the original snapshot, every resulting movement—including soft-deleted targets—and whether the split is currently revertible.
@@ -128,8 +129,8 @@ Selection guidance:
 - `create_plan`, `update_plan`
 - `create_automation_rule`, `update_automation_rule`
 
-The implemented MCP exposes thirty-three tools: `list_businesses` plus thirty-two Business-contextual tools. `delete_movement` performs a recoverable soft delete. `delete_recurrent_movement` permanently removes one recurrent rule while preserving movements it already generated. `revert_split` atomically restores one split's original movement and removes all unchanged targets. The MCP does not expose general movement restoration, physical deletion beyond recurrent movement rules, deletion of other record types, batch mutation, import, contact mutation, or automatic bank-statement reconciliation.
-It also does not expose dedicated account-balance, payable, receivable, budget, or projected-cash-flow tools. Never claim those outputs are directly available.
+The implemented MCP exposes thirty-three tools: `list_businesses` plus thirty-two Business-contextual tools. `delete_movement` performs a recoverable soft delete. `delete_recurrent_movement` permanently removes one recurrent rule while preserving movements it already generated. `revert_split` atomically restores one split's original movement and removes all unchanged targets. The MCP does not expose general movement restoration, physical deletion beyond recurrent movement rules, deletion of other record types, batch mutation, import, contact mutation, automatic bank-statement reconciliation, or the monthly budget report.
+It also does not expose dedicated account-balance, payable, receivable, or projected-cash-flow tools. Category tools expose the configured monthly budget only; never claim that this is the report or that unsupported outputs are directly available.
 
 ## Shared contracts
 
@@ -138,6 +139,7 @@ It also does not expose dedicated account-balance, payable, receivable, budget, 
 - Use only IDs returned by `list_businesses`. An unknown or unauthorized selector returns `forbidden` without revealing whether another tenant exists.
 - Record IDs are integers and are resolved only inside the selected Business.
 - Monetary values use integer cents and always carry a currency. For example, ARS 1,000 is `100000` cents.
+- Category responses from `search_categories`, `create_category`, and `update_category` expose `monthly_budget` as null or `{cents, currency}` in the Business base currency.
 - `request_id` is a client-generated UUID for durable write idempotency.
 - `expected_updated_at` is the latest ISO 8601 timestamp from a read and protects updates, deletion, proration, and subdivision with optimistic concurrency.
 - `revert_split` requires the exact `expected_movements` list returned by `get_split`, containing every target `id` and `updated_at`. A changed, deleted, added, duplicated, or omitted target produces `conflict`.
@@ -173,6 +175,8 @@ It also does not expose dedicated account-balance, payable, receivable, budget, 
 
 Never create related records implicitly. If a requested category or account is missing, ask before creating it with its explicit tool.
 
+For `create_category`, `monthly_budget_cents` is optional. When supplied, it must be a non-negative integer and the created response returns it as `monthly_budget` with the Business base currency.
+
 ### Update
 
 1. Fetch the current record.
@@ -183,6 +187,8 @@ Never create related records implicitly. If a requested category or account is m
 6. Refetch and verify.
 
 If `expected_updated_at` is stale, do not overwrite. Refetch and reconcile with the current record.
+
+For `update_category`, `monthly_budget_cents` accepts a non-negative integer to set or change the configured budget, or null to remove it. The field participates in idempotency and optimistic concurrency, and successful mutations include its integer-cent transition in `changed_fields`. A category budget cannot overlap another configured budget on an ancestor or descendant; invalid negative or overlapping values return `validation_failed`.
 
 ### Delete a movement
 

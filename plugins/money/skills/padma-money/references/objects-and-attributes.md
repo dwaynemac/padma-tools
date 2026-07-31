@@ -64,6 +64,8 @@ Interpret Money records with these product semantics. The field names shown are 
 
 - Categories classify income or expense for subtotals and reports. They do not carry balances.
 - `parent_id` places a category in the hierarchy. Values assigned to a child roll up into its ancestors.
+- `monthly_budget` is null or `{cents, currency}` in the Business base currency. It is the category's configured monthly target, not an account balance or a monthly report result.
+- `create_category.monthly_budget_cents` optionally sets the budget; `update_category.monthly_budget_cents` sets or changes it with a non-negative integer and removes it with null. Ancestor and descendant categories cannot both have configured budgets in the same branch.
 - Notes describe the organization's classification convention. They are guidance for categorization, not financial data; the MCP does not expose note editing.
 - An archived category is removed from forms, the category screen, and reports. Existing records remain stored, but their historical values do not appear in category reports while the category is archived.
 - A category linked to movements, recurrent movements, or plans cannot be deleted in the product until those links are changed. The MCP does not expose deletion.

@@ -1,6 +1,6 @@
 ---
 name: padma-money
-description: Use PADMA Money through its remote MCP server to inspect accounts, categories, contacts, movements and their splits, financial reports, recurrent movements, plans, and automation rules; create, update, prorate, subdivide, revert splits, soft-delete movements, or delete recurrent movement rules safely. Use for requests such as cuanto gastamos, ingresos del mes, flujo de caja, compara periodos, revisa pagos, registra un gasto, corrige, categoriza, divide, prorratea o elimina un movimiento, elimina una recurrencia, revierte una division, concilia una cuenta, detecta anomalias, or otherwise consults or manages an organization's financial information stored in Money.
+description: Use PADMA Money through its remote MCP server to inspect accounts, categories and their monthly budgets, contacts, movements and their splits, financial reports, recurrent movements, plans, and automation rules; create, update, prorate, subdivide, revert splits, soft-delete movements, or delete recurrent movement rules safely. Use for requests such as cuanto gastamos, ingresos del mes, flujo de caja, compara periodos, revisa pagos, configura un presupuesto de categoria, registra un gasto, corrige, categoriza, divide, prorratea o elimina un movimiento, elimina una recurrencia, revierte una division, concilia una cuenta, detecta anomalias, or otherwise consults or manages an organization's financial information stored in Money.
 ---
 
 # Use Money MCP
@@ -27,13 +27,14 @@ Use the `money` MCP server as the only execution path for Money data. OAuth dete
 3. When a confirmed PADMA contact ID is already available, pass it directly as `contact_padma_id` to `search_movements`; do not make an extra lookup only to translate it into Money's integer `contact_id`.
 4. Never send `contact_id` and `contact_padma_id` together. They are mutually exclusive filters.
 5. Use `category_tree_ids` on `search_movements` when the request covers one or more categories plus all their descendants. Resolve every root ID with `search_categories`; keep `category_id` for one exact category.
-6. Paginate when the requested scope exceeds one page. Do not infer a complete result from a truncated page.
-7. Preserve Money semantics: `report_on` selects reporting months; `movement_at` and `reconciled_at` select actual dates.
-8. Prefer `category_subtotals` for category totals and `analyze_movements` for deterministic findings. Use movement search for detail, audit, categorization, reconciliation, or explaining an aggregate.
-9. Calculate from structured integer values, never from formatted display text. Do not add unlike currencies or silently convert them.
-10. Present monetary values in human units with their currency while retaining exact integer cents when precision matters.
-11. State the business or account scope, period, date basis, currency, filters, and material exclusions.
-12. Separate MCP-confirmed facts from interpretation or recommendations. Do not label derived output as an official accounting statement.
+6. Read `monthly_budget` from `search_categories` when the user asks about a category's configured monthly budget. It is either null or an object with integer `cents` and the Business base `currency`; it is not the monthly budget report.
+7. Paginate when the requested scope exceeds one page. Do not infer a complete result from a truncated page.
+8. Preserve Money semantics: `report_on` selects reporting months; `movement_at` and `reconciled_at` select actual dates.
+9. Prefer `category_subtotals` for category totals and `analyze_movements` for deterministic findings. Use movement search for detail, audit, categorization, reconciliation, or explaining an aggregate.
+10. Calculate from structured integer values, never from formatted display text. Do not add unlike currencies or silently convert them.
+11. Present monetary values in human units with their currency while retaining exact integer cents when precision matters.
+12. State the business or account scope, period, date basis, currency, filters, and material exclusions.
+13. Separate MCP-confirmed facts from interpretation or recommendations. Do not label derived output as an official accounting statement.
 
 ## Movement permalinks
 
@@ -53,6 +54,7 @@ When the user requests a direct link to a movement:
 6. Change only explicitly requested fields. Correct an existing record in place instead of creating a duplicate.
 7. Before `revert_split`, call `get_split` immediately before confirmation. Show the original and every resulting movement, then pass the exact returned target IDs and `updated_at` values as `expected_movements`. Never omit a target or bypass a conflict.
 8. Refetch or search after the write and report the persisted result. After splitting, verify with `get_split`; after `revert_split`, verify the restored original; after `delete_movement`, verify that normal reads return `not_found` and report the returned deletion timestamp; after `delete_recurrent_movement`, verify that `get_recurrent_movement` returns `not_found`. Do not treat a successful request alone as verification.
+9. For a category budget, pass `monthly_budget_cents` as a non-negative integer to `create_category` or `update_category`; pass null only to `update_category` to remove it. Do not invent a currency input: category budgets always use the Business base currency. A category cannot have a budget when an ancestor or descendant in the same branch already has one.
 
 ## Protect credentials and tenant scope
 
@@ -65,5 +67,5 @@ When the user requests a direct link to a movement:
 ## Handle unavailable or unsupported operations
 
 - If the server or expected tool is unavailable, report the missing capability plainly and provide connection checks from the operations reference.
-- Do not emulate deferred capabilities such as restoring an independently deleted movement, physical deletion beyond recurrent movement rules, deletion of other record types, batch mutation, imports, automatic bank-statement matching, or contact mutation through unrelated tools. `revert_split` is limited to atomically restoring the original movement and removing every unchanged target of that split.
+- Do not emulate deferred capabilities such as the monthly budget report, restoring an independently deleted movement, physical deletion beyond recurrent movement rules, deletion of other record types, batch mutation, imports, automatic bank-statement matching, or contact mutation through unrelated tools. Category budget fields are available through category tools; `revert_split` is limited to atomically restoring the original movement and removing every unchanged target of that split.
 - For authentication, authorization, validation, conflict, or rate-limit errors, follow the response-specific recovery in the operations reference. Do not retry writes blindly.
