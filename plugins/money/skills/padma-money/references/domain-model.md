@@ -35,7 +35,7 @@ Do not treat a split as duplication: after a successful split, the original is a
 
 ## Category
 
-A hierarchical reporting classification, separate from an account. Child-category values roll up to parent totals. Categories have income or expense sections and may define one monthly budget in the Business base currency. A configured category budget is not a balance or the monthly budget report; only one category in an ancestor-descendant branch may carry a budget.
+A hierarchical reporting classification, separate from an account. Child-category values roll up to parent totals. Categories have income or expense sections and may define one monthly budget in a supported currency, independently of the Business base currency. Monthly reports convert it to the Business currency using the applicable reporting-month rate. A configured category budget is not a balance or the monthly budget report; only one category in an ancestor-descendant branch may carry a budget.
 
 ## Contact and agent
 

@@ -27,7 +27,7 @@ Use the `money` MCP server as the only execution path for Money data. OAuth dete
 3. When a confirmed PADMA contact ID is already available, pass it directly as `contact_padma_id` to `search_movements`; do not make an extra lookup only to translate it into Money's integer `contact_id`.
 4. Never send `contact_id` and `contact_padma_id` together. They are mutually exclusive filters.
 5. Use `category_tree_ids` on `search_movements` when the request covers one or more categories plus all their descendants. Resolve every root ID with `search_categories`; keep `category_id` for one exact category.
-6. Read `monthly_budget` from `search_categories` when the user asks about a category's configured monthly budget. It is either null or an object with integer `cents` and the Business base `currency`; it is not the monthly budget report.
+6. Read `monthly_budget` from `search_categories` when the user asks about a category's configured monthly budget. It is either null or an object with integer `cents` and the category's stored `currency`; it is not the monthly budget report. Do not assume that its currency matches the Business base currency.
 7. Paginate when the requested scope exceeds one page. Do not infer a complete result from a truncated page.
 8. Preserve Money semantics: `report_on` selects reporting months; `movement_at` and `reconciled_at` select actual dates.
 9. Prefer `category_subtotals` for category totals and `analyze_movements` for deterministic findings. Use movement search for detail, audit, categorization, reconciliation, or explaining an aggregate.
@@ -54,7 +54,7 @@ When the user requests a direct link to a movement:
 6. Change only explicitly requested fields. Correct an existing record in place instead of creating a duplicate.
 7. Before `revert_split`, call `get_split` immediately before confirmation. Show the original and every resulting movement, then pass the exact returned target IDs and `updated_at` values as `expected_movements`. Never omit a target or bypass a conflict.
 8. Refetch or search after the write and report the persisted result. After splitting, verify with `get_split`; after `revert_split`, verify the restored original; after `delete_movement`, verify that normal reads return `not_found` and report the returned deletion timestamp; after `delete_recurrent_movement`, verify that `get_recurrent_movement` returns `not_found`. Do not treat a successful request alone as verification.
-9. For a category budget, pass `monthly_budget_cents` as a non-negative integer to `create_category` or `update_category`; pass null only to `update_category` to remove it. Do not invent a currency input: category budgets always use the Business base currency. A category cannot have a budget when an ancestor or descendant in the same branch already has one.
+9. For a category budget, pass `monthly_budget_cents` as a non-negative integer and, when requested, `monthly_budget_currency` as one of `usd`, `brl`, `eur`, `ars`, or `btc`; uppercase variants are accepted and stored lowercase. Omitting currency on creation defaults to the Business base currency. On update, changing only cents preserves the stored currency, changing only currency preserves cents, and `monthly_budget_cents: null` removes both fields. Never combine that null with a currency. A category cannot have a budget when an ancestor or descendant in the same branch already has one.
 
 ## Protect credentials and tenant scope
 

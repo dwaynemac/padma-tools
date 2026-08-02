@@ -106,7 +106,7 @@ Selection guidance:
 - Use `search_movements(contact_padma_id: ...)` when the stable PADMA contact ID is already known, including when it came from a current CRM response. Do not first translate it into a Money-local integer ID.
 - `contact_id` and `contact_padma_id` are mutually exclusive movement filters. Supplying both returns `validation_failed`.
 - Use `search_movements(category_tree_ids: [...])` to include movements assigned to any selected category or its descendants. Resolve every root with `search_categories`; use `category_id` for an exact category. If both filters are supplied, Money returns their intersection.
-- `search_categories` returns `monthly_budget` as null or `{cents, currency}`. The currency is always the selected Business's base currency.
+- `search_categories` returns `monthly_budget` as null or `{cents, currency}`. The currency is the value stored for that category and may differ from the selected Business's base currency.
 - Use `search_movements` for audit, reconciliation, category review, finding a specific payment, duplicate checks, or explaining an aggregate.
 - Use `get_movement` immediately before updating, deleting, prorating, or subdividing one movement. A non-null `split_id` identifies the split that owns a resulting movement.
 - Use `get_split` to inspect the original snapshot, every resulting movement—including soft-deleted targets—and whether the split is currently revertible.
@@ -139,7 +139,7 @@ It also does not expose dedicated account-balance, payable, receivable, or proje
 - Use only IDs returned by `list_businesses`. An unknown or unauthorized selector returns `forbidden` without revealing whether another tenant exists.
 - Record IDs are integers and are resolved only inside the selected Business.
 - Monetary values use integer cents and always carry a currency. For example, ARS 1,000 is `100000` cents.
-- Category responses from `search_categories`, `create_category`, and `update_category` expose `monthly_budget` as null or `{cents, currency}` in the Business base currency.
+- Category responses from `search_categories`, `create_category`, and `update_category` expose `monthly_budget` as null or `{cents, currency}` using the category's stored currency.
 - `request_id` is a client-generated UUID for durable write idempotency.
 - `expected_updated_at` is the latest ISO 8601 timestamp from a read and protects updates, deletion, proration, and subdivision with optimistic concurrency.
 - `revert_split` requires the exact `expected_movements` list returned by `get_split`, containing every target `id` and `updated_at`. A changed, deleted, added, duplicated, or omitted target produces `conflict`.
@@ -175,7 +175,7 @@ It also does not expose dedicated account-balance, payable, receivable, or proje
 
 Never create related records implicitly. If a requested category or account is missing, ask before creating it with its explicit tool.
 
-For `create_category`, `monthly_budget_cents` is optional. When supplied, it must be a non-negative integer and the created response returns it as `monthly_budget` with the Business base currency.
+For `create_category`, `monthly_budget_cents` is optional. When supplied, it must be a non-negative integer. `monthly_budget_currency` is also optional and accepts `usd`, `brl`, `eur`, `ars`, or `btc`, including uppercase variants that Money normalizes to lowercase; when omitted, Money stores the Business base currency for compatibility with existing clients. Supplying currency without cents returns `validation_failed`. The created response returns the budget with its stored currency.
 
 ### Update
 
@@ -188,7 +188,7 @@ For `create_category`, `monthly_budget_cents` is optional. When supplied, it mus
 
 If `expected_updated_at` is stale, do not overwrite. Refetch and reconcile with the current record.
 
-For `update_category`, `monthly_budget_cents` accepts a non-negative integer to set or change the configured budget, or null to remove it. The field participates in idempotency and optimistic concurrency, and successful mutations include its integer-cent transition in `changed_fields`. A category budget cannot overlap another configured budget on an ancestor or descendant; invalid negative or overlapping values return `validation_failed`.
+For `update_category`, `monthly_budget_cents` accepts a non-negative integer to set or change the configured budget, or null to remove it. `monthly_budget_currency` accepts `usd`, `brl`, `eur`, `ars`, or `btc`, including uppercase variants that Money normalizes to lowercase. Sending cents alone preserves the stored currency, or defaults to the Business currency when setting the first budget; sending currency alone preserves existing cents and requires a configured budget. Sending `monthly_budget_cents: null` clears both stored fields and must not be combined with `monthly_budget_currency`. Both fields participate in idempotency and optimistic concurrency, and explicitly supplied fields include their transitions in `changed_fields`. A category budget cannot overlap another configured budget on an ancestor or descendant; invalid amounts, currencies, field combinations, or overlapping values return `validation_failed`.
 
 ### Delete a movement
 
@@ -258,4 +258,4 @@ Reuse a `request_id` only when the prior response was uncertain and the payload 
 - No tools: verify that the URL ends in `/mcp`, reconnect Money, complete OAuth authorization, and start a new task.
 - Intended Business missing from `list_businesses`: reconnect Money and grant the corresponding account in OAuth.
 
-Source: [Money MCP documentation in Notion](https://app.notion.com/p/39e3160bddf28027a1fbec7a5102e070), fetched 2026-07-16, reconciled with the implemented Money MCP contract. Authentication and multi-Business selection updated on 2026-07-21; split tool catalog updated on 2026-07-27; category-tree movement filtering updated on 2026-07-29.
+Source: [Money MCP documentation in Notion](https://app.notion.com/p/39e3160bddf28027a1fbec7a5102e070), fetched 2026-07-16, reconciled with the implemented Money MCP contract. Authentication and multi-Business selection updated on 2026-07-21; split tool catalog updated on 2026-07-27; category-tree movement filtering updated on 2026-07-29; category budget currencies updated on 2026-07-31.

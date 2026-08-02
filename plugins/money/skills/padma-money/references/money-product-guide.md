@@ -55,9 +55,9 @@ Categories organize reports and subtotals. They form a hierarchy: movements assi
 
 Category notes document the team's classification standard. A category linked to movements, recurrent movements, or plans should be archived rather than deleted when its history must remain. Archived categories leave existing data intact but disappear from forms and reports according to the documented product behavior.
 
-Categories may define a monthly budget in the Business base currency. A budget can be zero, but cannot be negative; ancestors and descendants cannot both define budgets in the same branch.
+Categories may define a monthly budget in `usd`, `brl`, `eur`, `ars`, or `btc`, independently of the Business base currency. A budget can be zero, but cannot be negative; ancestors and descendants cannot both define budgets in the same branch. Monthly reports convert a foreign-currency budget to the Business currency with the applicable reporting-month rate, so converted progress depends on that rate being available.
 
-The MCP supports creating, renaming, reparenting, archiving, unarchiving, and setting or removing category budgets. `search_categories`, `create_category`, and `update_category` return the configured budget with integer cents and base currency. It does not expose the monthly budget report, category deletion, or category-note editing.
+The MCP supports creating, renaming, reparenting, archiving, unarchiving, and setting or removing category budgets. `search_categories`, `create_category`, and `update_category` return the configured budget with integer cents and its stored currency. Omitting the currency when creating a budget keeps older clients compatible by using the Business base currency. It does not expose the monthly budget report, category deletion, or category-note editing.
 
 ## Plans and recurrent movements
 
