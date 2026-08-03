@@ -36,6 +36,13 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 | `create_contact_property` | optional account; required `padma_id`, `property_type`, and `value` | Idempotently create a supported account-owned system or custom contact property. |
 | `create_contact_communication` | optional account; required `request_id`, `padma_id`, `observations`, and `media` | Create an idempotent account-scoped communication as the authenticated user. |
 | `update_contact_communication` | optional account; required `communication_id` and at least one editable field | Update approved fields on an account-scoped communication. |
+| `list_operations_assignees` | optional `account_name` | Discover usernames available for Operations task assignment. |
+| `list_operations_tasks` | optional account, task filters, `page_size`, `cursor` | List signed-cursor pages of Operations tasks readable by the authenticated user. |
+| `create_operations_task` | optional account; required `title` | Create an Operations task with server-owned creator attribution. |
+| `update_operations_task` | optional account; required `task_id` and at least one editable field | Partially update an authorized Operations task. |
+| `complete_operations_task` | optional account; required `task_id` | Idempotently complete a task as the authenticated user. |
+| `reopen_operations_task` | optional account; required `task_id` | Idempotently reopen a completed task. |
+| `delete_operations_task` | optional account; required `task_id` | Permanently delete a task when authorized. |
 | `list_monthly_stat_definitions` | optional `account_name` | Discover stable metric names, localized metadata, types, and availability. |
 | `get_monthly_stats` | `stat_names`; optional account and month range | Read dense persisted monthly series. |
 | `compare_monthly_stats` | `stat_names`; optional account and month | Compare current, previous, and prior-three-month baselines. |
@@ -152,12 +159,49 @@ For `update_contact_communication`:
 
 For `create_contact_comment`, pass only the resolved `padma_id` and exact approved `observations`. Each call creates a new comment, so inspect `get_contact_history` before retrying an uncertain result.
 
+## Operations tasks
+
+Operations tools use the same account, feature-level, assignment, creator, and
+role authorization as CRM's task interface. A regular authorized member can
+read and update tasks assigned to them or created by them, and can delete tasks
+they created. Account admins and directors can manage team tasks. A principal
+without write capability can list readable tasks but cannot mutate them.
+
+Call `list_operations_tasks` without filters to get every active readable task,
+including later work. Optional filters are:
+
+- `status`: `active`, `completed`, or `all`;
+- `due_group`: `overdue`, `today`, `upcoming`, `later`, or `unscheduled`;
+- `assignee_username`, discovered with `list_operations_assignees`;
+- `contact_padma_id`, resolved through CRM contact tools.
+
+Do not combine a due group with `status: completed`. Responses include
+`task_id`, editable fields, creator and completion attribution, `due_group`,
+audit timestamps, and a linked contact's public `padma_id` and friendly name.
+The task ID is account-scoped and must come from a current list response.
+
+For task writes:
+
+- `create_operations_task` requires `title` and accepts `description`,
+  `assignee_username`, strict `YYYY-MM-DD` `due_on`, and
+  `contact_padma_id`. The server supplies the account and creator, and defaults
+  the assignee to the authenticated user. Creation is not idempotent.
+- `update_operations_task` accepts only `title`, `description`,
+  `assignee_username`, `due_on`, and `contact_padma_id`. Omitted fields are
+  preserved; `null` clears description, due date, or contact. Creator,
+  completion attribution, account, and task ID cannot be changed.
+- Completion and reopening are idempotent and report whether they changed the
+  task. Deletion is permanent, destructive, and not idempotent.
+- Resolve and show the exact task before a destructive deletion. If a create
+  result is uncertain, list matching tasks before retrying.
+
 ## Pagination and limits
 
 - Contact pages default to 50 and accept at most 200 records.
 - A returned contact cursor is signed and bound to its account, filters, and response projection. Reuse it only for the next page of the identical search.
 - A saved-list cursor is signed and bound to its account, list ID, and page size. Reuse it only for the next page of that same list request.
 - Contact-history pages use the same 1–200 page-size limit. Reuse their signed cursor only with the same account, `padma_id`, and page size.
+- Operations task pages use the same 1–200 page-size limit. Reuse their signed cursor only with the same account, filters, and page size.
 - Explicit contact-search dates use strict `YYYY-MM-DD` values.
 - Birthday filters use integer `birthday_day`, `birthday_month`, and optional `birthday_year`; omit any component that should not constrain the search.
 - `status` accepts one value; `statuses` accepts several. Do not send both.
