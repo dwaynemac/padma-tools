@@ -14,7 +14,7 @@
     {
       "name": "crm",
       "source": "./plugins/crm",
-      "description": "Consult authorized PADMA CRM contacts, Operations tasks, activity, statistics, and funnel data, and safely create or update supported records."
+      "description": "Consult authorized PADMA CRM contacts, Operations projects and tasks, activity, statistics, and funnel data, and safely create or update supported records."
     },
     {
       "name": "padma",

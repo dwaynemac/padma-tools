@@ -60,12 +60,20 @@ Interpret CRM records with these product semantics. The names shown are the MCP 
 - A communication history entry's `object_id`, or the `id` returned on creation, identifies the record accepted by `update_contact_communication`.
 - Communication updates can replace approved activity fields and marketing methods, but cannot move the record to another account or contact or change its author or idempotency metadata.
 
+## Operations projects
+
+- An Operations project is an account-scoped, name-only category used to group tasks.
+- `project_id` is stable for MCP mutations but belongs only to the selected account. Discover it with `list_operations_projects`.
+- Project names are unique within an account without regard to case. Only admins and directors with write capability can create, rename, or delete them.
+- Deleting a project preserves every task and leaves those tasks without a project.
+
 ## Operations tasks
 
-- An Operations task is account-scoped work with a title, optional description and due date, one assignee, one creator, and an optional linked CRM contact.
+- An Operations task is account-scoped work with a title, optional description and due date, one assignee, one creator, an optional linked CRM contact, and an optional Operations project.
 - `task_id` is the MCP mutation identifier. A linked person is always identified publicly by `contact.padma_id`, never by the task's internal contact foreign key.
+- A task's `project` is returned as `{ project_id, name }` or `null`. Omit the `project_id` filter to include all tasks; pass `null` to select only tasks without a project.
 - Active due groups are calculated in the selected account's timezone: `overdue`, `today`, `upcoming` (the next seven days), `later`, and `unscheduled`. Completed tasks use `completed` as their returned due group.
-- Creator, completion user, completion time, account, and task ID are server-owned. Only title, description, assignee, due date, and linked contact are editable.
+- Creator, completion user, completion time, account, and task ID are server-owned. Only title, description, assignee, due date, linked contact, and project are editable.
 - Task visibility and mutations depend on the authenticated user's current account permissions. A task returned to one user is not evidence that another user or account can access it.
 - Task creation is not idempotent. Completion and reopening are idempotent; deletion is permanent and destructive.
 

@@ -167,7 +167,8 @@ Permite:
 - crear comunicaciones idempotentes bajo el usuario autenticado;
 - corregir campos editables de una comunicación existente sin cambiar su contacto, autor ni metadatos de idempotencia;
 - crear comentarios visibles para la cuenta en el contacto seleccionado;
-- listar, crear, editar, completar, reabrir y eliminar tareas operativas según los permisos del usuario;
+- listar y administrar proyectos operativos compartidos por cuenta según el rol del usuario;
+- listar, filtrar por proyecto, asignar, crear, editar, completar, reabrir y eliminar tareas operativas según los permisos del usuario;
 - leer series mensuales persistidas y su fecha de actualización;
 - comparar métricas con el mes anterior y el promedio de los tres meses previos;
 - analizar contactos y conversión por método de marketing durante un rango mensual;
@@ -194,7 +195,7 @@ personales y distinguir estadísticas faltantes de valores cero.
 El plugin no requiere una API key ni una variable de entorno. El cliente
 administra la sesión OAuth. Las escrituras disponibles permiten crear o
 reutilizar contactos, crear propiedades, crear o corregir comunicaciones,
-crear comentarios y gestionar tareas operativas autorizadas.
+crear comentarios y gestionar proyectos y tareas operativas autorizadas.
 
 ## Ejemplos
 
@@ -235,7 +236,9 @@ crear comentarios y gestionar tareas operativas autorizadas.
 - “Guardá esta llamada saliente en el contacto que acabo de seleccionar.”
 - “Corregí el medio y la fecha de esta comunicación.”
 - “Agregá este comentario al contacto que acabo de seleccionar.”
+- “Listá los proyectos operativos disponibles en esta cuenta.”
 - “Mostrame todas mis tareas operativas activas, incluidas las de más adelante.”
+- “Mostrame las tareas operativas que no tienen proyecto.”
 - “Creá una tarea para llamar a este contacto mañana y asignásela a esta persona.”
 - “Completá esta tarea; si te pido eliminarla, mostrame sus datos y confirmá antes.”
 - “Mostrame alumnos y bajas mes a mes durante el último año.”
