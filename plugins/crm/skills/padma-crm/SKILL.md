@@ -1,6 +1,6 @@
 ---
 name: padma-crm
-description: Use PADMA CRM through its remote MCP server to find authorized accounts, discover contact metadata and dropout reasons, search or create account-scoped contacts, retrieve saved contact lists with their configured properties, inspect or create contact properties, read Learn user IDs, activity summaries, and history, create or update communications, record comments, manage authorized Operations projects and recurring tasks, analyze persisted school monthly statistics, compare periods, rank marketing-method conversion and dropout reasons, and review live commercial follow-up or historical lead funnels. Use for requests about CRM contacts, prospects, students, saved lists, custom properties, Learn links, activity or churn risk, dropout-reason segmentation, comments, communications, operational projects or tasks, task recurrence, contact status, enrollment and dropout metrics, acquisition performance, monthly school performance, or commercial funnels stored in PADMA CRM.
+description: Use PADMA CRM through its remote MCP server to find authorized accounts, discover contact metadata and dropout reasons, search or create account-scoped contacts, retrieve saved contact lists with their configured properties and current ages, inspect or create contact properties, read Learn user IDs, activity summaries, and history, create or update communications, record comments, manage authorized Operations projects and recurring tasks, analyze persisted school monthly statistics, compare periods, rank marketing-method conversion and dropout reasons, and review live commercial follow-up or historical lead funnels. Use for requests about CRM contacts, prospects, students, saved lists, ages, custom properties, Learn links, activity or churn risk, dropout-reason segmentation, comments, communications, operational projects or tasks, task recurrence, contact status, enrollment and dropout metrics, acquisition performance, monthly school performance, or commercial funnels stored in PADMA CRM.
 ---
 
 # Use PADMA CRM
@@ -35,19 +35,20 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 1. Call `list_contact_lists` in the selected account and resolve the requested list to a current `list_id`.
 2. Call `get_contact_list` when the user wants the contacts produced by that saved list. Do not recreate it with `search_contacts`: CRM applies the list's persisted filters, ordering, and membership semantics.
 3. Do not send property selectors. The saved list controls projection through its configured UI columns, and every returned contact includes a `properties` array even when it is empty.
-4. Use `list.columns` to report the saved configuration and `list.property_selection` to explain which system property types and custom definitions CRM projected. Computed, operational, and stale columns can remain in `columns` without producing properties.
+4. Use `list.columns` to report the saved configuration and `list.property_selection` to explain which system property types and custom definitions CRM projected. A saved `age` column returns top-level `age` without exposing a birthday property; other computed, operational, and stale columns can remain in `columns` without producing properties.
 5. Paginate with `next_cursor` until the requested scope is complete. Reuse the cursor only with the same account, list ID, and page size.
 
 ## Select contact response fields
 
 1. Without response selectors, preserve the compact default projection from `search_contacts` and `get_contact`.
-2. Use `response_fields: ["learn_user_id"]` only when the workflow needs the contact's Learn identifier. The field is `null` when the contact is not linked to Learn.
-3. Use `response_fields: ["learn_activity_summary"]` to add the stored Learn snapshot as a top-level field on every returned contact. Combine both values in one `response_fields` array when both are needed.
-4. For system properties, pass only the needed `property_types`: `email`, `telephone`, `birthday`, `identification`, `address`, or `occupation`.
-5. For custom properties, call `list_custom_property_definitions` in the selected account, then pass only returned `property_configuration_id` values as `property_configuration_ids`.
-6. Treat all three selectors as response projection. They do not filter which contacts match a search, and changing them invalidates an existing search cursor.
-7. Expect every matching account-owned property value in `properties`, not only the primary one. A selected type or definition with no value returns an empty array.
-8. For a `Contact` definition, use only the nested `related_contact.padma_id` and `friendly_name`. CRM omits relationships whose target is not connected to the selected account.
+2. Use `response_fields: ["age"]` when the workflow needs the contact's current age rather than the birthdate. The top-level field is `null` when CRM cannot calculate or estimate it.
+3. Use `response_fields: ["learn_user_id"]` only when the workflow needs the contact's Learn identifier. The field is `null` when the contact is not linked to Learn.
+4. Use `response_fields: ["learn_activity_summary"]` to add the stored Learn snapshot as a top-level field on every returned contact. Combine response field values in one array when several are needed.
+5. For system properties, pass only the needed `property_types`: `email`, `telephone`, `birthday`, `identification`, `address`, or `occupation`. Age is a response field, not a property type.
+6. For custom properties, call `list_custom_property_definitions` in the selected account, then pass only returned `property_configuration_id` values as `property_configuration_ids`.
+7. Treat all three selectors as response projection. They do not filter which contacts match a search, and changing them invalidates an existing search cursor.
+8. Expect every matching account-owned property value in `properties`, not only the primary one. A selected type or definition with no value returns an empty array.
+9. For a `Contact` definition, use only the nested `related_contact.padma_id` and `friendly_name`. CRM omits relationships whose target is not connected to the selected account.
 
 ## Inspect Learn activity
 

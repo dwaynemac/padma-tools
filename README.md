@@ -157,7 +157,7 @@ Permite:
 - descubrir y seleccionar cuentas autorizadas por OAuth;
 - buscar contactos por identidad, cumpleaños, estado, vínculo con la cuenta, actividad, fechas y motivos de baja;
 - descubrir etiquetas, métodos de marketing, motivos de baja y listas guardadas antes de usarlos;
-- consultar una lista guardada respetando sus filtros, orden y columnas de propiedades configuradas;
+- consultar una lista guardada respetando sus filtros, orden y columnas configuradas, incluida la edad calculada sin exponer la fecha de nacimiento;
 - descubrir propiedades personalizadas y consultar valores seleccionados del contacto;
 - consultar datos operativos del contacto dentro de la cuenta seleccionada;
 - consultar bajo demanda el identificador de usuario de Learn y el resumen de actividad y riesgo de abandono calculado por Learn;
@@ -229,6 +229,7 @@ crear comentarios y gestionar proyectos y tareas operativas autorizadas.
 - “¿Quién cumple años hoy en esta cuenta?”
 - “Mostrame los contactos dados de baja por mudanza.”
 - “Mostrame los contactos de esta lista guardada con sus columnas configuradas.”
+- “Mostrame la edad actual de este contacto sin devolver su fecha de nacimiento.”
 - “Mostrame la actividad reciente de este contacto.”
 - “Mostrame el resumen de actividad de Learn de este contacto.”
 - “Listá las propiedades personalizadas disponibles y mostrame el apodo de este contacto.”

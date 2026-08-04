@@ -10,6 +10,7 @@ Interpret CRM records with these product semantics. The names shown are the MCP 
 ## Contact properties
 
 - System properties represent email, telephone, birthday, identification, address, and occupation values owned by the selected account.
+- Age is a computed top-level response field, not a contact property. Requesting it does not expose the birthday, and it can be `null` when CRM cannot calculate or estimate it.
 - Custom property definitions are account-scoped labels with `String`, `Date`, `Integer`, or `Contact` data types. Their numeric IDs are selectors, not portable identifiers across accounts.
 - Property selectors on contact reads control projection only; they do not filter the contacts returned by a search.
 - A `Contact` custom property is a relationship. CRM exposes the related person's stable `padma_id` and friendly name only when that person is also connected to the selected account.

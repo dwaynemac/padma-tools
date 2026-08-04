@@ -1,6 +1,6 @@
 {
   "name": "crm",
-  "version": "0.1.18+codex.20260804114438",
+  "version": "0.1.19+codex.20260804142625",
   "description": "Consult authorized PADMA CRM contacts, Operations projects and recurring tasks, rankings, Learn links, properties, activity, and statistics, and safely create or update supported records through its remote MCP server.",
   "author": {
     "name": "PADMA"
@@ -31,6 +31,7 @@
       "Busc\u00e1 un contacto por nombre, email o tel\u00e9fono.",
       "Mostrame los contactos dados de baja por un motivo determinado.",
       "Mostrame los contactos de esta lista guardada con sus columnas configuradas.",
+      "Mostrame la edad actual de este contacto sin devolver su fecha de nacimiento.",
       "Mostrame las propiedades configuradas y los valores de este contacto.",
       "Mostrame el identificador de Learn de este contacto.",
       "Agreg\u00e1 esta propiedad al contacto que acabo de seleccionar.",

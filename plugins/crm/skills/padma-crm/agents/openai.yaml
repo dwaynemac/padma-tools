@@ -1,7 +1,7 @@
 interface:
   display_name: "PADMA CRM"
-  short_description: "Consultar contactos, tareas recurrentes y métricas"
-  default_prompt: "Usá $padma-crm para buscar contactos autorizados, gestionar proyectos y tareas operativas —incluidas sus recurrencias—, crear o corregir actividad y elegir el análisis adecuado."
+  short_description: "Consultar contactos, edades, tareas y métricas"
+  default_prompt: "Usá $padma-crm para buscar contactos autorizados y sus edades cuando sean necesarias, gestionar proyectos y tareas operativas —incluidas sus recurrencias—, crear o corregir actividad y elegir el análisis adecuado."
 
 dependencies:
   tools:

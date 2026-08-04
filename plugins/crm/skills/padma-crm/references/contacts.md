@@ -43,7 +43,7 @@ Search results are account-scoped summaries. Paginate until the requested scope 
 
 `list_contact_lists` discovers current list IDs and names. To retrieve one saved list, pass its `list_id` to `get_contact_list`; do not translate the list into `search_contacts` filters. The saved list's persisted filters and ordering determine which contacts are returned.
 
-`get_contact_list` projects properties automatically from the list's saved UI columns. It maps the system columns for email, telephone, birthday, identification, and occupation directly; maps `age` to birthday; maps `primary_address` and `primary_*` address components to address once; and maps exact account-owned custom-property labels to their definition IDs. Callers cannot add property selectors.
+`get_contact_list` projects fields automatically from the list's saved UI columns. It maps the system columns for email, telephone, birthday, identification, and occupation directly; returns a saved `age` column as top-level computed age without exposing birthday; maps `primary_address` and `primary_*` address components to address once; and maps exact account-owned custom-property labels to their definition IDs. Callers cannot add response selectors.
 
 The response preserves all configured column names in `list.columns`, including computed, operational, or stale columns that do not project a contact property. `list.property_selection` reports the property types and custom definition IDs that were derived.
 
@@ -59,11 +59,13 @@ Email and phone are resolved from properties belonging to the selected account. 
 
 To expand contacts returned by `get_contact` or `search_contacts`, pass any needed response selectors:
 
-- `response_fields`: accepts `learn_user_id` for the contact's Learn identifier and `learn_activity_summary` for the stored Learn snapshot;
+- `response_fields`: accepts `age` for the contact's current age, `learn_user_id` for the contact's Learn identifier, and `learn_activity_summary` for the stored Learn snapshot;
 - `property_types`: `email`, `telephone`, `birthday`, `identification`, `address`, or `occupation`;
 - `property_configuration_ids`: IDs returned by `list_custom_property_definitions` for the selected account.
 
 Selectors control response projection only and can be combined. They do not filter search matches. Property selectors add a flat `properties` array containing every matching account-owned value in deterministic order. Without selectors, responses retain their compact shape, including the existing top-level email and phone on `get_contact`.
+
+Selecting `age` adds the CRM-calculated current age as a top-level field. It can use the canonical birthday or CRM's maintained estimated age and is `null` when neither is available. Age is not a contact property and does not expose the birthdate.
 
 Selecting `learn_user_id` adds that identifier as a top-level field. It is `null` when the contact is not linked to Learn. Request it only when the workflow requires the Learn identity; selecting it does not grant access to Learn or prove that Learn tools are available.
 
