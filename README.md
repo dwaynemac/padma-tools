@@ -169,6 +169,7 @@ Permite:
 - crear comentarios visibles para la cuenta en el contacto seleccionado;
 - listar y administrar proyectos operativos compartidos por cuenta según el rol del usuario;
 - listar, filtrar por proyecto, asignar, crear, editar, completar, reabrir y eliminar tareas operativas según los permisos del usuario;
+- configurar recurrencias diarias, semanales, mensuales o anuales y obtener la siguiente tarea al completar una ocurrencia;
 - leer series mensuales persistidas y su fecha de actualización;
 - comparar métricas con el mes anterior y el promedio de los tres meses previos;
 - analizar contactos y conversión por método de marketing durante un rango mensual;

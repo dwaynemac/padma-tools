@@ -1,7 +1,7 @@
 {
   "name": "crm",
-  "version": "0.1.17+codex.20260803211906",
-  "description": "Consult authorized PADMA CRM contacts, Operations projects and tasks, rankings, Learn links, properties, activity, and statistics, and safely create or update supported records through its remote MCP server.",
+  "version": "0.1.18+codex.20260804114438",
+  "description": "Consult authorized PADMA CRM contacts, Operations projects and recurring tasks, rankings, Learn links, properties, activity, and statistics, and safely create or update supported records through its remote MCP server.",
   "author": {
     "name": "PADMA"
   },
@@ -17,8 +17,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "CRM",
-    "shortDescription": "Consult\u00e1 contactos, proyectos, tareas y m\u00e9tricas",
-    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para buscar o crear contactos, segmentarlos por motivos de baja, consultar sus v\u00ednculos con Learn y listas guardadas, administrar propiedades, proyectos y tareas operativas, crear o corregir actividad y analizar rankings de marketing y bajas, estad\u00edsticas mensuales, seguimiento comercial actual y conversi\u00f3n hist\u00f3rica.",
+    "shortDescription": "Consult\u00e1 contactos, tareas recurrentes y m\u00e9tricas",
+    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para buscar o crear contactos, segmentarlos por motivos de baja, consultar sus v\u00ednculos con Learn y listas guardadas, administrar propiedades, proyectos y tareas operativas recurrentes, crear o corregir actividad y analizar rankings de marketing y bajas, estad\u00edsticas mensuales, seguimiento comercial actual y conversi\u00f3n hist\u00f3rica.",
     "developerName": "PADMA",
     "category": "Productivity",
     "capabilities": [
@@ -42,8 +42,8 @@
       "List\u00e1 los proyectos operativos disponibles en esta cuenta.",
       "Mostrame mis tareas operativas activas, incluidas las planificadas para m\u00e1s adelante.",
       "Mostrame las tareas operativas que no tienen proyecto.",
-      "Cre\u00e1 esta tarea para el contacto seleccionado despu\u00e9s de mostrarme sus datos.",
-      "Complet\u00e1 esta tarea operativa.",
+      "Cre\u00e1 esta tarea semanal para el contacto seleccionado despu\u00e9s de mostrarme sus datos.",
+      "Complet\u00e1 esta tarea operativa y mostr\u00e1 la pr\u00f3xima ocurrencia si corresponde.",
       "Compar\u00e1 la conversi\u00f3n por m\u00e9todo de marketing de los \u00faltimos seis meses.",
       "Mostrame las bajas agrupadas por motivo durante el \u00faltimo a\u00f1o.",
       "Mostrame qu\u00e9 contactos necesitan seguimiento ahora en cada etapa comercial.",

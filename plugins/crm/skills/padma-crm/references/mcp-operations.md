@@ -42,9 +42,9 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 | `update_operations_project` | optional account; required `project_id` and `name` | Rename an account-scoped Operations project when authorized. |
 | `delete_operations_project` | optional account; required `project_id` | Delete a project, preserve its tasks, and report how many became unassigned. |
 | `list_operations_tasks` | optional account, task filters, `page_size`, `cursor` | List signed-cursor pages of Operations tasks readable by the authenticated user. |
-| `create_operations_task` | optional account; required `title` | Create an Operations task with server-owned creator attribution. |
-| `update_operations_task` | optional account; required `task_id` and at least one editable field | Partially update an authorized Operations task. |
-| `complete_operations_task` | optional account; required `task_id` | Idempotently complete a task as the authenticated user. |
+| `create_operations_task` | optional account; required `title`; optional recurrence | Create an Operations task with server-owned creator attribution and optional recurrence. |
+| `update_operations_task` | optional account; required `task_id` and at least one editable field | Partially update an authorized task, including setting or clearing recurrence. |
+| `complete_operations_task` | optional account; required `task_id` | Idempotently complete a task and return any recurring successor. |
 | `reopen_operations_task` | optional account; required `task_id` | Idempotently reopen a completed task. |
 | `delete_operations_task` | optional account; required `task_id` | Permanently delete a task when authorized. |
 | `list_monthly_stat_definitions` | optional `account_name` | Discover stable metric names, localized metadata, types, and availability. |
@@ -190,24 +190,35 @@ including later work. Optional filters are:
 
 Do not combine a due group with `status: completed`. Responses include
 `task_id`, editable fields, creator and completion attribution, `due_group`,
-audit timestamps, a linked contact's public `padma_id` and friendly name, and
-`project` as `{ project_id, name }` or `null`. The task ID is account-scoped and
-must come from a current list response.
+audit timestamps, a linked contact's public `padma_id` and friendly name,
+`project` as `{ project_id, name }` or `null`, `recurrence` as
+`{ frequency, interval, ends_on }` or `null`, `generated_from_task_id`, and
+`next_task_id`. The task ID is account-scoped and must come from a current list
+response.
 
 For task writes:
 
 - `create_operations_task` requires `title` and accepts `description`,
-  `assignee_username`, strict `YYYY-MM-DD` `due_on`, and
-  `contact_padma_id`, plus nullable `project_id`. The server supplies the account
-  and creator, and defaults the assignee to the authenticated user. Creation is
-  not idempotent.
+  `assignee_username`, strict `YYYY-MM-DD` `due_on`, `contact_padma_id`, nullable
+  `project_id`, and `recurrence`. The server supplies the account and creator,
+  and defaults the assignee to the authenticated user. Creation is not
+  idempotent.
+- `recurrence` is `null` or `{ frequency, interval, ends_on }`. Frequency is
+  `daily`, `weekly`, `monthly`, or `yearly`; interval is a positive integer and
+  defaults to `1`; `ends_on` is an optional strict `YYYY-MM-DD` inclusive limit.
+  Setting recurrence requires `due_on`.
 - `update_operations_task` accepts only `title`, `description`,
-  `assignee_username`, `due_on`, `contact_padma_id`, and `project_id`. Omitted
-  fields are preserved; `null` clears description, due date, contact, or
-  project. Creator,
+  `assignee_username`, `due_on`, `contact_padma_id`, `project_id`, and
+  `recurrence`. Omitted fields are preserved; `null` clears description, due
+  date, contact, project, or recurrence. Recurrence cannot change after a task
+  has generated a successor; update the active successor instead. Creator,
   completion attribution, account, and task ID cannot be changed.
 - Completion and reopening are idempotent and report whether they changed the
-  task. Deletion is permanent, destructive, and not idempotent.
+  task. Completing a recurring task atomically creates at most one successor on
+  the first future occurrence, skips missed dates, respects the inclusive end
+  date, and returns `next_task_id`. Reopening preserves an existing successor,
+  and completing the same task again does not duplicate it. Deletion is
+  permanent, destructive, and not idempotent.
 - Resolve and show the exact task before a destructive deletion. If a create
   result is uncertain, list matching tasks before retrying.
 
