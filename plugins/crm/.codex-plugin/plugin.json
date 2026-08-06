@@ -1,7 +1,7 @@
 {
   "name": "crm",
-  "version": "0.1.19+codex.20260804142625",
-  "description": "Consult authorized PADMA CRM contacts, Operations projects and recurring tasks, rankings, Learn links, properties, activity, and statistics, and safely create or update supported records through its remote MCP server.",
+  "version": "0.3.0+codex.20260805233141",
+  "description": "Consult authorized PADMA CRM contacts, Operations project members, task collaborators, and recurring tasks, rankings, Learn links, properties, activity, and statistics, and safely create or update supported records through its remote MCP server.",
   "author": {
     "name": "PADMA"
   },
@@ -17,8 +17,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "CRM",
-    "shortDescription": "Consult\u00e1 contactos, tareas recurrentes y m\u00e9tricas",
-    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para buscar o crear contactos, segmentarlos por motivos de baja, consultar sus v\u00ednculos con Learn y listas guardadas, administrar propiedades, proyectos y tareas operativas recurrentes, crear o corregir actividad y analizar rankings de marketing y bajas, estad\u00edsticas mensuales, seguimiento comercial actual y conversi\u00f3n hist\u00f3rica.",
+    "shortDescription": "Consult\u00e1 contactos, colaboradores y m\u00e9tricas",
+    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para buscar o crear contactos, segmentarlos por motivos de baja, consultar sus v\u00ednculos con Learn y listas guardadas, administrar propiedades, miembros de proyectos, colaboradores y tareas operativas recurrentes, crear o corregir actividad y analizar rankings de marketing y bajas, estad\u00edsticas mensuales, seguimiento comercial actual y conversi\u00f3n hist\u00f3rica.",
     "developerName": "PADMA",
     "category": "Productivity",
     "capabilities": [
@@ -41,6 +41,8 @@
       "Mostrame el resumen de actividad de Learn de este contacto.",
       "Agreg\u00e1 este comentario al contacto que acabo de seleccionar.",
       "List\u00e1 los proyectos operativos disponibles en esta cuenta.",
+      "Mostrame los miembros de este proyecto operativo.",
+      "Agreg\u00e1 estos colaboradores a la tarea operativa.",
       "Mostrame mis tareas operativas activas, incluidas las planificadas para m\u00e1s adelante.",
       "Mostrame las tareas operativas que no tienen proyecto.",
       "Cre\u00e1 esta tarea semanal para el contacto seleccionado despu\u00e9s de mostrarme sus datos.",

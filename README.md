@@ -167,8 +167,8 @@ Permite:
 - crear comunicaciones idempotentes bajo el usuario autenticado;
 - corregir campos editables de una comunicación existente sin cambiar su contacto, autor ni metadatos de idempotencia;
 - crear comentarios visibles para la cuenta en el contacto seleccionado;
-- listar y administrar proyectos operativos compartidos por cuenta según el rol del usuario;
-- listar, filtrar por proyecto, asignar, crear, editar, completar, reabrir y eliminar tareas operativas según los permisos del usuario;
+- listar y administrar proyectos operativos compartidos y sus miembros por cuenta según el rol del usuario;
+- listar, filtrar por proyecto, asignar colaboradores, crear, editar, completar, reabrir y eliminar tareas operativas según los permisos del usuario, incluidos los accesos de colaboradores y miembros de proyecto;
 - configurar recurrencias diarias, semanales, mensuales o anuales y obtener la siguiente tarea al completar una ocurrencia;
 - leer series mensuales persistidas y su fecha de actualización;
 - comparar métricas con el mes anterior y el promedio de los tres meses previos;

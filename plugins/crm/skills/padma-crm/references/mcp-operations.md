@@ -37,13 +37,13 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 | `create_contact_communication` | optional account; required `request_id`, `padma_id`, `observations`, and `media` | Create an idempotent account-scoped communication as the authenticated user. |
 | `update_contact_communication` | optional account; required `communication_id` and at least one editable field | Update approved fields on an account-scoped communication. |
 | `list_operations_assignees` | optional `account_name` | Discover usernames available for Operations task assignment. |
-| `list_operations_projects` | optional `account_name` | List account-scoped Operations projects in alphabetical order. |
-| `create_operations_project` | optional account; required `name` | Create an Operations project when authorized. |
-| `update_operations_project` | optional account; required `project_id` and `name` | Rename an account-scoped Operations project when authorized. |
+| `list_operations_projects` | optional `account_name` | List account-scoped Operations projects and their sorted members in alphabetical order. |
+| `create_operations_project` | optional account; required `name`; optional `member_usernames` | Create an Operations project and optional complete member list when authorized. |
+| `update_operations_project` | optional account; required `project_id` and at least one of `name` or `member_usernames` | Partially update a project; membership is a complete replacement and `[]` clears it. |
 | `delete_operations_project` | optional account; required `project_id` | Delete a project, preserve its tasks, and report how many became unassigned. |
 | `list_operations_tasks` | optional account, task filters, `page_size`, `cursor` | List signed-cursor pages of Operations tasks readable by the authenticated user. |
-| `create_operations_task` | optional account; required `title`; optional recurrence | Create an Operations task with server-owned creator attribution and optional recurrence. |
-| `update_operations_task` | optional account; required `task_id` and at least one editable field | Partially update an authorized task, including setting or clearing recurrence. |
+| `create_operations_task` | optional account; required `title`; optional collaborators and recurrence | Create an Operations task with server-owned creator attribution and optional complete collaborator list. |
+| `update_operations_task` | optional account; required `task_id` and at least one editable field | Partially update an authorized task, including replacing collaborators or setting or clearing recurrence. |
 | `complete_operations_task` | optional account; required `task_id` | Idempotently complete a task and return any recurring successor. |
 | `reopen_operations_task` | optional account; required `task_id` | Idempotently reopen a completed task. |
 | `delete_operations_task` | optional account; required `task_id` | Permanently delete a task when authorized. |
@@ -165,17 +165,19 @@ For `create_contact_comment`, pass only the resolved `padma_id` and exact approv
 
 ## Operations projects and tasks
 
-Operations tools use the same account, feature-level, assignment, creator, and
-role authorization as CRM's task interface. A regular authorized member can
+Operations tools use the same account, feature-level, assignment, creator,
+collaborator, project-membership, and role authorization as CRM's task interface. A regular authorized member can
 read and update tasks assigned to them or created by them, and can delete tasks
-they created. Account admins and directors can manage team tasks. A principal
+they created. A project member can read every task in that project without gaining
+task mutation rights. Account admins and directors can manage team tasks. A principal
 without write capability can list readable tasks but cannot mutate them. Every
 user who can access Operations tasks can list the selected account's projects;
 only account admins and directors with write capability can create, rename, or
 delete projects.
 
 `list_operations_projects` returns the current account's projects alphabetically
-as stable `project_id` and `name` pairs. Project IDs are account-scoped: discover
+as stable `project_id`, `name`, and sorted `member_usernames` values. Project IDs
+and member usernames are account-scoped: discover
 them in the selected account and never reuse one from another account.
 
 Call `list_operations_tasks` without filters to get every active readable task,
@@ -191,7 +193,8 @@ including later work. Optional filters are:
 Do not combine a due group with `status: completed`. Responses include
 `task_id`, editable fields, creator and completion attribution, `due_group`,
 audit timestamps, a linked contact's public `padma_id` and friendly name,
-`project` as `{ project_id, name }` or `null`, `recurrence` as
+sorted `collaborator_usernames`,
+`project` as `{ project_id, name, member_usernames }` or `null`, `recurrence` as
 `{ frequency, interval, ends_on }` or `null`, `generated_from_task_id`, and
 `next_task_id`. The task ID is account-scoped and must come from a current list
 response.
@@ -199,20 +202,24 @@ response.
 For task writes:
 
 - `create_operations_task` requires `title` and accepts `description`,
-  `assignee_username`, strict `YYYY-MM-DD` `due_on`, `contact_padma_id`, nullable
-  `project_id`, and `recurrence`. The server supplies the account and creator,
-  and defaults the assignee to the authenticated user. Creation is not
-  idempotent.
+  `assignee_username`, complete-replacement `collaborator_usernames`, strict
+  `YYYY-MM-DD` `due_on`, `contact_padma_id`, nullable `project_id`, and
+  `recurrence`. Every collaborator must belong to the selected account; creator
+  and assignee are implicit participants and are omitted from the stored list.
+  The server supplies the account and creator, and defaults the assignee to the
+  authenticated user. Creation is not idempotent.
 - `recurrence` is `null` or `{ frequency, interval, ends_on }`. Frequency is
   `daily`, `weekly`, `monthly`, or `yearly`; interval is a positive integer and
   defaults to `1`; `ends_on` is an optional strict `YYYY-MM-DD` inclusive limit.
   Setting recurrence requires `due_on`.
 - `update_operations_task` accepts only `title`, `description`,
-  `assignee_username`, `due_on`, `contact_padma_id`, `project_id`, and
-  `recurrence`. Omitted fields are preserved; `null` clears description, due
-  date, contact, project, or recurrence. Recurrence cannot change after a task
-  has generated a successor; update the active successor instead. Creator,
-  completion attribution, account, and task ID cannot be changed.
+  `assignee_username`, `collaborator_usernames`, `due_on`, `contact_padma_id`,
+  `project_id`, and `recurrence`. Omitted fields are preserved;
+  `collaborator_usernames` is a complete replacement and `[]` clears it;
+  `null` clears description, due date, contact, project, or recurrence.
+  Recurrence cannot change after a task has generated a successor; update the
+  active successor instead. Creator, completion attribution, account, and task
+  ID cannot be changed.
 - Completion and reopening are idempotent and report whether they changed the
   task. Completing a recurring task atomically creates at most one successor on
   the first future occurrence, skips missed dates, respects the inclusive end
@@ -222,10 +229,14 @@ For task writes:
 - Resolve and show the exact task before a destructive deletion. If a create
   result is uncertain, list matching tasks before retrying.
 
-Project writes use an exact account-scoped `project_id`. Names are required,
-trimmed, at most 255 characters, and unique within the account without regard
-to case. `create_operations_project` and `update_operations_project` return the
-project metadata. `delete_operations_project` returns the deleted project and
+Project writes use an exact account-scoped `project_id`. Names are trimmed, at
+most 255 characters, and unique within the account without regard to case.
+`create_operations_project` requires a name and accepts optional
+`member_usernames`. `update_operations_project` requires at least one of `name`
+or complete-replacement `member_usernames`; omitted fields remain unchanged and
+an empty member list clears membership. Every member must be a current user of
+the selected account. Both tools return the project metadata.
+`delete_operations_project` returns the deleted project and
 `unassigned_tasks_count`; it never deletes the project's tasks, but leaves them
 without a project. Confirm this destructive project deletion immediately before
 calling it.

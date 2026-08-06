@@ -63,19 +63,20 @@ Interpret CRM records with these product semantics. The names shown are the MCP 
 
 ## Operations projects
 
-- An Operations project is an account-scoped, name-only category used to group tasks.
+- An Operations project is an account-scoped category used to group tasks and has a sorted complete-replacement `member_usernames` list.
 - `project_id` is stable for MCP mutations but belongs only to the selected account. Discover it with `list_operations_projects`.
-- Project names are unique within an account without regard to case. Only admins and directors with write capability can create, rename, or delete them.
+- Project names are unique within an account without regard to case. Project members can read every task in the project without task mutation rights. Only admins and directors with write capability can create projects, rename them, replace membership, or delete them.
 - Deleting a project preserves every task and leaves those tasks without a project.
 
 ## Operations tasks
 
-- An Operations task is account-scoped work with a title, optional description and due date, one assignee, one creator, an optional linked CRM contact, an optional Operations project, and optional daily, weekly, monthly, or yearly recurrence.
+- An Operations task is account-scoped work with a title, optional description and due date, one assignee, one creator, optional collaborators, an optional linked CRM contact, an optional Operations project, and optional daily, weekly, monthly, or yearly recurrence.
 - `task_id` is the MCP mutation identifier. A linked person is always identified publicly by `contact.padma_id`, never by the task's internal contact foreign key.
-- A task's `project` is returned as `{ project_id, name }` or `null`. Omit the `project_id` filter to include all tasks; pass `null` to select only tasks without a project.
+- A task's `project` is returned as `{ project_id, name, member_usernames }` or `null`. Omit the `project_id` filter to include all readable tasks; pass `null` to select only tasks without a project.
 - Active due groups are calculated in the selected account's timezone: `overdue`, `today`, `upcoming` (the next seven days), `later`, and `unscheduled`. Completed tasks use `completed` as their returned due group.
 - `recurrence` is `null` or `{ frequency, interval, ends_on }`; recurring tasks require a due date. `generated_from_task_id` identifies the prior occurrence and `next_task_id` identifies the generated successor.
 - Creator, completion user, completion time, account, task ID, and recurrence lineage are server-owned. Title, description, assignee, due date, linked contact, project, and recurrence are editable until the task has generated a successor.
+- `collaborator_usernames` is sorted in responses and is a complete-replacement write field. Every collaborator belongs to the task account; creator and assignee are implicit participants and are not stored as collaborators. Collaborators can read the task without gaining task mutation rights.
 - Task visibility and mutations depend on the authenticated user's current account permissions. A task returned to one user is not evidence that another user or account can access it.
 - Task creation is not idempotent. Completion and reopening are idempotent; completing a recurring task creates at most one future successor, and reopening does not remove it. Deletion is permanent and destructive.
 
