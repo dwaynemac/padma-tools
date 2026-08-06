@@ -1,6 +1,6 @@
 {
   "name": "crm",
-  "version": "0.3.0+codex.20260805233141",
+  "version": "0.3.1+codex.20260806135421",
   "description": "Consult authorized PADMA CRM contacts, Operations project members, task collaborators, and recurring tasks, rankings, Learn links, properties, activity, and statistics, and safely create or update supported records through its remote MCP server.",
   "author": {
     "name": "PADMA"

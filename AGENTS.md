@@ -13,10 +13,14 @@ delgados: describen conexiones, contexto y workflows seguros.
 
 - `.agents/plugins/marketplace.json`: catálogo público para Codex.
 - `.claude-plugin/marketplace.json`: catálogo público para Claude Code.
+- `plugins/<nombre>/plugin.json`: manifiesto portable de Agent Plugins.
+- `plugins/<nombre>/mcp.json`: servidores MCP portables de Agent Plugins,
+  cuando corresponda.
 - `plugins/<nombre>/.codex-plugin/plugin.json`: manifiesto publicado para Codex.
 - `plugins/<nombre>/.claude-plugin/plugin.json`: manifiesto publicado para
   Claude Code.
-- `plugins/<nombre>/.mcp.json`: servidores MCP declarados por el plugin.
+- `plugins/<nombre>/.mcp.json`: servidores MCP declarados para Codex y Claude
+  Code.
 - `plugins/<nombre>/skills/<skill>/SKILL.md`: instrucciones principales.
 - `plugins/<nombre>/skills/<skill>/agents/openai.yaml`: metadatos y
   dependencias de la skill.
@@ -24,6 +28,29 @@ delgados: describen conexiones, contexto y workflows seguros.
   demanda.
 - `README.md`: instalación, capacidades y ejemplos para usuarios.
 - `CONTRIBUTING.md`: requisitos para contribuciones.
+
+## Compatibilidad con Agent Plugins
+
+- Mantené cada plugin publicado conforme a la especificación portable de
+  [Agent Plugins](https://agent-plugins.org/).
+- Tratá `plugins/<nombre>/plugin.json`, `plugins/<nombre>/skills/` y, cuando el
+  plugin sea dueño de una conexión MCP, `plugins/<nombre>/mcp.json` como el
+  contrato portable canónico. Usá los nombres, ubicaciones, schemas y
+  transportes definidos por la versión de Agent Plugins declarada en esos
+  archivos.
+- Conservá cada `SKILL.md` conforme a la especificación de Agent Skills que
+  adopta Agent Plugins, incluidos el frontmatter, los límites de sus campos y
+  la coincidencia entre `name` y el nombre del directorio.
+- Mantené la configuración y metadatos específicos de Codex y Claude Code como
+  superficies adicionales. No reemplaces ni contradigas el contrato portable
+  con manifiestos, marketplaces o extensiones propios de un cliente.
+- Ubicá cualquier extensión específica de un cliente bajo `extensions` o el
+  namespace de dominio inverso que corresponda, según Agent Plugins. No
+  agregues campos específicos de clientes al nivel superior del manifiesto
+  portable.
+- Cuando cambie una capacidad, sincronizá el contrato portable con las
+  superficies específicas de cada cliente sin duplicar la propiedad de skills
+  ni servidores MCP.
 
 ## Límites de cada plugin
 
@@ -48,6 +75,7 @@ delgados: describen conexiones, contexto y workflows seguros.
 4. Si cambia una capacidad publicada, sincronizá:
    - el `SKILL.md` y sus referencias;
    - `agents/openai.yaml`;
+   - `plugin.json` y `mcp.json`, cuando corresponda;
    - `.codex-plugin/plugin.json`;
    - `.claude-plugin/plugin.json`;
    - `.mcp.json`, si cambia la conexión;
@@ -127,6 +155,9 @@ git status --short
 
 Además, revisá manualmente que:
 
+- cada plugin cumpla la versión declarada de
+  [Agent Plugins](https://agent-plugins.org/), incluidos su `plugin.json`, sus
+  skills y, cuando corresponda, su `mcp.json`;
 - ambos marketplaces publiquen el mismo conjunto de plugins;
 - cada entrada del marketplace apunte a un plugin existente con el formato de
   fuente correspondiente al cliente;

@@ -1,4 +1,5 @@
 {
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "crm",
   "version": "0.3.1+codex.20260806135421",
   "description": "Consult authorized PADMA CRM contacts, Operations project members, task collaborators, and recurring tasks, rankings, Learn links, properties, activity, and statistics, and safely create or update supported records through its remote MCP server.",
@@ -7,6 +8,11 @@
   },
   "homepage": "https://crm.derose.app/",
   "repository": "https://github.com/dwaynemac/padma-tools",
-  "skills": "./skills/",
-  "mcpServers": "./.mcp.json"
+  "keywords": [
+    "crm",
+    "contacts",
+    "statistics",
+    "padma",
+    "mcp"
+  ]
 }

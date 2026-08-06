@@ -1,4 +1,5 @@
 {
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "padma",
   "version": "0.1.10+codex.20260806135421",
   "description": "Coordinate safe CRM and Money read/write workflows through one client-oriented skill.",
@@ -7,5 +8,11 @@
   },
   "homepage": "https://derose.app/",
   "repository": "https://github.com/dwaynemac/padma-tools",
-  "skills": "./skills/"
+  "keywords": [
+    "padma",
+    "crm",
+    "money",
+    "business",
+    "coordination"
+  ]
 }

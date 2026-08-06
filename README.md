@@ -7,6 +7,11 @@ Este repositorio publica catálogos específicos para cada cliente. Ambos
 instalan los mismos plugins, skills y conexiones MCP con las aplicaciones de
 PADMA.
 
+Cada directorio bajo `plugins/` también publica el contrato portable de
+[Agent Plugins 1.0](https://agent-plugins.org/) mediante un `plugin.json`, sus
+skills y, para los plugins de producto, un `mcp.json`. Esta superficie convive
+con los manifiestos y marketplaces específicos de Codex y Claude Code.
+
 ## Instalar el marketplace en Codex
 
 Necesitás una versión reciente de Codex con soporte para plugins.

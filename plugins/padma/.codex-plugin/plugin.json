@@ -1,6 +1,6 @@
 {
   "name": "padma",
-  "version": "0.1.9+codex.20260729230348",
+  "version": "0.1.10+codex.20260806135421",
   "description": "Coordinate safe CRM and Money read/write workflows through one client-oriented skill.",
   "author": {
     "name": "PADMA"
