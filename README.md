@@ -174,6 +174,7 @@ Permite:
 - crear comentarios visibles para la cuenta en el contacto seleccionado;
 - listar y administrar proyectos operativos compartidos y sus miembros por cuenta según el rol del usuario;
 - listar, filtrar por proyecto, asignar colaboradores, crear, editar, completar, reabrir y eliminar tareas operativas según los permisos del usuario, incluidos los accesos de colaboradores y miembros de proyecto;
+- consultar y publicar mensajes en las conversaciones de tareas operativas visibles, con autoría autenticada y paginación segura;
 - configurar recurrencias diarias, semanales, mensuales o anuales y obtener la siguiente tarea al completar una ocurrencia;
 - leer series mensuales persistidas y su fecha de actualización;
 - comparar métricas con el mes anterior y el promedio de los tres meses previos;
@@ -202,6 +203,8 @@ El plugin no requiere una API key ni una variable de entorno. El cliente
 administra la sesión OAuth. Las escrituras disponibles permiten crear o
 reutilizar contactos, crear propiedades, crear o corregir comunicaciones,
 crear comentarios y gestionar proyectos y tareas operativas autorizadas.
+También permiten consultar y publicar mensajes en las conversaciones de esas
+tareas; los mensajes no se pueden editar ni eliminar mediante MCP.
 
 ## Ejemplos
 
@@ -248,6 +251,8 @@ crear comentarios y gestionar proyectos y tareas operativas autorizadas.
 - “Mostrame las tareas operativas que no tienen proyecto.”
 - “Creá una tarea para llamar a este contacto mañana y asignásela a esta persona.”
 - “Completá esta tarea; si te pido eliminarla, mostrame sus datos y confirmá antes.”
+- “Mostrame los mensajes más recientes de esta tarea operativa.”
+- “Publicá este mensaje en la tarea operativa que acabo de seleccionar.”
 - “Mostrame alumnos y bajas mes a mes durante el último año.”
 - “Compará la efectividad de este mes con el mes anterior.”
 - “Compará la conversión por método de marketing de los últimos seis meses.”

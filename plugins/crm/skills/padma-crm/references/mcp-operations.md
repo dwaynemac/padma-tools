@@ -47,6 +47,8 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 | `complete_operations_task` | optional account; required `task_id` | Idempotently complete a task and return any recurring successor. |
 | `reopen_operations_task` | optional account; required `task_id` | Idempotently reopen a completed task. |
 | `delete_operations_task` | optional account; required `task_id` | Permanently delete a task when authorized. |
+| `list_operations_messages` | optional account; required `task_id`; optional `page_size`, `cursor` | List the newest messages from a readable task and page backward through its conversation. |
+| `create_operations_message` | optional account; required `task_id`, `body` | Post a non-idempotent Markdown message as the authenticated user to a readable task. |
 | `list_monthly_stat_definitions` | optional `account_name` | Discover stable metric names, localized metadata, types, and availability. |
 | `get_monthly_stats` | `stat_names`; optional account and month range | Read dense persisted monthly series. |
 | `compare_monthly_stats` | `stat_names`; optional account and month | Compare current, previous, and prior-three-month baselines. |
@@ -163,7 +165,7 @@ For `update_contact_communication`:
 
 For `create_contact_comment`, pass only the resolved `padma_id` and exact approved `observations`. Each call creates a new comment, so inspect `get_contact_history` before retrying an uncertain result.
 
-## Operations projects and tasks
+## Operations projects, tasks, and conversations
 
 Operations tools use the same account, feature-level, assignment, creator,
 collaborator, project-membership, and role authorization as CRM's task interface. A regular authorized member can
@@ -196,8 +198,9 @@ audit timestamps, a linked contact's public `padma_id` and friendly name,
 sorted `collaborator_usernames`,
 `project` as `{ project_id, name, member_usernames }` or `null`, `recurrence` as
 `{ frequency, interval, ends_on }` or `null`, `generated_from_task_id`, and
-`next_task_id`. The task ID is account-scoped and must come from a current list
-response.
+`next_task_id`. `messages_count` reports the conversation size and is `0` when
+the task has no conversation. The task ID is account-scoped and must come from
+a current list response.
 
 For task writes:
 
@@ -229,6 +232,21 @@ For task writes:
 - Resolve and show the exact task before a destructive deletion. If a create
   result is uncertain, list matching tasks before retrying.
 
+Task conversations inherit the task's read authorization. Use
+`list_operations_messages` with an exact current `task_id`; it returns
+`messages_count` and newest-first messages with `message_id`,
+`author_username`, Markdown `body`, `created_at`, and `updated_at`. Its signed
+cursor moves backward through older messages and is bound to the selected
+account, task, and page size. A task without messages returns an empty list
+without creating a conversation.
+
+`create_operations_message` additionally requires write capability and accepts
+only `task_id` and a nonblank Markdown `body`. CRM owns the account,
+conversation, and authenticated author. Posting may add a sender who is not the
+creator or assignee as a collaborator and notifies the other task participants.
+The call is not idempotent, so list the latest messages before retrying an
+uncertain result. The MCP does not expose message updates or deletions.
+
 Project writes use an exact account-scoped `project_id`. Names are trimmed, at
 most 255 characters, and unique within the account without regard to case.
 `create_operations_project` requires a name and accepts optional
@@ -248,6 +266,7 @@ calling it.
 - A saved-list cursor is signed and bound to its account, list ID, and page size. Reuse it only for the next page of that same list request.
 - Contact-history pages use the same 1–200 page-size limit. Reuse their signed cursor only with the same account, `padma_id`, and page size.
 - Operations task pages use the same 1–200 page-size limit. Reuse their signed cursor only with the same account, filters, and page size.
+- Operations message pages use the same 1–200 page-size limit. Reuse their signed cursor only with the same account, task ID, and page size; each next page moves backward into older messages.
 - Explicit contact-search dates use strict `YYYY-MM-DD` values.
 - Birthday filters use integer `birthday_day`, `birthday_month`, and optional `birthday_year`; omit any component that should not constrain the search.
 - `status` accepts one value; `statuses` accepts several. Do not send both.

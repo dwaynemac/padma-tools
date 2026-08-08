@@ -1,6 +1,6 @@
 ---
 name: padma-crm
-description: Use PADMA CRM through its remote MCP server to find authorized accounts; search or create account-scoped contacts; retrieve saved lists, properties, ages, Learn links, activity, and history; create or update communications and comments; manage authorized Operations projects, collaborators, and recurring tasks; and analyze school statistics, acquisition, dropout reasons, commercial follow-up, and historical lead funnels. Use for requests about CRM contacts, prospects, students, saved lists, ages, custom properties, Learn activity or churn risk, dropout segmentation, communications, operational projects or tasks, enrollment metrics, monthly performance, or commercial funnels stored in PADMA CRM.
+description: Use PADMA CRM through its remote MCP server to find authorized accounts; search or create account-scoped contacts; retrieve saved lists, properties, ages, Learn links, activity, and history; create or update communications and comments; manage authorized Operations projects, collaborators, recurring tasks, and task conversations; and analyze school statistics, acquisition, dropout reasons, commercial follow-up, and historical lead funnels. Use for requests about CRM contacts, prospects, students, saved lists, ages, custom properties, Learn activity or churn risk, dropout segmentation, communications, operational projects, tasks or messages, enrollment metrics, monthly performance, or commercial funnels stored in PADMA CRM.
 ---
 
 # Use PADMA CRM
@@ -119,21 +119,23 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 5. Do not attempt to change the account, contact, author, request ID, or idempotency metadata; the tool does not accept them.
 6. Repeating the same update is idempotent and returns `updated: false`. Report whether CRM changed the record.
 
-## Manage Operations projects and tasks
+## Manage Operations projects, tasks, and conversations
 
 1. Call `list_operations_projects` when a request names a project, needs project discovery, or will assign or filter tasks by project. It returns each project's sorted `member_usernames`; use only a `project_id` and usernames returned for the selected account.
 2. Use `list_operations_tasks` for task requests. It defaults to every active task the authenticated user can read, including later work; use `status`, `due_group`, `assignee_username`, `contact_padma_id`, or `project_id` only when the request needs that filter. Omit `project_id` to include every project; send explicit `null` to return only tasks without a project.
 3. Follow `next_cursor` until the requested scope is complete. Never reuse a task cursor after changing the account, filters, or page size.
-4. Call `list_operations_assignees` before creating a task or changing its assignee or collaborators, and use only usernames returned for the selected account.
-5. Resolve a linked contact through `search_contacts` and pass its public `padma_id`; never pass CRM's internal contact ID.
-6. Create a task only when the user explicitly requests it. State the selected account, title, assignee, due date, linked contact, project, description, and recurrence before writing when any value is ambiguous. Creation is not idempotent, so inspect the task list before retrying an uncertain result.
-7. Pass recurrence as `null` or `{ frequency, interval, ends_on }`. Frequency is `daily`, `weekly`, `monthly`, or `yearly`; interval is a positive integer and defaults to `1`; `ends_on` is an optional strict `YYYY-MM-DD`. A recurring task requires `due_on`.
-8. For updates, resolve the exact `task_id` from `list_operations_tasks` and pass only approved editable fields. `collaborator_usernames` is a complete replacement of account users; omit it to preserve collaborators or send `[]` to clear them. Creator and assignee are implicit participants and are ignored in that list. Other omitted fields stay unchanged; `null` clears the description, due date, linked contact, project, or recurrence. Once a task has generated its successor, change recurrence on that successor instead.
-9. Use `complete_operations_task` and `reopen_operations_task` only for the exact resolved task. Both are idempotent. Completing a recurring task atomically creates at most one successor on the first future occurrence and returns `next_task_id`; reopening preserves that successor and completing again does not duplicate it. Report whether the response changed state and identify the successor when present.
-10. Treat `delete_operations_task` as permanent and destructive. Show the resolved task and obtain explicit confirmation immediately before deleting it.
-11. Create, rename, change the complete project member list, or delete a project only for an authenticated admin or director with CRM write capability. `create_operations_project` accepts optional `member_usernames`; `update_operations_project` requires at least one of `name` or `member_usernames`, preserves omitted fields, and uses `[]` to clear every member. Project names and members are account-scoped; resolve the exact project and discover usernames before updating it.
-12. Treat `delete_operations_project` as destructive even though it preserves tasks. Show the resolved project, obtain explicit confirmation immediately before deletion, and report `unassigned_tasks_count` because those tasks become unassigned from any project.
-13. Project members can read every task in their project. Respect `forbidden` as an authorization boundary and do not attempt to bypass assignment, creator, collaborator, project membership, role, account, write-capability, or feature-level restrictions.
+4. Use a task's `messages_count` to identify conversation activity. Call `list_operations_messages` with the exact readable `task_id` when the user asks for its conversation. Messages arrive newest first; follow `next_cursor` backward only with the same account, task, and page size. A task without a conversation returns an empty list.
+5. Call `create_operations_message` only when the user explicitly asks to post the exact supplied body to a resolved readable task. CRM records the authenticated author, may add a nonimplicit sender as a collaborator, and notifies the other participants. The write is not idempotent: if the result is uncertain, list the latest messages before retrying. CRM does not expose message editing or deletion through MCP.
+6. Call `list_operations_assignees` before creating a task or changing its assignee or collaborators, and use only usernames returned for the selected account.
+7. Resolve a linked contact through `search_contacts` and pass its public `padma_id`; never pass CRM's internal contact ID.
+8. Create a task only when the user explicitly requests it. State the selected account, title, assignee, due date, linked contact, project, description, and recurrence before writing when any value is ambiguous. Creation is not idempotent, so inspect the task list before retrying an uncertain result.
+9. Pass recurrence as `null` or `{ frequency, interval, ends_on }`. Frequency is `daily`, `weekly`, `monthly`, or `yearly`; interval is a positive integer and defaults to `1`; `ends_on` is an optional strict `YYYY-MM-DD`. A recurring task requires `due_on`.
+10. For updates, resolve the exact `task_id` from `list_operations_tasks` and pass only approved editable fields. `collaborator_usernames` is a complete replacement of account users; omit it to preserve collaborators or send `[]` to clear them. Creator and assignee are implicit participants and are ignored in that list. Other omitted fields stay unchanged; `null` clears the description, due date, linked contact, project, or recurrence. Once a task has generated its successor, change recurrence on that successor instead.
+11. Use `complete_operations_task` and `reopen_operations_task` only for the exact resolved task. Both are idempotent. Completing a recurring task atomically creates at most one successor on the first future occurrence and returns `next_task_id`; reopening preserves that successor and completing again does not duplicate it. Report whether the response changed state and identify the successor when present.
+12. Treat `delete_operations_task` as permanent and destructive. Show the resolved task and obtain explicit confirmation immediately before deleting it.
+13. Create, rename, change the complete project member list, or delete a project only for an authenticated admin or director with CRM write capability. `create_operations_project` accepts optional `member_usernames`; `update_operations_project` requires at least one of `name` or `member_usernames`, preserves omitted fields, and uses `[]` to clear every member. Project names and members are account-scoped; resolve the exact project and discover usernames before updating it.
+14. Treat `delete_operations_project` as destructive even though it preserves tasks. Show the resolved project, obtain explicit confirmation immediately before deletion, and report `unassigned_tasks_count` because those tasks become unassigned from any project.
+15. Project members can read every task in their project. Respect `forbidden` as an authorization boundary and do not attempt to bypass assignment, creator, collaborator, project membership, role, account, write-capability, or feature-level restrictions.
 
 ## Protect authorization and scope
 
@@ -145,7 +147,7 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 
 ## Respect write limits
 
-- CRM can create or reuse contacts, create supported system or custom contact properties, create or update communications, create contact comments, and manage Operations projects and tasks within the authenticated user's permissions.
+- CRM can create or reuse contacts, create supported system or custom contact properties, create or update communications, create contact comments, manage Operations projects and tasks, and participate in readable task conversations within the authenticated user's permissions.
 - Contact creation only enriches missing identity and relationship fields; it does not overwrite existing contact data.
 - Property writes add values and preserve birthday conflicts; they do not expose `public` or `primary` controls.
 - CRM cannot otherwise update contacts, statuses, or statistics.

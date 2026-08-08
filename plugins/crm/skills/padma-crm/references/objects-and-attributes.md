@@ -77,8 +77,17 @@ Interpret CRM records with these product semantics. The names shown are the MCP 
 - `recurrence` is `null` or `{ frequency, interval, ends_on }`; recurring tasks require a due date. `generated_from_task_id` identifies the prior occurrence and `next_task_id` identifies the generated successor.
 - Creator, completion user, completion time, account, task ID, and recurrence lineage are server-owned. Title, description, assignee, due date, linked contact, project, and recurrence are editable until the task has generated a successor.
 - `collaborator_usernames` is sorted in responses and is a complete-replacement write field. Every collaborator belongs to the task account; creator and assignee are implicit participants and are not stored as collaborators. Collaborators can read the task without gaining task mutation rights.
+- `messages_count` is the number of messages in the task conversation and is `0` when no conversation exists.
 - Task visibility and mutations depend on the authenticated user's current account permissions. A task returned to one user is not evidence that another user or account can access it.
 - Task creation is not idempotent. Completion and reopening are idempotent; completing a recurring task creates at most one future successor, and reopening does not remove it. Deletion is permanent and destructive.
+
+## Operations task messages
+
+- An Operations message belongs to one task conversation and exposes `message_id`, `author_username`, Markdown `body`, `created_at`, and `updated_at`.
+- Conversation visibility is inherited from the task. An account or user that cannot read the task cannot list or post its messages.
+- Message listing is newest first and paginates backward into older history. A missing conversation is represented as an empty message list, not as an error.
+- CRM owns author attribution. Posting is not idempotent, can enroll a nonimplicit sender as a task collaborator, and notifies the other task participants.
+- The MCP does not expose message updates or deletions.
 
 ## Monthly statistics and lead funnel
 
