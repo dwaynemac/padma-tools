@@ -15,7 +15,7 @@ Do not imply that commercial changes caused financial changes solely because the
 
 1. Resolve the CRM account and Money Business independently through `list_accounts` and `list_businesses`. Keep `account_name` only on CRM calls and `business_id` only on Money calls.
 2. Find the person in CRM within the selected account using the minimum personal data needed. Confirm the intended result and retain its current `padma_id`.
-3. For Money contact metadata or membership verification, call `search_contacts(padma_id: crm_contact.padma_id)` inside the selected Money Business. This is an exact match and returns an empty collection when that contact is not connected to the Business.
+3. For Money contact metadata or membership verification, call `search_contacts(padma_id: crm_contact.padma_id)` inside the selected Money Business. This is an exact match and returns an empty collection when that contact is not connected to the Business. A match preserves its Money `id`, `name`, `padma_id`, and `status`, and can also provide nullable `teacher` (`{id, name}`), `learn_id` (string), `ltv` (`{cents, currency}`), and `current_plan` (`{id, name}`).
 4. For realized movements, call `search_movements(contact_padma_id: crm_contact.padma_id, ...)` directly with an explicit date field and period. Do not perform an intermediate lookup merely to obtain Money's integer `contact_id`.
 5. Do not send `contact_id` together with `contact_padma_id`. An unknown or out-of-Business `contact_padma_id` returns `not_found`.
 6. Paginate Money movement results when `next_cursor` is present and preserve the same contact, period, page size, and Business filters on every page.
@@ -33,6 +33,8 @@ Money search_movements(business_id: selected_money_business, contact_padma_id: c
 `padma_id` is the shared identity key. It does not authorize either product, select an organization, or prove that similarly named CRM and Money tenants correspond.
 
 Absence from one account or Business does not prove that the person does not exist elsewhere. A CRM student status does not prove payment, and a Money plan does not prove learning access.
+
+Treat every nullable Money contact enrichment independently. Do not turn a missing `teacher`, `learn_id`, `ltv`, or `current_plan` into a claim about CRM relationship data, Learn access, or realized payments. When presenting LTV, retain its exact cents and currency.
 
 ## Funnel and financial comparison
 

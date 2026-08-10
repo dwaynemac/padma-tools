@@ -75,7 +75,7 @@ Permite:
 - ubicar cada pregunta en su fuente de verdad dentro de PADMA;
 - buscar o registrar contactos y comunicaciones, y analizar métricas comerciales mediante CRM;
 - consultar y administrar las operaciones financieras disponibles en Money;
-- relacionar un contacto confirmado en CRM con su registro y movimientos de Money mediante el `padma_id` compartido;
+- relacionar un contacto confirmado en CRM con su registro, docente, Learn ID, LTV, plan actual y movimientos de Money mediante el `padma_id` compartido;
 - preparar panoramas combinados con períodos, organizaciones y fuentes claras;
 - reconocer cuándo una solicitud pertenece a Learn u otra app que
   todavía no está conectada por este plugin.
@@ -109,7 +109,9 @@ correcto y a no mezclar tenants, identificadores, monedas ni fechas.
 2. Seleccioná el negocio Money de forma independiente mediante
    `list_businesses`; el `padma_id` no reemplaza al `business_id`.
 3. Usá `search_contacts` de Money con `padma_id` para verificar una coincidencia
-   exacta dentro de ese negocio.
+   exacta dentro de ese negocio. La coincidencia incluye `id`, `name`,
+   `padma_id` y `status`, y puede incluir `teacher`, `learn_id`, `ltv` y
+   `current_plan`; cada uno puede ser nulo independientemente.
 4. Usá `search_movements` con `contact_padma_id`, un período explícito y el
    mismo `business_id` para consultar directamente sus movimientos.
 5. No envíes `contact_id` y `contact_padma_id` juntos, y recorré
@@ -126,7 +128,7 @@ Conecta el agente con [PADMA Money](https://money.derose.app/) mediante su servi
 Permite:
 
 - descubrir y seleccionar entre los negocios autorizados por OAuth;
-- consultar cuentas, categorías, contactos y movimientos;
+- consultar cuentas, categorías, contactos enriquecidos con docente, Learn ID, LTV y plan actual, y movimientos;
 - buscar contactos por `padma_id` exacto y movimientos por `contact_padma_id`;
 - filtrar movimientos por una o más categorías junto con todas sus subcategorías;
 - analizar gastos, ingresos, períodos y posibles anomalías;
@@ -214,10 +216,12 @@ tareas; los mensajes no se pueden editar ni eliminar mediante MCP.
 - “¿La mejora del funnel coincide con mayores ingresos? Separá hechos de interpretación.”
 - “Buscá este contacto en CRM y revisá si tiene movimientos relacionados en Money.”
 - “Tomá el `padma_id` de este contacto de CRM y listá sus movimientos de Money del último año.”
+- “Tomá el `padma_id` de este contacto de CRM y mostrame su docente, Learn ID, LTV y plan actual en Money.”
 - “¿Qué parte de esta consulta corresponde a CRM, Money o Learn?”
 
 ### Money
 
+- “Buscá este contacto y mostrame su docente, Learn ID, LTV y plan actual.”
 - “¿Cuánto gastamos el mes pasado, separado por categoría?”
 - “Mostrame los movimientos de esta categoría y todas sus subcategorías.”
 - “Configurá un presupuesto mensual para esta categoría después de mostrarme el cambio.”

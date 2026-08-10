@@ -103,6 +103,7 @@ It accepts no arguments and returns only locally usable Businesses authorized by
 Selection guidance:
 
 - Use `search_contacts(padma_id: ...)` for an exact PADMA ID match inside the selected Business. Its `text` filter remains a partial name-or-PADMA-ID search.
+- Every `search_contacts` result contains `id`, `name`, `padma_id`, and `status`, plus nullable enriched fields: `teacher` as `{id, name}` for the authorized local Agent, `learn_id` as a string, stored `ltv` as `{cents, currency}`, and `current_plan` as `{id, name}` for an authorized Plan in the selected Business. `teacher` and `current_plan` are null when their records are unavailable or inaccessible. These additions do not change filters, inputs, or cursor pagination.
 - Use `search_movements(contact_padma_id: ...)` when the stable PADMA contact ID is already known, including when it came from a current CRM response. Do not first translate it into a Money-local integer ID.
 - `contact_id` and `contact_padma_id` are mutually exclusive movement filters. Supplying both returns `validation_failed`.
 - Use `search_movements(category_tree_ids: [...])` to include movements assigned to any selected category or its descendants. Resolve every root with `search_categories`; use `category_id` for an exact category. If both filters are supplied, Money returns their intersection.
@@ -144,6 +145,7 @@ It also does not expose dedicated account-balance, payable, receivable, or proje
 - `expected_updated_at` is the latest ISO 8601 timestamp from a read and protects updates, deletion, proration, and subdivision with optimistic concurrency.
 - `revert_split` requires the exact `expected_movements` list returned by `get_split`, containing every target `id` and `updated_at`. A changed, deleted, added, duplicated, or omitted target produces `conflict`.
 - Search responses are cursor-paginated. Default and maximum page sizes may vary by tool.
+- Nullable `search_contacts` enrichments are independent: a missing teacher, Learn ID, LTV, or current plan does not establish that any of the others is missing.
 - `search_contacts.padma_id` and `search_movements.contact_padma_id` are exact matches. An unknown `search_contacts.padma_id` returns an empty collection; an unknown or out-of-Business `contact_padma_id` returns `not_found`.
 - `search_movements.category_tree_ids` is an array of category roots from the selected Business. Each root includes itself and all descendants; an unknown or out-of-Business root returns `not_found`.
 - Related account, category, contact, agent, and target-account IDs must belong to the selected Business.

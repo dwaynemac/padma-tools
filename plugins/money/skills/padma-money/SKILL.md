@@ -23,7 +23,7 @@ Use the `money` MCP server as the only execution path for Money data. OAuth dete
 ## Read and analyze
 
 1. Use the narrowest typed search tool and filters that answer the question.
-2. Use `search_contacts` with `padma_id` for an exact Money contact lookup. Keep `text` for partial name-or-PADMA-ID discovery.
+2. Use `search_contacts` with `padma_id` for an exact Money contact lookup. Keep `text` for partial name-or-PADMA-ID discovery. Each result preserves `id`, `name`, `padma_id`, and `status`, and also returns the assigned `teacher`, `learn_id`, stored `ltv`, and `current_plan` when available; treat each nullable field independently and do not infer missing data.
 3. When a confirmed PADMA contact ID is already available, pass it directly as `contact_padma_id` to `search_movements`; do not make an extra lookup only to translate it into Money's integer `contact_id`.
 4. Never send `contact_id` and `contact_padma_id` together. They are mutually exclusive filters.
 5. Use `category_tree_ids` on `search_movements` when the request covers one or more categories plus all their descendants. Resolve every root ID with `search_categories`; keep `category_id` for one exact category.

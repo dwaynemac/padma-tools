@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "money",
-  "version": "0.1.6+codex.20260806135421",
-  "description": "Consult and manage authorized PADMA Money businesses safely through its remote MCP server.",
+  "version": "0.1.7+codex.20260810172207",
+  "description": "Consult enriched contacts and manage authorized PADMA Money businesses safely through its remote MCP server.",
   "author": {
     "name": "PADMA"
   },

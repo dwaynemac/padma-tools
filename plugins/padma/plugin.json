@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "padma",
-  "version": "0.1.10+codex.20260806135421",
-  "description": "Coordinate safe CRM and Money read/write workflows through one client-oriented skill.",
+  "version": "0.1.11+codex.20260810172207",
+  "description": "Coordinate safe CRM and enriched Money contact workflows through one client-oriented skill.",
   "author": {
     "name": "PADMA"
   },

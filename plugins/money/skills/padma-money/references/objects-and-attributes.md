@@ -95,7 +95,9 @@ Interpret Money records with these product semantics. The field names shown are 
 ## Contact
 
 - A contact represents a related person used for attribution, selection, plans, and analysis. The MCP exposes contact search but not contact mutation.
-- LTV is total income attributed to the contact minus attributed expenses.
+- Contact search preserves `id`, `name`, `padma_id`, and `status`. It also returns nullable `teacher` (`{id, name}` for the authorized local Agent), `learn_id` (string), stored `ltv` (`{cents, currency}`), and `current_plan` (`{id, name}` for an authorized Plan in the selected Business).
+- Interpret `teacher` and `current_plan` as compact related-record summaries, not complete records. Both are null when their related records are unavailable or inaccessible. Use their returned IDs only inside the selected Business and do not invent details that are not present.
+- LTV is total income attributed to the contact minus attributed expenses. When returned by MCP, use the exact integer `cents` and accompanying `currency`.
 - In the documented Argentina behavior, LTV is shown in USD by converting each ARS movement with the exchange rate for that movement's corresponding month.
 
 ## Currency and exchange-rate attributes

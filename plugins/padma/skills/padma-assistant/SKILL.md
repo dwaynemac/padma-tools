@@ -36,10 +36,10 @@ This plugin provides coordination instructions only. It does not declare MCP ser
 
 1. Use the narrowest typed tool and exact period that answer the request.
 2. In CRM, discover tags, marketing methods, dropout reasons, saved lists, and custom property definitions with their account-scoped list tools before using their IDs.
-3. Treat a current CRM contact's `padma_id` as the cross-product identity bridge. Use it unchanged with Money `search_contacts(padma_id: ...)` or `search_movements(contact_padma_id: ...)`; never substitute a CRM-local or Money-local integer ID.
+3. Treat a current CRM contact's `padma_id` as the cross-product identity bridge. Use it unchanged with Money `search_contacts(padma_id: ...)` or `search_movements(contact_padma_id: ...)`; never substitute a CRM-local or Money-local integer ID. Money contact search can also return its assigned teacher, Learn ID, LTV, and current plan when available.
 4. A shared `padma_id` links identity only. Continue resolving CRM `account_name` and Money `business_id` independently through their OAuth discovery tools.
 5. Paginate every search needed for complete coverage. Do not treat one page as a complete population.
-6. Preserve product semantics: CRM missing monthly values are unknown, not zero; Money amounts are integer cents with currency; Money reporting months differ from actual movement dates.
+6. Preserve product semantics: CRM missing monthly values are unknown, not zero; Money amounts, including contact LTV, are integer cents with currency; Money reporting months differ from actual movement dates. Treat each nullable Money contact enrichment independently.
 7. Keep currencies separate and label derived calculations.
 8. Separate MCP-confirmed facts from interpretations and recommendations.
 9. For combined analysis, align periods explicitly but preserve each product's source, date basis, freshness, filters, and missing coverage.
