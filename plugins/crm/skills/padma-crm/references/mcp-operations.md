@@ -178,9 +178,10 @@ only account admins and directors with write capability can create, rename, or
 delete projects.
 
 `list_operations_projects` returns the current account's projects alphabetically
-as stable `project_id`, `name`, and sorted `member_usernames` values. Project IDs
-and member usernames are account-scoped: discover
-them in the selected account and never reuse one from another account.
+as stable `project_id`, `name`, sorted `member_usernames`, and ordered `sections`.
+Each section exposes an account-scoped `project_section_id`, `name`, and
+`position`; discover these values in the selected account and never reuse them
+in another account.
 
 Call `list_operations_tasks` without filters to get every active readable task,
 including later work. Optional filters are:
@@ -191,12 +192,15 @@ including later work. Optional filters are:
 - `contact_padma_id`, resolved through CRM contact tools;
 - `project_id`: omit it to include every project, pass `null` for only tasks
   without a project, or pass an ID from `list_operations_projects`.
+- `project_section_id`: omit it to include every section, pass `null` for only
+  tasks without a section, or pass a section ID from `list_operations_projects`.
 
 Do not combine a due group with `status: completed`. Responses include
 `task_id`, editable fields, creator and completion attribution, `due_group`,
 audit timestamps, a linked contact's public `padma_id` and friendly name,
 sorted `collaborator_usernames`,
-`project` as `{ project_id, name, member_usernames }` or `null`, `recurrence` as
+`project` as `{ project_id, name, member_usernames }` or `null`,
+`project_section` as `{ project_section_id, name }` or `null`, `recurrence` as
 `{ frequency, interval, ends_on }` or `null`, `generated_from_task_id`, and
 `next_task_id`. `messages_count` reports the conversation size and is `0` when
 the task has no conversation. The task ID is account-scoped and must come from
