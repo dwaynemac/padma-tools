@@ -7,6 +7,16 @@ Este repositorio publica catálogos específicos para cada cliente. Ambos
 instalan los mismos plugins, skills y conexiones MCP con las aplicaciones de
 PADMA.
 
+Incluye dos integraciones MCP oficiales e independientes:
+
+- [`crm`](#crm), para contactos, actividad, métricas y operaciones comerciales
+  en PADMA CRM.
+- [`money`](#money), para cuentas, planes, presupuestos y movimientos
+  financieros en PADMA Money.
+
+Instalá ambos plugins si necesitás trabajar entre CRM y Money; instalá sólo el
+plugin correspondiente cuando tu consulta pertenezca a un único producto.
+
 Cada directorio bajo `plugins/` también publica el contrato portable de
 [Agent Plugins 1.0](https://agent-plugins.org/) mediante un `plugin.json`, sus
 skills y, para los plugins de producto, un `mcp.json`. Esta superficie convive
@@ -129,6 +139,7 @@ Permite:
 
 - descubrir y seleccionar entre los negocios autorizados por OAuth;
 - consultar cuentas, categorías, contactos enriquecidos con docente, Learn ID, LTV y plan actual, y movimientos;
+- identificar planes con o sin deuda de pagos en un rango mensual inclusivo de hasta 36 meses, incluidos planes ya terminados;
 - buscar contactos por `padma_id` exacto y movimientos por `contact_padma_id`;
 - filtrar movimientos por una o más categorías junto con todas sus subcategorías;
 - analizar gastos, ingresos, períodos y posibles anomalías;
@@ -138,6 +149,8 @@ Permite:
 - aplicar confirmación, idempotencia y verificación en operaciones de escritura.
 
 El plugin incluye la skill `padma-money`, que enseña al agente el modelo financiero de Money, sus workflows seguros y las limitaciones reales de las herramientas disponibles.
+
+Para buscar deuda de planes, usá `search_plans` con `has_debt: true` y ambas fechas `from`/`to` en formato `YYYY-MM-DD`. Los días se normalizan al mes; no combines el rango con `active_on`. Un mes activo impago cuenta cuando su primer día es anterior a hoy en la zona horaria del negocio: el mes actual participa desde el segundo día. `has_debt: false` devuelve el complemento entre los planes activos en el rango; omitirlo permite buscar todos esos planes. Este filtro no calcula un saldo ni un total adeudado. Consultá el [contrato completo y los ejemplos](plugins/money/skills/padma-money/references/mcp-operations.md#deuda-de-pagos-en-search_plans).
 
 #### Configurar el acceso
 
@@ -221,6 +234,7 @@ tareas; los mensajes no se pueden editar ni eliminar mediante MCP.
 
 ### Money
 
+- “Mostrame los planes con deuda de pagos de enero a marzo de 2026, incluidos los que ya terminaron.”
 - “Buscá este contacto y mostrame su docente, Learn ID, LTV y plan actual.”
 - “¿Cuánto gastamos el mes pasado, separado por categoría?”
 - “Mostrame los movimientos de esta categoría y todas sus subcategorías.”

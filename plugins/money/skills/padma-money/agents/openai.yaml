@@ -1,7 +1,7 @@
 interface:
   display_name: "PADMA Money"
-  short_description: "Consultar contactos y administrar Money"
-  default_prompt: "Usá $padma-money para buscar un contacto y resumir su docente, Learn ID, LTV y plan actual sin perder el alcance del negocio."
+  short_description: "Consultar pagos y planes con deuda en Money"
+  default_prompt: "Usá $padma-money para identificar planes con deuda de pagos en un rango mensual explícito, incluidos los que ya terminaron, conservando el negocio y todos los filtros al paginar."
 
 dependencies:
   tools:

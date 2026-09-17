@@ -115,6 +115,40 @@ Selection guidance:
 - Use `analyze_movements` for deterministic trends, variance, uncategorized items, aging, probable duplicates, outliers, and reporting-month mismatches.
 - Use `search_plans` for forecast records and `search_recurrent_movements` for rules that create realized movements. Do not confuse the two.
 
+### Deuda de pagos en `search_plans`
+
+| Parámetro | Tipo y contrato |
+| --- | --- |
+| `from`, `to` | Strings de fecha ISO `YYYY-MM-DD`, siempre juntos. Se normalizan al mes y abarcan ambos meses completos. El mes de `from` debe ser anterior o igual al de `to`; máximo 36 meses inclusivos. |
+| `has_debt` | Booleano opcional. Tanto `true` como `false` requieren `from` y `to`. Omitirlo no filtra por deuda. |
+| `active_on` | Conserva el filtro existente por fecha cuando se usa solo. Es incompatible con `from` o `to`. |
+
+El rango selecciona los planes activos en algún momento de esos meses, sin exigir que sigan activos hoy. `has_debt: true` conserva un plan cuando existe al menos un mes del rango cuyo primer día es anterior a la fecha de hoy en la zona horaria del negocio, el plan estaba activo en ese mes y `paid?` es falso para ese mes. Coincide con el reporte de planes impagos de la grilla. `has_debt: false` es el complemento dentro de los planes activos en el rango: también puede incluir planes cuyos únicos meses activos son futuros. No significa que todos sus pagos futuros ya estén hechos.
+
+El primer día del mes actual todavía no cuenta para deuda; desde el segundo día, ese mes ya puede contar. Los meses futuros no cuentan. La regla usa el estado de pago del plan y no su saldo de cuenta. El filtro identifica planes, no calcula ni devuelve un total de deuda.
+
+Ejemplos (agregá el `business_id` resuelto con `list_businesses` cuando corresponda):
+
+```json
+{"has_debt": true, "from": "2026-01-15", "to": "2026-03-20"}
+```
+
+Busca deuda en enero, febrero y marzo completos. Un plan terminado en febrero puede aparecer si quedó impago un mes en el que estuvo activo.
+
+```json
+{"has_debt": false, "from": "2026-01-01", "to": "2026-03-01"}
+```
+
+Devuelve los planes activos en ese rango sin meses que cumplan el criterio de deuda. Para buscar todos los planes activos en el rango, omití `has_debt`.
+
+```json
+{"has_debt": true, "from": "2026-09-01", "to": "2026-09-30"}
+```
+
+Si hoy es 8 de septiembre de 2026 en el negocio, septiembre participa; si hoy fuera el 1 de septiembre, todavía no. No sustituyas esta regla por «solo meses cerrados».
+
+Las fechas incompletas, inválidas, invertidas por mes, `has_debt` sin rango y las combinaciones con `active_on` devuelven `validation_failed`. Los rangos mayores a 36 meses devuelven `limit_exceeded`. En cada página conservá el negocio, los filtros y el tamaño de página: los cursores firmados están asociados al alcance y a los filtros de la búsqueda. No reutilices un cursor para otro rango o valor de `has_debt`.
+
 ### Analysis
 
 - `category_subtotals`

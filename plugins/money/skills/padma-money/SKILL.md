@@ -1,6 +1,6 @@
 ---
 name: padma-money
-description: Use PADMA Money through its remote MCP server to inspect accounts, categories and their monthly budgets, contacts, movements and their splits, financial reports, recurrent movements, plans, and automation rules; create, update, prorate, subdivide, revert splits, soft-delete movements, or delete recurrent movement rules safely. Use for requests such as cuanto gastamos, ingresos del mes, flujo de caja, compara periodos, revisa pagos, configura un presupuesto de categoria, registra un gasto, corrige, categoriza, divide, prorratea o elimina un movimiento, elimina una recurrencia, revierte una division, concilia una cuenta, detecta anomalias, or otherwise consults or manages an organization's financial information stored in Money.
+description: Use PADMA Money through its remote MCP server to inspect accounts, categories and their monthly budgets, contacts, movements and their splits, financial reports, recurrent movements, plans with payment debt over a bounded monthly range, and automation rules; create, update, prorate, subdivide, revert splits, soft-delete movements, or delete recurrent movement rules safely. Use for requests such as cuanto gastamos, ingresos del mes, flujo de caja, compara periodos, revisa pagos, configura un presupuesto de categoria, registra un gasto, corrige, categoriza, divide, prorratea o elimina un movimiento, elimina una recurrencia, revierte una division, concilia una cuenta, detecta anomalias, or otherwise consults or manages an organization's financial information stored in Money.
 ---
 
 # Use Money MCP
@@ -35,6 +35,12 @@ Use the `money` MCP server as the only execution path for Money data. OAuth dete
 11. Present monetary values in human units with their currency while retaining exact integer cents when precision matters.
 12. State the business or account scope, period, date basis, currency, filters, and material exclusions.
 13. Separate MCP-confirmed facts from interpretation or recommendations. Do not label derived output as an official accounting statement.
+
+## Deuda de pagos de planes
+
+Usá `search_plans(has_debt: true, from: ..., to: ...)` con ambos extremos de un rango mensual inclusivo de hasta 36 meses. `has_debt: false` devuelve los planes activos en ese rango sin meses que cumplan el criterio de deuda; omitirlo permite ver todos los planes activos en el rango. Conservá `business_id` y todos los filtros al paginar. `active_on` sigue disponible por separado y no se combina con el rango.
+
+Seguí el contrato y los ejemplos de [references/mcp-operations.md](references/mcp-operations.md#deuda-de-pagos-en-search_plans). Puede incluir planes que ya terminaron. El mes actual participa después de su primer día; no infieras deuda por saldo de cuenta ni un importe adeudado a partir de este filtro.
 
 ## Movement permalinks
 

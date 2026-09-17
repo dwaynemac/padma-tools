@@ -36,6 +36,16 @@ Absence from one account or Business does not prove that the person does not exi
 
 Treat every nullable Money contact enrichment independently. Do not turn a missing `teacher`, `learn_id`, `ltv`, or `current_plan` into a claim about CRM relationship data, Learn access, or realized payments. When presenting LTV, retain its exact cents and currency.
 
+## Deuda de pagos de planes
+
+1. Resolvé el negocio Money con `list_businesses` y fijá el período solicitado.
+2. Usá `search_plans(has_debt: true, from: ..., to: ...)` con fechas ISO y ambos meses inclusivos, hasta 36 meses. No combines `active_on` con el rango.
+3. Paginá conservando el negocio, rango, `has_debt` y demás filtros. Los planes pueden haber terminado: alcanza con que hayan estado activos en el rango y tengan un mes activo impago cuyo primer día sea anterior a hoy en el negocio.
+4. El mes actual participa desde su segundo día. No presentes el resultado como saldo de cuenta, importe total adeudado ni prueba del estado comercial o de acceso a clases.
+5. Para planes sin meses que cumplan ese criterio dentro del rango, usá `has_debt: false`; para todos los planes activos en el rango, omití `has_debt`. Un plan futuro sin meses vencidos también puede cumplir `false`.
+
+Si necesitás contexto CRM, vinculá identidades sólo mediante el `padma_id` confirmado y resolvé cada organización por separado. La fuente del filtro de deuda sigue siendo Money; seguí su referencia de operaciones para el contrato completo.
+
 ## Funnel and financial comparison
 
 1. Use CRM `get_lead_funnel` for demand, visits, profile visits, enrollments, and conversions.

@@ -1,7 +1,7 @@
 {
   "name": "padma",
-  "version": "0.1.11+codex.20260810172207",
-  "description": "Coordinate safe CRM and enriched Money contact workflows through one client-oriented skill.",
+  "version": "0.1.12+codex.20260908144225",
+  "description": "Coordinate safe CRM and Money workflows, including enriched contacts and plans with payment debt over explicit monthly ranges, through one client-oriented skill.",
   "author": {
     "name": "PADMA"
   },

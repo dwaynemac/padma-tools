@@ -1,6 +1,6 @@
 ---
 name: padma-assistant
-description: Use the PADMA client ecosystem through the authorized CRM and Money MCP servers. Route each business question to its source of truth, search contacts or register their properties and activity in CRM, analyze acquisition and dropout rankings, choose the correct operational or historical CRM funnel, analyze or manage finances in Money, and coordinate cross-product school reviews without mixing tenants, identifiers, currencies, dates, or unsupported applications. Use for requests about a school, students, contacts, marketing conversion, dropout reasons, commercial performance, payments, expenses, income, or combined CRM and financial analysis in PADMA.
+description: Use the PADMA client ecosystem through the authorized CRM and Money MCP servers. Route each business question to its source of truth, search contacts or register their properties and activity in CRM, analyze acquisition and dropout rankings, choose the correct operational or historical CRM funnel, analyze or manage finances and monthly plan payment debt in Money, and coordinate cross-product school reviews without mixing tenants, identifiers, currencies, dates, or unsupported applications. Use for requests about a school, students, contacts, marketing conversion, dropout reasons, commercial performance, payments, expenses, income, or combined CRM and financial analysis in PADMA.
 ---
 
 # Coordinate PADMA CRM and Money
@@ -45,6 +45,8 @@ This plugin provides coordination instructions only. It does not declare MCP ser
 9. For combined analysis, align periods explicitly but preserve each product's source, date basis, freshness, filters, and missing coverage.
 10. Use CRM `get_commercial_funnel` for current actionable follow-up lists and `get_lead_funnel` for historical monthly conversion. Never treat the live stage counts as a conversion series.
 11. Use CRM `get_marketing_method_statistics` for acquisition conversion and `get_dropout_reason_statistics` for dropout counts by reason. Preserve the returned account-local monthly range.
+
+Para identificar planes con deuda de pagos, usá Money `search_plans(has_debt: true, from: ..., to: ...)` con ambos extremos mensuales inclusivos, hasta 36 meses, y sin `active_on`. Incluí planes que estuvieron activos en ese período aunque ya hayan terminado. Seguí la skill de Money y [el workflow de deuda de planes](references/cross-product-workflows.md#deuda-de-pagos-de-planes) para interpretar el mes actual y conservar filtros al paginar.
 
 ## Protect people, credentials, and tenants
 

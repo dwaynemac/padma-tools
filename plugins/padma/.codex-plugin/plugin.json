@@ -1,7 +1,7 @@
 {
   "name": "padma",
-  "version": "0.1.11+codex.20260810172207",
-  "description": "Coordinate safe CRM and enriched Money contact workflows through one client-oriented skill.",
+  "version": "0.1.12+codex.20260908144225",
+  "description": "Coordinate safe CRM and Money workflows, including enriched contacts and plans with payment debt over explicit monthly ranges, through one client-oriented skill.",
   "author": {
     "name": "PADMA"
   },
@@ -18,7 +18,7 @@
   "interface": {
     "displayName": "PADMA",
     "shortDescription": "Trabaj\u00e1 con CRM y Money desde un agente",
-    "longDescription": "Ense\u00f1a a Codex cu\u00e1ndo usar los plugins CRM y Money, c\u00f3mo trabajar con actividad de contactos, analizar rankings de marketing y bajas, elegir entre seguimiento comercial actual y conversi\u00f3n hist\u00f3rica, y relacionar contactos mediante su PADMA ID con el docente, Learn ID, LTV y plan actual de Money sin mezclar cuentas, identificadores locales ni fuentes de verdad.",
+    "longDescription": "Enseña a Codex cuándo usar los plugins CRM y Money, cómo trabajar con actividad de contactos, analizar rankings de marketing y bajas, elegir entre seguimiento comercial actual y conversión histórica, y relacionar contactos mediante su PADMA ID con el docente, Learn ID, LTV y plan actual de Money sin mezclar cuentas, identificadores locales ni fuentes de verdad. Para deudas de pagos, coordina búsquedas de planes en Money con un rango mensual explícito.",
     "developerName": "PADMA",
     "category": "Productivity",
     "capabilities": [
@@ -26,6 +26,7 @@
     ],
     "websiteURL": "https://derose.app/",
     "defaultPrompt": [
+      "Mostrame los planes con deuda de pagos de enero a marzo de 2026, incluidos los que ya terminaron.",
       "Dame un panorama comercial y financiero de mi escuela este mes.",
       "Busc\u00e1 un contacto en CRM y revis\u00e1 sus movimientos en Money.",
       "Busc\u00e1 un contacto en CRM y revis\u00e1 su docente, Learn ID, LTV y plan actual en Money.",

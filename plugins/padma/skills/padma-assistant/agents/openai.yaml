@@ -1,7 +1,7 @@
 interface:
   display_name: "PADMA Assistant"
-  short_description: "Coordinar CRM, Money y contexto de contactos"
-  default_prompt: "Usá $padma-assistant para relacionar un contacto de CRM con su contexto en Money sin mezclar organizaciones ni fuentes."
+  short_description: "Coordinar CRM, Money y deuda de pagos"
+  default_prompt: "Usá $padma-assistant para identificar planes con deuda de pagos en un rango mensual explícito, incluidos los que ya terminaron, conservando el negocio y todos los filtros al paginar."
 
 dependencies:
   tools:
