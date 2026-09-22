@@ -23,6 +23,8 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 | `list_accounts` | none | Discover authorized accounts, brands, and grant roles. |
 | `get_account_context` | optional `account_name` | Get selected account, user, roles, statuses, capabilities, and limits. |
 | `list_tags` | optional `account_name` | Discover account tag IDs and names for `tag_ids`. |
+| `add_contact_tags` | optional account; required `padma_id`, nonempty `tag_ids` | Idempotently assign existing account tags to a contact. |
+| `remove_contact_tags` | optional account; required `padma_id`, nonempty `tag_ids` | Idempotently remove selected assignments without deleting tags. |
 | `list_marketing_methods` | optional `account_name` | Discover active account marketing method IDs and values. |
 | `list_dropout_reasons` | optional `account_name` | Discover account dropout reason IDs and values for `dropout_reason_ids`. |
 | `list_contact_lists` | optional `account_name` | Discover saved contact-list IDs and names. |
@@ -124,6 +126,12 @@ Both `get_contact` and `search_contacts` accept these optional selectors:
 When either property selector is present, each contact includes a flat `properties` array with every matching account-owned value. Selecting `age` adds CRM's current computed or estimated age as a top-level field; it is `null` when unavailable and does not expose the birthdate. Selecting `learn_user_id` adds the contact's Learn identifier as a top-level field; it is `null` when the contact is not linked to Learn. Selecting `learn_activity_summary` adds the latest normalized Learn snapshot; it is `null` when Learn has not calculated one. The selectors can be combined and change only response projection, never search matching. Without selectors, the existing compact response is unchanged. Search cursors are bound to all selectors and cannot be reused after changing them.
 
 System values include their applicable phone, identification, address, or birthday metadata. Custom values identify their definition, label, and data type. A `Contact` value returns a nested related contact with only `padma_id` and `friendly_name`; CRM omits a relationship when its target is unavailable in the selected account.
+
+## Contact tag writes
+
+`add_contact_tags` and `remove_contact_tags` require CRM MCP 1.19.0 or later and write capability. Check live tool availability before use. Inputs are the selected `account_name`, a confirmed contact `padma_id`, and a nonempty `tag_ids` array of positive integers returned by `list_tags` in that account. Names and foreign-account IDs are not accepted.
+
+Batches are atomic, preserve unrelated assignments, normalize duplicate IDs, and are idempotent. Existing additions and absent removals are successful no-ops. Responses contain `account_name`, `contact: {padma_id}`, `changed_tag_ids` in request order, and final account-scoped `tags: [{tag_id, name}]` ordered by name and ID. Removal is marked destructive but only removes assignments, never the tags themselves. See [contacts.md](contacts.md#tag-assignments) for errors and result interpretation.
 
 ## Contact and communication writes
 

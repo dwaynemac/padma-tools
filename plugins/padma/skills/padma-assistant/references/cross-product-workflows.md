@@ -64,12 +64,13 @@ counts with historical Money periods as if they were conversion metrics.
 
 ## Writes in a combined workflow
 
-CRM can create or reuse contacts, create supported properties, create or update communications, and create account-visible contact comments. Money supports typed creates and updates for movements and selected financial configuration, plus recoverable movement deletion.
+CRM can assign or remove existing contact tags through available tag tools, create or reuse contacts, create supported properties, create or update communications, and create account-visible contact comments. Money supports typed creates and updates for movements and selected financial configuration, plus recoverable movement deletion.
 
 ### CRM contact and communication writes
 
 Follow the `padma-crm` skill and keep the selected `account_name`:
 
+- For tag assignments, follow `padma-crm`: confirm tool availability, resolve the CRM contact and existing tags in the selected account, then use `add_contact_tags` or `remove_contact_tags`. Report actual changes and final tags; do not create or delete tags.
 - For a new person, call `create_contact` with a first name and exact email or phone. Stop on ambiguous identity instead of choosing a candidate.
 - For a contact property, resolve the contact, discover custom definitions when relevant, and call `create_contact_property` with only type-specific fields. Treat normalized duplicates as successful reuse.
 - For a new communication, resolve the contact, discover any marketing methods, and call `create_contact_communication` with one fresh `request_id`. Reuse it only for an identical retry.

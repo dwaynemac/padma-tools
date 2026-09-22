@@ -20,7 +20,9 @@ Interpret CRM records with these product semantics. The names shown are the MCP 
 
 - Tags (`tag_ids`) are free-form labels created by each school to organize or segment its contacts.
 - Their names and meanings are defined by that school. A tag is not a standardized PADMA classification, so do not infer its meaning from its name alone.
-- Discover current tags with `list_tags` before filtering. Use the returned IDs only in the same selected account.
+- Discover current tags with `list_tags` before filtering or changing assignments. Use the returned IDs only in the same selected account.
+
+- `add_contact_tags` and `remove_contact_tags` change a contact's assignments to existing tags in the selected account. They do not create tags or delete the account's tags. Use them only when exposed by the connected server.
 
 ## Marketing methods
 

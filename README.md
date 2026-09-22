@@ -176,6 +176,7 @@ Permite:
 
 - descubrir y seleccionar cuentas autorizadas por OAuth;
 - buscar contactos por identidad, cumpleaños, estado, vínculo con la cuenta, actividad, fechas y motivos de baja;
+- agregar o quitar etiquetas existentes de un contacto cuando el servidor expone `add_contact_tags` y `remove_contact_tags` (CRM MCP 1.19.0 o posterior), conservando las demás asignaciones y sin borrar etiquetas;
 - descubrir etiquetas, métodos de marketing, motivos de baja y listas guardadas antes de usarlos;
 - consultar una lista guardada respetando sus filtros, orden y columnas configuradas, incluida la edad calculada sin exponer la fecha de nacimiento;
 - descubrir propiedades personalizadas y consultar valores seleccionados del contacto;
@@ -216,7 +217,7 @@ personales y distinguir estadísticas faltantes de valores cero.
 
 El plugin no requiere una API key ni una variable de entorno. El cliente
 administra la sesión OAuth. Las escrituras disponibles permiten crear o
-reutilizar contactos, crear propiedades, crear o corregir comunicaciones,
+reutilizar contactos, agregar o quitar asignaciones de etiquetas existentes, crear propiedades, crear o corregir comunicaciones,
 crear comentarios y gestionar proyectos y tareas operativas autorizadas.
 También permiten consultar y publicar mensajes en las conversaciones de esas
 tareas; los mensajes no se pueden editar ni eliminar mediante MCP.
@@ -259,6 +260,8 @@ tareas; los mensajes no se pueden editar ni eliminar mediante MCP.
 - “Mostrame la actividad reciente de este contacto.”
 - “Mostrame el resumen de actividad de Learn de este contacto.”
 - “Listá las propiedades personalizadas disponibles y mostrame el apodo de este contacto.”
+- “Agregá la etiqueta existente que seleccioné a este contacto.”
+- “Quitá esta etiqueta del contacto sin borrar la etiqueta de la cuenta.”
 - “Agregá este teléfono al contacto que acabo de seleccionar.”
 - “Registrá a Ana como prospect con este email y teléfono.”
 - “Guardá esta llamada saliente en el contacto que acabo de seleccionar.”

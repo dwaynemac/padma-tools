@@ -1,6 +1,6 @@
 ---
 name: padma-crm
-description: Use PADMA CRM through its remote MCP server to find authorized accounts; search or create account-scoped contacts; retrieve saved lists, properties, ages, Learn links, activity, and history; create or update communications and comments; manage authorized Operations projects, collaborators, recurring tasks, and task conversations; and analyze school statistics, acquisition, dropout reasons, commercial follow-up, and historical lead funnels. Use for requests about CRM contacts, prospects, students, saved lists, ages, custom properties, Learn activity or churn risk, dropout segmentation, communications, operational projects, tasks or messages, enrollment metrics, monthly performance, or commercial funnels stored in PADMA CRM.
+description: Use PADMA CRM through its remote MCP server to find authorized accounts; search or create account-scoped contacts and assign or remove existing tags; retrieve saved lists, properties, ages, Learn links, activity, and history; create or update communications and comments; manage authorized Operations projects, collaborators, recurring tasks, and task conversations; and analyze school statistics, acquisition, dropout reasons, commercial follow-up, and historical lead funnels. Use for requests about CRM contacts, prospects, students, saved lists, ages, custom properties, Learn activity or churn risk, dropout segmentation, communications, operational projects, tasks or messages, enrollment metrics, monthly performance, or commercial funnels stored in PADMA CRM.
 ---
 
 # Use PADMA CRM
@@ -29,6 +29,15 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 5. Use only returned `padma_id` values with `get_contact` or `get_contact_history`; never invent or substitute an identifier.
 6. Treat email, phone, Learn user IDs, visits, status, coefficient, teacher, tags, and list membership as personal data. Return only fields needed for the user's request.
 7. State the selected account and material filters. Keep facts returned by CRM separate from interpretation.
+
+## Add or remove contact tags
+
+1. Confirm that `add_contact_tags` or `remove_contact_tags` is available in the connected server and that `get_account_context` includes write capability. These tools require CRM MCP 1.19.0 or later; documentation alone does not prove deployment.
+2. Resolve the contact with `search_contacts` in the selected account and discover existing tags with `list_tags`. Disambiguate the contact or requested tag before writing if needed.
+3. For the user's requested assignment change, pass `account_name`, the contact's `padma_id`, and a nonempty `tag_ids` array of returned positive integer IDs. Never send tag names or IDs from another account.
+4. Use `add_contact_tags` to add assignments and `remove_contact_tags` to remove only the requested assignments. Neither creates nor deletes the account's tags, and unrelated assignments remain unchanged.
+5. Both tools are atomic and idempotent. Repeated IDs are normalized; an already assigned tag or an absent assignment is a successful no-op. A retry must keep the same account, contact, operation, and IDs.
+6. Report `changed_tag_ids` and the returned final `tags` for the selected account. An empty `changed_tag_ids` means no change, not a failure. Read [references/contacts.md](references/contacts.md#tag-assignments) for the response and error contract.
 
 ## Retrieve a saved contact list
 
@@ -147,7 +156,7 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 
 ## Respect write limits
 
-- CRM can create or reuse contacts, create supported system or custom contact properties, create or update communications, create contact comments, manage Operations projects and tasks, and participate in readable task conversations within the authenticated user's permissions.
+- CRM can assign or remove existing contact tags, create or reuse contacts, create supported system or custom contact properties, create or update communications, create contact comments, manage Operations projects and tasks, and participate in readable task conversations within the authenticated user's permissions.
 - Contact creation only enriches missing identity and relationship fields; it does not overwrite existing contact data.
 - Property writes add values and preserve birthday conflicts; they do not expose `public` or `primary` controls.
 - CRM cannot otherwise update contacts, statuses, or statistics.

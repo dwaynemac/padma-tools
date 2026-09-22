@@ -1,7 +1,7 @@
 {
   "name": "crm",
-  "version": "0.3.2+codex.20260808200157",
-  "description": "Consult authorized PADMA CRM contacts, Operations project members, task collaborators, recurring tasks, and task conversations, rankings, Learn links, properties, activity, and statistics, and safely create or update supported records through its remote MCP server.",
+  "version": "0.3.3+codex.20260922133351",
+  "description": "Consult authorized PADMA CRM contacts and existing tag assignments, Operations project members, task collaborators, recurring tasks, and task conversations, rankings, Learn links, properties, activity, and statistics, and safely create or update supported records through its remote MCP server.",
   "author": {
     "name": "PADMA"
   },
@@ -18,7 +18,7 @@
   "interface": {
     "displayName": "CRM",
     "shortDescription": "Consult\u00e1 contactos, tareas y mensajes",
-    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para buscar o crear contactos, segmentarlos por motivos de baja, consultar sus v\u00ednculos con Learn y listas guardadas, administrar propiedades, miembros de proyectos, colaboradores, tareas operativas recurrentes y sus conversaciones, crear o corregir actividad y analizar rankings de marketing y bajas, estad\u00edsticas mensuales, seguimiento comercial actual y conversi\u00f3n hist\u00f3rica.",
+    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para buscar o crear contactos, segmentarlos por motivos de baja, consultar sus v\u00ednculos con Learn y listas guardadas, administrar propiedades, miembros de proyectos, colaboradores, tareas operativas recurrentes y sus conversaciones, crear o corregir actividad y analizar rankings de marketing y bajas, estad\u00edsticas mensuales, seguimiento comercial actual y conversi\u00f3n hist\u00f3rica. Permite agregar o quitar etiquetas existentes de contactos cuando el servidor CRM expone esas herramientas.",
     "developerName": "PADMA",
     "category": "Productivity",
     "capabilities": [

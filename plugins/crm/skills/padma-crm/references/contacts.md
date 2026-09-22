@@ -39,6 +39,14 @@ List conjunction semantics are explicit: intersection requires membership in eve
 
 Search results are account-scoped summaries. Paginate until the requested scope is complete, or state clearly that the answer covers only the returned page. Do not reuse a cursor after changing the account, any filter, response selector, or page size.
 
+## Tag assignments
+
+With CRM MCP 1.19.0 or later, use `add_contact_tags` or `remove_contact_tags` only if the connected server exposes that tool. Both require write capability. Resolve the contact and existing tags in the selected account first; pass `account_name`, `padma_id`, and a nonempty array of positive integer `tag_ids` returned by `list_tags`.
+
+These operations change assignments, not the tags themselves. They preserve unrelated assignments and never create tags. Removal does not delete the account's tag. A tag from another account or an unknown ID rejects the whole batch with `validation_failed`; a contact outside the selected account returns `not_found`, and missing write permission returns `forbidden`.
+
+Each batch is atomic and idempotent. Duplicate IDs are normalized. Adding an existing assignment or removing an absent one succeeds without changing it. Report the returned `account_name`, `contact: {padma_id}`, `changed_tag_ids` (unique IDs actually changed, in request order), and `tags: [{tag_id, name}]` (final assignments in the selected account, ordered by name and ID). Empty `changed_tag_ids` is a successful no-op. Do not interpret the response as assignments in any other account.
+
 ## Saved lists
 
 `list_contact_lists` discovers current list IDs and names. To retrieve one saved list, pass its `list_id` to `get_contact_list`; do not translate the list into `search_contacts` filters. The saved list's persisted filters and ordering determine which contacts are returned.
@@ -148,4 +156,4 @@ The tool preserves the account, contact, author, request ID, and idempotency met
 - Treat `not_found` as absence from the selected authorized account, not proof that the person does not exist elsewhere.
 - Keep returned CRM facts separate from guesses about identity, intent, or personal characteristics.
 
-CRM can create or reuse contacts, create supported contact properties, create or update communications, and create contact comments through this plugin. Contact creation enriches only missing fields, and property writes only add normalized values. Do not promise status changes, other contact edits, imports, merges, or deletions.
+CRM can assign or remove existing contact tags, create or reuse contacts, create supported contact properties, create or update communications, and create contact comments through this plugin. Contact creation enriches only missing fields, and property writes only add normalized values. Do not promise status changes, other contact edits, imports, merges, or deletions.
