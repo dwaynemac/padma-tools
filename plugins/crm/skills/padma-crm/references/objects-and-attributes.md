@@ -68,17 +68,18 @@ Interpret CRM records with these product semantics. The names shown are the MCP 
 - An Operations project is an account-scoped category used to group tasks and has a sorted complete-replacement `member_usernames` list and ordered sections.
 - `project_id` and each section's `project_section_id` are stable MCP identifiers within the selected account. Discover them with `list_operations_projects`.
 - Project names are unique within an account without regard to case. Project members can read every task in the project without task mutation rights. Only admins and directors with write capability can create projects, rename them, replace membership, or delete them.
-- Deleting a project preserves every task and leaves those tasks without a project.
+- Deleting a project preserves every task and its assignments to other projects.
 
 ## Operations tasks
 
-- An Operations task is account-scoped work with a title, optional description and due date, one assignee, one creator, optional collaborators, an optional linked CRM contact, an optional Operations project, and optional daily, weekly, monthly, or yearly recurrence.
+- An Operations task is account-scoped work with a title, optional description and due date, one assignee, one creator, optional collaborators, an optional linked CRM contact, zero or more project assignments, and optional daily, weekly, monthly, or yearly recurrence.
 - `task_id` is the MCP mutation identifier. A linked person is always identified publicly by `contact.padma_id`, never by the task's internal contact foreign key.
-- A task's `project` is returned as `{ project_id, name, member_usernames }` or `null`. Omit the `project_id` filter to include all readable tasks; pass `null` to select only tasks without a project.
-- A task's `project_section` is returned as `{ project_section_id, name }` or `null`. Omit the `project_section_id` filter to include all readable tasks; pass `null` to select only tasks without a section.
+- Task responses return `project_assignments` ordered by `project_id`. Each assignment contains `project: { project_id, name, member_usernames }` and `project_section: { project_section_id, name } | null`. There are no singular task `project` or `project_section` fields.
+- Omit the `project_id` filter to include every readable task; pass `null` to select main tasks without projects. Omit `project_section_id` to include every section; pass `null` to select tasks with no assigned section anywhere, or with a concrete `project_id` to select that project's sectionless assignments. Concrete project and section filters must match the same assignment.
 - Active due groups are calculated in the selected account's timezone: `overdue`, `today`, `upcoming` (the next seven days), `later`, and `unscheduled`. Completed tasks use `completed` as their returned due group.
 - `recurrence` is `null` or `{ frequency, interval, ends_on }`; recurring tasks require a due date. `generated_from_task_id` identifies the prior occurrence and `next_task_id` identifies the generated successor.
-- Creator, completion user, completion time, account, task ID, and recurrence lineage are server-owned. Title, description, assignee, due date, linked contact, project, and recurrence are editable until the task has generated a successor.
+- Creator, completion user, completion time, account, task ID, and recurrence lineage are server-owned. Title, description, assignee, due date, linked contact, and project assignments are editable; recurrence cannot change after the task has generated a successor.
+- Project assignment sections and order are independent. Due date, assignee, content, conversation, and completion state belong to the shared task. Subtasks have no project assignments. A recurring successor retains all project IDs and starts in each project's first section.
 - `collaborator_usernames` is sorted in responses and is a complete-replacement write field. Every collaborator belongs to the task account; creator and assignee are implicit participants and are not stored as collaborators. Collaborators can read the task without gaining task mutation rights.
 - `messages_count` is the number of messages in the task conversation and is `0` when no conversation exists.
 - Task visibility and mutations depend on the authenticated user's current account permissions. A task returned to one user is not evidence that another user or account can access it.

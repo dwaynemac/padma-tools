@@ -1,7 +1,7 @@
 {
   "name": "crm",
-  "version": "0.3.3+codex.20260922133351",
-  "description": "Consult authorized PADMA CRM contacts and existing tag assignments, Operations project members, task collaborators, recurring tasks, and task conversations, rankings, Learn links, properties, activity, and statistics, and safely create or update supported records through its remote MCP server.",
+  "version": "0.3.4+codex.20260924122401",
+  "description": "Consult authorized PADMA CRM contacts and existing tag assignments, Operations project sections, multi-project task assignments, collaborators, recurrence, and conversations, rankings, Learn links, properties, activity, and statistics, and safely create or update supported records through its remote MCP server.",
   "author": {
     "name": "PADMA"
   },

@@ -1,7 +1,7 @@
 {
   "name": "crm",
-  "version": "0.3.3+codex.20260922133351",
-  "description": "Consult authorized PADMA CRM contacts and existing tag assignments, Operations project members, task collaborators, recurring tasks, and task conversations, rankings, Learn links, properties, activity, and statistics, and safely create or update supported records through its remote MCP server.",
+  "version": "0.3.4+codex.20260924122401",
+  "description": "Consult authorized PADMA CRM contacts and existing tag assignments, Operations project sections, multi-project task assignments, collaborators, recurrence, and conversations, rankings, Learn links, properties, activity, and statistics, and safely create or update supported records through its remote MCP server.",
   "author": {
     "name": "PADMA"
   },
@@ -18,7 +18,7 @@
   "interface": {
     "displayName": "CRM",
     "shortDescription": "Consult\u00e1 contactos, tareas y mensajes",
-    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para buscar o crear contactos, segmentarlos por motivos de baja, consultar sus v\u00ednculos con Learn y listas guardadas, administrar propiedades, miembros de proyectos, colaboradores, tareas operativas recurrentes y sus conversaciones, crear o corregir actividad y analizar rankings de marketing y bajas, estad\u00edsticas mensuales, seguimiento comercial actual y conversi\u00f3n hist\u00f3rica. Permite agregar o quitar etiquetas existentes de contactos cuando el servidor CRM expone esas herramientas.",
+    "longDescription": "Conecta Codex con las cuentas autorizadas de PADMA CRM para buscar o crear contactos, segmentarlos por motivos de baja, consultar sus v\u00ednculos con Learn y listas guardadas, administrar propiedades, proyectos y secciones, asignar tareas operativas a varios proyectos con recurrencias, colaboradores y conversaciones, crear o corregir actividad y analizar rankings de marketing y bajas, estad\u00edsticas mensuales, seguimiento comercial actual y conversi\u00f3n hist\u00f3rica. Permite agregar o quitar etiquetas existentes de contactos cuando el servidor CRM expone esas herramientas.",
     "developerName": "PADMA",
     "category": "Productivity",
     "capabilities": [
@@ -42,10 +42,12 @@
       "Agreg\u00e1 este comentario al contacto que acabo de seleccionar.",
       "List\u00e1 los proyectos operativos disponibles en esta cuenta.",
       "Mostrame los miembros de este proyecto operativo.",
+      "Cre\u00e1 una secci\u00f3n en este proyecto operativo y orden\u00e1 sus secciones.",
       "Agreg\u00e1 estos colaboradores a la tarea operativa.",
       "Mostrame mis tareas operativas activas, incluidas las planificadas para m\u00e1s adelante.",
       "Mostrame las tareas operativas que no tienen proyecto.",
       "Cre\u00e1 esta tarea semanal para el contacto seleccionado despu\u00e9s de mostrarme sus datos.",
+      "Mov\u00e9 esta tarea a otra secci\u00f3n de este proyecto, conservando sus otros proyectos.",
       "Complet\u00e1 esta tarea operativa y mostr\u00e1 la pr\u00f3xima ocurrencia si corresponde.",
       "Mostrame los mensajes m\u00e1s recientes de esta tarea operativa.",
       "Public\u00e1 este mensaje en la tarea operativa que acabo de seleccionar.",

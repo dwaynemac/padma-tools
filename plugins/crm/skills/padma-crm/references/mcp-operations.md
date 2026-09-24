@@ -42,10 +42,12 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 | `list_operations_projects` | optional `account_name` | List account-scoped Operations projects and their sorted members in alphabetical order. |
 | `create_operations_project` | optional account; required `name`; optional `member_usernames` | Create an Operations project and optional complete member list when authorized. |
 | `update_operations_project` | optional account; required `project_id` and at least one of `name` or `member_usernames` | Partially update a project; membership is a complete replacement and `[]` clears it. |
+| `create_operations_project_section` | optional account; required `project_id`, `name` | Append a uniquely named section to an authorized project. |
+| `reorder_operations_project_sections` | optional account; required `project_id`, complete `section_ids` | Atomically set the complete section order, preserving task assignments. |
 | `delete_operations_project` | optional account; required `project_id` | Delete a project, preserve its tasks, and report how many became unassigned. |
 | `list_operations_tasks` | optional account, task filters, `page_size`, `cursor` | List signed-cursor pages of Operations tasks readable by the authenticated user. |
-| `create_operations_task` | optional account; required `title`; optional collaborators and recurrence | Create an Operations task with server-owned creator attribution and optional complete collaborator list. |
-| `update_operations_task` | optional account; required `task_id` and at least one editable field | Partially update an authorized task, including replacing collaborators or setting or clearing recurrence. |
+| `create_operations_task` | optional account; required `title`; optional `project_assignments`, collaborators, and recurrence | Create an Operations task with zero or more account-scoped project assignments. |
+| `update_operations_task` | optional account; required `task_id` and at least one editable field | Partially update an authorized task; change only listed project assignments and remove only explicit project IDs. |
 | `complete_operations_task` | optional account; required `task_id` | Idempotently complete a task and return any recurring successor. |
 | `reopen_operations_task` | optional account; required `task_id` | Idempotently reopen a completed task. |
 | `delete_operations_task` | optional account; required `task_id` | Permanently delete a task when authorized. |
@@ -182,8 +184,8 @@ they created. A project member can read every task in that project without gaini
 task mutation rights. Account admins and directors can manage team tasks. A principal
 without write capability can list readable tasks but cannot mutate them. Every
 user who can access Operations tasks can list the selected account's projects;
-only account admins and directors with write capability can create, rename, or
-delete projects.
+only account admins and directors with write capability can create, rename,
+delete, or change the sections of projects.
 
 `list_operations_projects` returns the current account's projects alphabetically
 as stable `project_id`, `name`, sorted `member_usernames`, and ordered `sections`.
@@ -198,28 +200,38 @@ including later work. Optional filters are:
 - `due_group`: `overdue`, `today`, `upcoming`, `later`, or `unscheduled`;
 - `assignee_username`, discovered with `list_operations_assignees`;
 - `contact_padma_id`, resolved through CRM contact tools;
-- `project_id`: omit it to include every project, pass `null` for only tasks
-  without a project, or pass an ID from `list_operations_projects`.
-- `project_section_id`: omit it to include every section, pass `null` for only
-  tasks without a section, or pass a section ID from `list_operations_projects`.
+- `project_id`: omit it to include every project, pass `null` for only main
+  tasks without project assignments, or pass an ID from `list_operations_projects`.
+- `project_section_id`: omit it to include every section, or pass a section ID
+  from `list_operations_projects`. Pass `null` without a concrete project for
+  tasks with no assigned section in any project; with a concrete `project_id`,
+  it selects tasks with no section in that project's assignment. Concrete
+  project and section IDs must match the same assignment.
 
 Do not combine a due group with `status: completed`. Responses include
 `task_id`, editable fields, creator and completion attribution, `due_group`,
 audit timestamps, a linked contact's public `padma_id` and friendly name,
-sorted `collaborator_usernames`,
-`project` as `{ project_id, name, member_usernames }` or `null`,
-`project_section` as `{ project_section_id, name }` or `null`, `recurrence` as
+sorted `collaborator_usernames`, `project_assignments` ordered by `project_id`
+as `[{ project: { project_id, name, member_usernames }, project_section:
+{ project_section_id, name } | null }]`, `recurrence` as
 `{ frequency, interval, ends_on }` or `null`, `generated_from_task_id`, and
 `next_task_id`. `messages_count` reports the conversation size and is `0` when
 the task has no conversation. The task ID is account-scoped and must come from
-a current list response.
+a current list response. List, create, update, complete, and reopen responses
+use this task projection; singular task `project` and `project_section` fields
+are absent. Each task appears once per list page even if assigned to several
+projects.
 
 For task writes:
 
 - `create_operations_task` requires `title` and accepts `description`,
   `assignee_username`, complete-replacement `collaborator_usernames`, strict
-  `YYYY-MM-DD` `due_on`, `contact_padma_id`, nullable `project_id`, and
-  `recurrence`. Every collaborator must belong to the selected account; creator
+  `YYYY-MM-DD` `due_on`, `contact_padma_id`, `parent_task_id`,
+  `project_assignments`, and `recurrence`. The assignment list contains zero or more
+  `{ project_id, project_section_id? }` objects. Omit the section to use that
+  project's first section, or no section if the project has none. Explicit
+  `null` for a new assignment is invalid when the project has sections. Every
+  collaborator and project must belong to the selected account; creator
   and assignee are implicit participants and are omitted from the stored list.
   The server supplies the account and creator, and defaults the assignee to the
   authenticated user. Creation is not idempotent.
@@ -229,12 +241,28 @@ For task writes:
   Setting recurrence requires `due_on`.
 - `update_operations_task` accepts only `title`, `description`,
   `assignee_username`, `collaborator_usernames`, `due_on`, `contact_padma_id`,
-  `project_id`, and `recurrence`. Omitted fields are preserved;
-  `collaborator_usernames` is a complete replacement and `[]` clears it;
-  `null` clears description, due date, contact, project, or recurrence.
+  `project_assignments`, `remove_project_ids`, and `recurrence` (plus supported
+  `parent_task_id`). `project_assignments` adds or updates only the listed
+  projects; `remove_project_ids` removes only those explicit associations.
+  Omitted or empty arrays preserve every association. Omit a section to keep
+  an existing assignment's section or default a new one to its project's first
+  section. Send `project_section_id: null` to clear an existing section. To
+  move a task between sections in one project, send
+  `project_assignments: [{ project_id: selected_project_id, project_section_id: selected_section_id }]`
+  with that project's resolved IDs; its other projects remain assigned.
+  Duplicate IDs within either array, IDs in both arrays, foreign projects, and
+  sections outside their project are rejected. Task and assignment changes are
+  atomic; `updated` reports actual changes to either. Other omitted fields are
+  preserved; `collaborator_usernames` is a complete replacement and `[]` clears
+  it; `null` clears description, due date, contact, or recurrence.
   Recurrence cannot change after a task has generated a successor; update the
   active successor instead. Creator, completion attribution, account, and task
   ID cannot be changed.
+- Subtasks have no project assignments or recurrence. Setting a parent clears
+  both; clearing `parent_task_id` makes the task a main task again. Assignee,
+  completion, due date, content, and conversation are shared across every
+  project. A recurring successor retains all projects and starts each in that
+  project's first section.
 - Completion and reopening are idempotent and report whether they changed the
   task. Completing a recurring task atomically creates at most one successor on
   the first future occurrence, skips missed dates, respects the inclusive end
@@ -266,10 +294,20 @@ most 255 characters, and unique within the account without regard to case.
 or complete-replacement `member_usernames`; omitted fields remain unchanged and
 an empty member list clears membership. Every member must be a current user of
 the selected account. Both tools return the project metadata.
+`create_operations_project_section` takes `project_id` and a 1–255 character
+`name`; it trims the name, requires uniqueness within the project ignoring case,
+and appends the section. Creation is not idempotent, so list sections before
+retrying an uncertain result. `reorder_operations_project_sections` takes
+`project_id` and the complete ordered `section_ids` array, each positive ID
+exactly once; `[]` is valid only for a project without sections. Missing, extra,
+or foreign IDs fail atomically. Reordering is idempotent and preserves each
+task's section assignment. Both tools return `{ account_name, project }` with
+ordered sections and require admin/director authorization plus write capability.
+
 `delete_operations_project` returns the deleted project and
-`unassigned_tasks_count`; it never deletes the project's tasks, but leaves them
-without a project. Confirm this destructive project deletion immediately before
-calling it.
+`unassigned_tasks_count`; it never deletes tasks or their other project
+assignments. The count reports tasks detached from that project. Confirm this
+destructive project deletion immediately before calling it.
 
 ## Pagination and limits
 

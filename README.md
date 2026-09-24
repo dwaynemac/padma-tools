@@ -188,8 +188,9 @@ Permite:
 - crear comunicaciones idempotentes bajo el usuario autenticado;
 - corregir campos editables de una comunicación existente sin cambiar su contacto, autor ni metadatos de idempotencia;
 - crear comentarios visibles para la cuenta en el contacto seleccionado;
-- listar y administrar proyectos operativos compartidos y sus miembros por cuenta según el rol del usuario;
-- listar, filtrar por proyecto, asignar colaboradores, crear, editar, completar, reabrir y eliminar tareas operativas según los permisos del usuario, incluidos los accesos de colaboradores y miembros de proyecto;
+- listar y administrar proyectos operativos compartidos, sus miembros y el orden de sus secciones según el rol del usuario;
+- listar, filtrar por proyecto y sección, asignar colaboradores, crear, editar, completar, reabrir y eliminar tareas operativas según los permisos del usuario, incluidos los accesos de colaboradores y miembros de proyecto;
+- asignar una misma tarea a varios proyectos de la cuenta, mover su sección en uno sin alterar los demás y quitar asociaciones concretas sin borrar la tarea;
 - consultar y publicar mensajes en las conversaciones de tareas operativas visibles, con autoría autenticada y paginación segura;
 - configurar recurrencias diarias, semanales, mensuales o anuales y obtener la siguiente tarea al completar una ocurrencia;
 - leer series mensuales persistidas y su fecha de actualización;
@@ -268,8 +269,11 @@ tareas; los mensajes no se pueden editar ni eliminar mediante MCP.
 - “Corregí el medio y la fecha de esta comunicación.”
 - “Agregá este comentario al contacto que acabo de seleccionar.”
 - “Listá los proyectos operativos disponibles en esta cuenta.”
+- “Creá una sección en este proyecto operativo y ordená sus secciones como te indiqué.”
 - “Mostrame todas mis tareas operativas activas, incluidas las de más adelante.”
 - “Mostrame las tareas operativas que no tienen proyecto.”
+- “Asigná esta tarea a dos proyectos y mostrame en qué sección quedó en cada uno.”
+- “Mové esta tarea a otra sección del proyecto seleccionado, conservando sus otros proyectos.”
 - “Creá una tarea para llamar a este contacto mañana y asignásela a esta persona.”
 - “Completá esta tarea; si te pido eliminarla, mostrame sus datos y confirmá antes.”
 - “Mostrame los mensajes más recientes de esta tarea operativa.”
