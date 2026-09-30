@@ -108,7 +108,7 @@ The response contains the selected `account_name`, list metadata, contact summar
 
 CRM derives projection from the saved columns:
 
-- `email`, `telephone`, `birthday`, `identification`, and `occupation` select the matching system type;
+- `email`, `telephone`, `birthday`, and `occupation` select the matching system type;
 - `age` adds top-level computed age without selecting or exposing `birthday`;
 - `primary_address` and each `primary_*` address component select `address` once;
 - a column exactly matching an account-owned custom-property label selects that definition once.
@@ -122,12 +122,12 @@ Computed, operational, duplicate, and stale columns remain visible in `list.colu
 Both `get_contact` and `search_contacts` accept these optional selectors:
 
 - `response_fields`: unique values from the additional top-level fields currently supported: `age`, `learn_user_id`, and `learn_activity_summary`;
-- `property_types`: unique values from `email`, `telephone`, `birthday`, `identification`, `address`, and `occupation`;
+- `property_types`: unique values from `email`, `telephone`, `birthday`, `address`, and `occupation`;
 - `property_configuration_ids`: unique positive IDs from the current account's definition list.
 
 When either property selector is present, each contact includes a flat `properties` array with every matching account-owned value. Selecting `age` adds CRM's current computed or estimated age as a top-level field; it is `null` when unavailable and does not expose the birthdate. Selecting `learn_user_id` adds the contact's Learn identifier as a top-level field; it is `null` when the contact is not linked to Learn. Selecting `learn_activity_summary` adds the latest normalized Learn snapshot; it is `null` when Learn has not calculated one. The selectors can be combined and change only response projection, never search matching. Without selectors, the existing compact response is unchanged. Search cursors are bound to all selectors and cannot be reused after changing them.
 
-System values include their applicable phone, identification, address, or birthday metadata. Custom values identify their definition, label, and data type. A `Contact` value returns a nested related contact with only `padma_id` and `friendly_name`; CRM omits a relationship when its target is unavailable in the selected account.
+System values include their applicable phone, address, or birthday metadata. Custom values identify their definition, label, and data type. A `Contact` value returns a nested related contact with only `padma_id` and `friendly_name`; CRM omits a relationship when its target is unavailable in the selected account.
 
 ## Contact tag writes
 
@@ -148,8 +148,8 @@ Batches are atomic, preserve unrelated assignments, normalize duplicate IDs, and
 For `create_contact_property`:
 
 - Resolve an existing account-scoped contact and pass `padma_id`, `property_type`, and `value`.
-- `property_type` accepts `email`, `telephone`, `birthday`, `identification`, `address`, `occupation`, or `custom`.
-- Telephone accepts `phone_country`; identification requires `identification_type`: `dni`, `cpf`, `rg`, or `passport`; address accepts its label and postal/location fields; custom requires `custom_label`.
+- `property_type` accepts `email`, `telephone`, `birthday`, `address`, `occupation`, or `custom`.
+- Telephone accepts `phone_country`; address accepts its label and postal/location fields; custom requires `custom_label`.
 - Do not send type-specific fields to another type, and do not send `public` or `primary`.
 - Custom properties are String-only for this write. CRM creates or reuses an account-scoped String definition and rejects a label already configured with another data type.
 - Exact normalized matches return `existing`. Other successful statuses are `created`, `birthday_assigned`, `birthday_unchanged`, and `birthday_preserved_as_custom`.
@@ -344,3 +344,7 @@ HTTP authentication and availability errors have different recovery:
 - `403`: request the `crm` scope or authorize an enabled account.
 - `429`: wait for `Retry-After` before retrying.
 - `503`: Accounts could not validate the token; retry later without treating it as invalid credentials.
+
+## MCP 2.0.0 identification boundary
+
+Government identification properties and filters are unavailable. Saved lists with identification filters, including nested dependencies, fail validation. Identification columns are omitted from list metadata. MCP full-text and property searches exclude structured identification values; ordinary CRM UI searches remain unchanged. Never use custom fields or free text to work around this boundary. Existing arbitrary text is not automatically redacted.

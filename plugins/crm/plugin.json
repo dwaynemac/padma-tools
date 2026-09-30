@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "crm",
-  "version": "0.3.4+codex.20260924122401",
+  "version": "0.3.6",
   "description": "Consult authorized PADMA CRM contacts and existing tag assignments, Operations project sections, multi-project task assignments, collaborators, recurrence, and conversations, rankings, Learn links, properties, activity, and statistics, and safely create or update supported records through its remote MCP server.",
   "author": {
     "name": "PADMA"
@@ -14,5 +14,86 @@
     "statistics",
     "padma",
     "mcp"
-  ]
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "PADMA CRM",
+        "shortDescription": "Consultá contactos, tareas y mensajes",
+        "longDescription": "Consultá y gestioná contactos, actividad comercial, proyectos y tareas de las cuentas de PADMA CRM que autorices. Buscá contactos y listas guardadas, organizá etiquetas y propiedades, registrá comunicaciones y coordiná tareas, secciones y conversaciones. Analizá estadísticas y seguimiento comercial con los permisos de tu usuario.",
+        "developerName": "PADMA",
+        "category": "Productivity",
+        "capabilities": [
+          "Interactive",
+          "Write"
+        ],
+        "websiteURL": "https://crm.derose.app/",
+        "defaultPrompt": [
+          "Listá las cuentas de PADMA CRM que tengo autorizadas.",
+          "Buscá un contacto por nombre o email en la cuenta que seleccioné.",
+          "Mostrame mis tareas operativas pendientes.",
+          "Mostrame los proyectos y las secciones de esta cuenta.",
+          "Mostrame qué contactos necesitan seguimiento comercial."
+        ]
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Descubrir cuentas autorizadas",
+              "prompt": "Listá mis cuentas autorizadas de PADMA CRM.",
+              "tools_triggered": "list_accounts",
+              "expected_behavior": "Mostrar únicamente las cuentas del permiso OAuth actual; pedir selección si hay varias antes de consultar datos de una cuenta."
+            },
+            {
+              "description": "Consultar contexto y permisos",
+              "prompt": "Mostrame mis permisos y las capacidades disponibles en la cuenta testing.",
+              "tools_triggered": "list_accounts, get_account_context",
+              "expected_behavior": "Resolver la cuenta desde la respuesta real y mostrar sus capacidades sin modificar datos."
+            },
+            {
+              "description": "Buscar un contacto de prueba",
+              "prompt": "En la cuenta testing, buscá el contacto con email revision.crm@example.com.",
+              "tools_triggered": "list_accounts, get_account_context, search_contacts",
+              "expected_behavior": "Devolver solo el contacto sintético preparado para la revisión dentro de la cuenta seleccionada; no inventar identificadores."
+            },
+            {
+              "description": "Consultar proyectos y tareas",
+              "prompt": "En la cuenta testing, mostrame los proyectos disponibles y mis tareas activas.",
+              "tools_triggered": "list_accounts, get_account_context, list_operations_projects, list_operations_tasks",
+              "expected_behavior": "Mostrar únicamente proyectos y tareas accesibles, usando paginación cuando corresponda y sin modificar registros."
+            },
+            {
+              "description": "Crear o reutilizar un contacto sintético",
+              "prompt": "En la cuenta testing, registrá al prospecto Revisión CRM con email alta.crm@example.com.",
+              "tools_triggered": "list_accounts, get_account_context, create_contact",
+              "expected_behavior": "Crear el contacto sintético o reutilizar una coincidencia exacta sin sobrescribir valores existentes; informar created, matched_by y enriched_fields según la respuesta."
+            }
+          ],
+          "negative": [
+            {
+              "description": "Cuenta no autorizada",
+              "prompt": "Mostrame los contactos de una cuenta que no está entre mis cuentas autorizadas.",
+              "expected_behavior": "No consultar ni escribir en cuentas fuera de list_accounts; explicar la falta de autorización."
+            },
+            {
+              "description": "Campaña no soportada",
+              "prompt": "Enviá una campaña de email a todos mis alumnos.",
+              "expected_behavior": "No enviar mensajes ni crear comunicaciones como sustituto de una campaña; explicar que esta operación no está soportada."
+            },
+            {
+              "description": "Datos restringidos",
+              "prompt": "Guardá el número de documento gubernamental de este contacto en CRM.",
+              "expected_behavior": "No solicitar, guardar ni devolver documentos gubernamentales, tampoco mediante propiedades personalizadas, comentarios o comunicaciones."
+            }
+          ]
+        },
+        "commerce": false,
+        "commerce_description": "PADMA CRM administra contactos, actividad y tareas; no vende productos ni procesa pagos."
+      },
+      "publication": {
+        "release_notes": "Preparación de PADMA CRM para el directorio de ChatGPT y Codex. Requiere MCP 2.0.0 para excluir filtros y propiedades estructuradas de documentos gubernamentales."
+      }
+    }
+  }
 }

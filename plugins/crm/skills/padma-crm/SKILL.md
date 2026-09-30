@@ -53,7 +53,7 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 2. Use `response_fields: ["age"]` when the workflow needs the contact's current age rather than the birthdate. The top-level field is `null` when CRM cannot calculate or estimate it.
 3. Use `response_fields: ["learn_user_id"]` only when the workflow needs the contact's Learn identifier. The field is `null` when the contact is not linked to Learn.
 4. Use `response_fields: ["learn_activity_summary"]` to add the stored Learn snapshot as a top-level field on every returned contact. Combine response field values in one array when several are needed.
-5. For system properties, pass only the needed `property_types`: `email`, `telephone`, `birthday`, `identification`, `address`, or `occupation`. Age is a response field, not a property type.
+5. For system properties, pass only the needed `property_types`: `email`, `telephone`, `birthday`, `address`, or `occupation`. Age is a response field, not a property type.
 6. For custom properties, call `list_custom_property_definitions` in the selected account, then pass only returned `property_configuration_id` values as `property_configuration_ids`.
 7. Treat all three selectors as response projection. They do not filter which contacts match a search, and changing them invalidates an existing search cursor.
 8. Expect every matching account-owned property value in `properties`, not only the primary one. A selected type or definition with no value returns an empty array.
@@ -103,8 +103,8 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 ## Create a contact property
 
 1. Resolve the selected account and contact before writing, and call `create_contact_property` only when the user asks to add the value.
-2. Pass `padma_id`, `property_type`, and `value`. Supported types are `email`, `telephone`, `birthday`, `identification`, `address`, `occupation`, and `custom`.
-3. Include only metadata accepted by that type: `phone_country`; `identification_type`; address label and location fields; or `custom_label` for a custom string property.
+2. Pass `padma_id`, `property_type`, and `value`. Supported types are `email`, `telephone`, `birthday`, `address`, `occupation`, and `custom`.
+3. Include only metadata accepted by that type: `phone_country`; address label and location fields; or `custom_label` for a custom string property.
 4. Before using a custom label, call `list_custom_property_definitions`. CRM creates a missing String definition, reuses a matching one, and rejects a label configured with another data type.
 5. Treat the write as idempotent. Report the returned normalized property and status instead of assuming creation.
 6. For birthdays, distinguish `birthday_assigned`, `birthday_unchanged`, and `birthday_preserved_as_custom`; a conflicting incoming date does not replace the canonical birthday.
@@ -163,3 +163,7 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 - Do not emulate writes through browser automation or unrelated tools.
 - Do not call missing-stat calculation paths or present derived values as persisted CRM statistics.
 - If a requested operation is unsupported, explain the boundary and offer the closest available operation.
+
+## Government identifiers
+
+Do not request, search for, create, or return government identifiers such as DNI, CPF, RG, or passport numbers. MCP 2.0.0 removes their structured filters, property types, and projections. Do not work around this boundary with custom properties, comments, messages, or communications. If encountered in free text, do not repeat the value. These instructions do not imply server-side redaction of arbitrary text. CRM's regular UI retains its identification features.

@@ -324,3 +324,7 @@ Consultá [CONTRIBUTING.md](CONTRIBUTING.md) para agregar o actualizar un plugin
 - [Crear y distribuir plugins](https://developers.openai.com/codex/plugins/build)
 - [Plugins de Claude Code](https://code.claude.com/docs/en/plugins)
 - [Marketplaces de Claude Code](https://code.claude.com/docs/en/plugin-marketplaces)
+
+## Publicación de PADMA CRM en ChatGPT
+
+El plan, los requisitos pendientes y la verificación están en [docs/crm-publication.md](docs/crm-publication.md). El paquete está en preparación; esta documentación no implica publicación ni aprobación.

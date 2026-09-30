@@ -9,7 +9,7 @@ Use the exact input names published by the tool schema:
 | Group | Inputs |
 |---|---|
 | General | `text`, `status`, `statuses` |
-| Identity and location | `first_name`, `last_name`, `email`, `telephone`, `identification`, `identification_label`, `gender`, `occupation`, `address`, `neighborhood`, `city`, `state`, `country`, `postal_code`, `younger_than`, `older_than` |
+| Identity and location | `first_name`, `last_name`, `email`, `telephone`, `gender`, `occupation`, `address`, `neighborhood`, `city`, `state`, `country`, `postal_code`, `younger_than`, `older_than` |
 | Birthday | `birthday_day`, `birthday_month`, `birthday_year` |
 | Current account relationship | `local_teacher`, `coefficient`, `level`, `access_type`, `filiation_tier`, `in_professional_training`, `professional_training_level`, `followed_by_user` |
 | Stored relationship dates | `student_on`, `first_enrolled_on_gte`, `first_enrolled_on_lte`, `last_enrolled_on_gte`, `last_enrolled_on_lte`, `first_communicated_at_gte`, `first_communicated_at_lte`, `last_communicated_at_gte`, `last_communicated_at_lte`, `last_seen_at_gte`, `last_seen_at_lte`, `last_seen_days_ago_gt`, `last_seen_days_ago_lte`, `last_booking_on_gte`, `last_booking_on_lte` |
@@ -51,7 +51,7 @@ Each batch is atomic and idempotent. Duplicate IDs are normalized. Adding an exi
 
 `list_contact_lists` discovers current list IDs and names. To retrieve one saved list, pass its `list_id` to `get_contact_list`; do not translate the list into `search_contacts` filters. The saved list's persisted filters and ordering determine which contacts are returned.
 
-`get_contact_list` projects fields automatically from the list's saved UI columns. It maps the system columns for email, telephone, birthday, identification, and occupation directly; returns a saved `age` column as top-level computed age without exposing birthday; maps `primary_address` and `primary_*` address components to address once; and maps exact account-owned custom-property labels to their definition IDs. Callers cannot add response selectors.
+`get_contact_list` projects fields automatically from the list's saved UI columns. It maps the system columns for email, telephone, birthday, and occupation directly; returns a saved `age` column as top-level computed age without exposing birthday; maps `primary_address` and `primary_*` address components to address once; and maps exact account-owned custom-property labels to their definition IDs. Callers cannot add response selectors.
 
 The response preserves all configured column names in `list.columns`, including computed, operational, or stale columns that do not project a contact property. `list.property_selection` reports the property types and custom definition IDs that were derived.
 
@@ -68,7 +68,7 @@ Email and phone are resolved from properties belonging to the selected account. 
 To expand contacts returned by `get_contact` or `search_contacts`, pass any needed response selectors:
 
 - `response_fields`: accepts `age` for the contact's current age, `learn_user_id` for the contact's Learn identifier, and `learn_activity_summary` for the stored Learn snapshot;
-- `property_types`: `email`, `telephone`, `birthday`, `identification`, `address`, or `occupation`;
+- `property_types`: `email`, `telephone`, `birthday`, `address`, or `occupation`;
 - `property_configuration_ids`: IDs returned by `list_custom_property_definitions` for the selected account.
 
 Selectors control response projection only and can be combined. They do not filter search matches. Property selectors add a flat `properties` array containing every matching account-owned value in deterministic order. Without selectors, responses retain their compact shape, including the existing top-level email and phone on `get_contact`.
@@ -89,9 +89,9 @@ If multiple candidates exist, or the supplied email and phone identify different
 
 ## Create a contact property
 
-Use `create_contact_property` only for a contact confirmed in the selected account. Required inputs are `padma_id`, `property_type`, and `value`. Supported property types are `email`, `telephone`, `birthday`, `identification`, `address`, `occupation`, and `custom`.
+Use `create_contact_property` only for a contact confirmed in the selected account. Required inputs are `padma_id`, `property_type`, and `value`. Supported property types are `email`, `telephone`, `birthday`, `address`, `occupation`, and `custom`.
 
-Send only metadata relevant to the selected type. Telephone accepts a two-letter `phone_country`; identification requires `identification_type` (`dni`, `cpf`, `rg`, or `passport`); address accepts `address_label`, postal code, city, state, neighborhood, and country; custom requires `custom_label`. Do not send `public` or `primary`.
+Send only metadata relevant to the selected type. Telephone accepts a two-letter `phone_country`; address accepts `address_label`, postal code, city, state, neighborhood, and country; custom requires `custom_label`. Do not send `public` or `primary`.
 
 Call `list_custom_property_definitions` before selecting a custom label. This write supports String custom values only. A missing String definition is created, an existing String definition is reused, and a label configured with another data type is rejected.
 
