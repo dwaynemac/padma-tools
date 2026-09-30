@@ -52,3 +52,13 @@ Paquete portable: incluir únicamente `plugin.json`, `mcp.json` y `skills/` desd
 - Verificación: `rbenv exec ruby bin/rails test test/mcp test/requests/mcp_test.rb test/searchs/contact_search/local_contact_test.rb test/searchs/contact_search_test.rb test/models/persistent_contact_search_test.rb` — 339 tests, 2517 assertions, cero fallos/errores, un skip preexistente. Búsqueda habitual de CRM conservada y verificada.
 - Compatibilidad del plugin: 119 assertions, JSON/YAML y enlaces relativos válidos. No hay commit, push ni despliegue.
 - Antes del envío: desplegar y verificar la misma versión en Work; revisar por separado datos restringidos que puedan existir en campos libres y el alcance de otros campos sensibles. Este cambio no constituye redacción automática de contenido arbitrario ni aprobación del directorio.
+
+## Páginas públicas: preparación local
+
+- Responsable confirmado: HARAPPA srl. Soporte y privacidad: support@derose.app.
+- Rutas implementadas en CRM: `/privacy` y `/support`, sin sesión, en español, inglés y portugués de Brasil/Portugal. El layout no carga analítica ni widgets externos.
+- Plugin 0.3.7 apunta a https://crm.derose.app/privacy y https://crm.derose.app/support. Son destinos previstos: no se verificaron desplegados y no se debe enviar el paquete suponiendo que ya son públicos.
+- El usuario confirmó que no hay plazo definido para datos de escuelas que dejan el servicio y backups. La política lo declara expresamente; no promete borrado automático. Sigue pendiente definir y verificar la retención para cerrar el requisito del directorio sobre plazos.
+- Contenido de destinatarios contrastado con código: AWS para archivos, AppSignal y, según funciones habilitadas, Brevo, PostHog, Google Gemini e integraciones conectadas. La ejecución/configuración productiva de cada proveedor no se auditó en esta preparación.
+- Verificación local: 2 tests, 94 assertions, sin fallos; acceso sin sesión y traducciones en cuatro locales. Diseño inspeccionado en escritorio y móvil de 390 px.
+- Commits anteriores ya creados: CRM 38ea72a39 y plugin e184548. Estas páginas y sus metadatos son cambios posteriores sin commit; no hubo push, despliegue ni envío.
