@@ -14,12 +14,12 @@
     {
       "name": "crm",
       "source": "./plugins/crm",
-      "description": "Consult authorized PADMA CRM contacts, Operations project sections and multi-project tasks, collaborators, recurrence, conversations, activity, statistics, and funnel data, and safely create or update supported records."
+      "description": "Consult authorized PADMA CRM contacts, Operations project members and sections, multi-project tasks, collaborators, recurrence, conversations, activity, statistics, and funnel data, and safely create or update supported records."
     },
     {
       "name": "padma",
       "source": "./plugins/padma",
-      "description": "Coordinate safe CRM and Money workflows, including enriched contacts and plans with payment debt over explicit monthly ranges, through one client-oriented skill."
+      "description": "Coordinate safe CRM and Money workflows, including CRM Operations project sections, enriched contacts and plans with payment debt over explicit monthly ranges, through one client-oriented skill."
     }
   ]
 }

@@ -156,11 +156,12 @@ Para buscar deuda de planes, usá `search_plans` con `has_debt: true` y ambas fe
 
 1. Instalá el plugin e iniciá una tarea nueva.
 2. Cuando el cliente lo solicite, conectá Money e iniciá sesión mediante OAuth.
-   Codex o Claude Code registrarán automáticamente un cliente público mediante
-   DCR; no configures un Client ID ni un Client Secret compartidos.
+   El cliente descubre automáticamente el método de registro OAuth compatible
+   (CIMD o DCR); no configures un Client ID ni un Client Secret compartidos.
 3. Autorizá el acceso a una o más cuentas. Money limitará cada operación a los negocios habilitados que también puedas usar localmente.
 4. Probá la conexión con: `Listá los negocios de Money que tengo autorizados.`
 
+El `mcp.json` portable declara OAuth explícitamente para los hosts de OpenAI.
 El plugin no requiere una API key ni una variable de entorno. El cliente administra la sesión OAuth; no pegues códigos de autorización ni tokens en prompts, archivos del repositorio, logs o URLs.
 
 Si una instalación anterior tenía un Client ID OAuth estático, actualizá el
@@ -189,6 +190,7 @@ Permite:
 - corregir campos editables de una comunicación existente sin cambiar su contacto, autor ni metadatos de idempotencia;
 - crear comentarios visibles para la cuenta en el contacto seleccionado;
 - listar y administrar proyectos operativos compartidos, sus miembros y el orden de sus secciones según el rol del usuario;
+- crear y ordenar secciones de proyectos con `create_operations_project_section` y `reorder_operations_project_sections` (CRM MCP 1.20.0 o posterior), con permiso de escritura y rol admin o director; descubrir y reutilizar las secciones existentes, enviar la lista completa de IDs al ordenar y verificar cada cambio mediante lectura, sin mover tareas;
 - listar, filtrar por proyecto y sección, asignar colaboradores, crear, editar, completar, reabrir y eliminar tareas operativas según los permisos del usuario, incluidos los accesos de colaboradores y miembros de proyecto;
 - asignar una misma tarea a varios proyectos de la cuenta, mover su sección en uno sin alterar los demás y quitar asociaciones concretas sin borrar la tarea;
 - consultar y publicar mensajes en las conversaciones de tareas operativas visibles, con autoría autenticada y paginación segura;

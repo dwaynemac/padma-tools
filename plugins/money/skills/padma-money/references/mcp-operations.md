@@ -14,17 +14,19 @@
 - Server: `https://money.derose.app/mcp`
 - Transport: Streamable HTTP
 - Authentication: OAuth managed by the MCP client
-- Client registration: Dynamic Client Registration (DCR)
+- Client registration: automatic OAuth discovery (CIMD or DCR)
 - OAuth resource: `https://money.derose.app/mcp`
 
 Connect Money when the client requests authorization, sign in, and authorize the intended account or accounts. The plugin does not require an API key or environment variable. Never paste authorization codes or access tokens into prompts, files, logs, URLs, or MCP arguments.
 
 Do not configure a shared `oauth_client_id`, Client ID, or Client Secret. The
-client discovers the Accounts `registration_endpoint`, registers its exact
-callback as a public PKCE client, and receives its own `client_id`. Callback
+client discovers the Accounts OAuth metadata and uses CIMD or registers its exact
+callback through DCR as a public PKCE client. Callback
 wildcards such as `http://127.0.0.1/callback/*` are not supported.
 
-The plugin supplies this equivalent server configuration:
+The portable `mcp.json` explicitly declares OAuth in
+`extensions.com.openai.auth.type`. The Codex and Claude compatibility file
+`.mcp.json` uses the following configuration and relies on OAuth discovery:
 
 ```json
 {
@@ -39,7 +41,8 @@ The plugin supplies this equivalent server configuration:
 
 ### Codex
 
-The plugin deliberately omits `oauth_client_id` so Codex uses DCR. If Money was
+The plugin deliberately omits `oauth_client_id` so Codex can discover a supported
+OAuth client registration method. If Money was
 previously added manually with the shared static client, replace that entry:
 
 ```bash

@@ -3,7 +3,14 @@
   "mcpServers": {
     "money": {
       "type": "streamable-http",
-      "url": "https://money.derose.app/mcp"
+      "url": "https://money.derose.app/mcp",
+      "extensions": {
+        "com.openai": {
+          "auth": {
+            "type": "oauth"
+          }
+        }
+      }
     }
   }
 }

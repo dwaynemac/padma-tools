@@ -1,0 +1,7 @@
+1
+00:00:00,000 --> 00:05:21,602
+Captura real de MCP privado. No valida las skills del ZIP.
+
+2
+00:05:21,602 --> 00:05:36,602
+N3 FALLA: solicita el documento. No se proporcionó ni guardó un número.

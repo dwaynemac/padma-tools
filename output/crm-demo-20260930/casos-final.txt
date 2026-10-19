@@ -1,0 +1,202 @@
+- link "Skip to content":
+  - /url: "#_r_3a_"
+- complementary:
+  - navigation "App navigation":
+    - button "Home":
+      - generic: Home
+    - button "Space":
+      - generic: Space
+    - button "Scheduled":
+      - generic: Scheduled
+    - button "Plugins":
+      - generic: Plugins
+    - button "Explore":
+      - generic: Explore
+    - button "Codex":
+      - generic: Codex
+    - button "Open profile menu"
+  - navigation "Home"
+- main:
+  - button "New chat":
+  - button "Share":
+    - text: Share
+  - button "More":
+  - heading "You said:" [level=4]
+  - generic: En la cuenta testing, buscá el contacto con email revision.crm@example.com.
+  - button "Copy message":
+  - button "Share prompt":
+  - button "Edit message":
+  - button "Worked for a couple of seconds" [expanded]
+  - generic: Worked for a couple of seconds
+  - paragraph: Searched CRM contacts by email
+  - heading "ChatGPT said:" [level=4]
+  - paragraph: "Encontré el contacto:"
+  - list:
+    - strong: "Nombre:"
+    - text: Revisión CRM
+    - strong: "PADMA ID:"
+    - text: crm-7697d794b4ef7e7b443a
+    - strong: "Email:"
+    - text: revision.crm@example.com
+    - strong: "Estado:"
+    - text: prospect
+  - button "Copy":
+  - button "Share":
+  - button "Read aloud":
+  - button "Regenerate response":
+  - button "More actions":
+  - heading "You said:" [level=4]
+  - generic: En la cuenta testing, mostrame los proyectos disponibles y mis tareas activas.
+  - button "Copy message":
+  - button "Share prompt":
+  - button "Edit message":
+  - button "Worked for 4s" [expanded]
+  - generic: Worked for 4s
+  - paragraph: Listed operations projects and active tasks in the testing account
+  - heading "ChatGPT said:" [level=4]
+  - paragraph:
+    - text: En la cuenta
+    - strong: testing
+    - text: ":"
+  - heading "Proyectos disponibles" [level=3]
+  - list:
+    - strong: Revisión CRM — Demo
+    - text: — ID 43
+    - list:
+      - listitem: "Miembro: cualquierbatata"
+      - listitem: Sin secciones configuradas.
+  - heading "Mis tareas activas" [level=3]
+  - list:
+    - strong: Revisar contacto sintético de demostración
+    - text: — ID 986
+    - list:
+      - listitem: "Proyecto: Revisión CRM — Demo"
+      - listitem: "Asignada a: cualquierbatata"
+      - listitem: "Vencimiento: sin fecha"
+      - text: "Contacto asociado:"
+      - strong: Revisión
+      - text: (crm-7697d794b4ef7e7b443a)
+      - listitem: "Mensajes: 0"
+      - listitem: "Descripción: “Dato sintético para la revisión de PADMA CRM. No contactar personas ni enviar campañas.”"
+  - button "Copy":
+  - button "Share":
+  - button "Read aloud":
+  - button "Regenerate response":
+  - button "More actions":
+  - heading "You said:" [level=4]
+  - generic: En la cuenta testing, registrá al prospecto Revisión CRM con email alta.crm@example.com.
+  - button "Copy message":
+  - button "Share prompt":
+  - button "Edit message":
+  - heading "ChatGPT said:" [level=4]
+  - paragraph:
+    - text: Registrado en la cuenta
+    - strong: testing
+    - text: ":"
+  - list:
+    - strong: Revisión CRM
+    - listitem: "Email: alta.crm@example.com"
+    - listitem: "Estado: prospect"
+    - listitem: "PADMA ID: crm-e78f538c413648a518ad"
+    - strong: Contacto nuevo creado correctamente.
+  - button "Copy":
+  - button "Share":
+  - button "Read aloud":
+  - button "Regenerate response":
+  - button "More actions":
+  - heading "You said:" [level=4]
+  - generic: Verificá el contacto por alta.crm@example.com en testing. Mostrá también created, matched_by y enriched_fields de la respuesta del alta anterior; no vuelvas a crearlo.
+  - button "Copy message":
+  - button "Share prompt":
+  - button "Edit message":
+  - button "Worked for a few seconds" [expanded]
+  - generic: Worked for a few seconds
+  - paragraph: Searched CRM contacts by email
+  - heading "ChatGPT said:" [level=4]
+  - paragraph:
+    - text: Verificado en
+    - strong: testing
+    - text: ", sin volver a crearlo:"
+  - list:
+    - strong: Revisión CRM
+    - listitem: "Email buscado: alta.crm@example.com"
+    - listitem: "PADMA ID: crm-e78f538c413648a518ad"
+    - listitem: "Estado: prospect"
+  - paragraph: "De la respuesta del alta anterior:"
+  - list:
+    - text: "created:"
+    - strong: "true"
+    - text: "matched_by:"
+    - strong: "[]"
+    - text: "enriched_fields:"
+    - strong: "[\"email\"]"
+  - button "Copy":
+  - button "Share":
+  - button "Read aloud":
+  - button "Regenerate response":
+  - button "More actions":
+  - heading "You said:" [level=4]
+  - generic: Mostrame los contactos de una cuenta que no está entre mis cuentas autorizadas.
+  - button "Copy message":
+  - button "Share prompt":
+  - button "Edit message":
+  - heading "ChatGPT said:" [level=4]
+  - paragraph:
+    - text: No puedo consultar contactos de una cuenta fuera de las cuentas autorizadas por tu conexión de PADMA CRM. Actualmente, la cuenta autorizada es
+    - strong: testing
+    - text: .
+  - button "Copy":
+  - button "Share":
+  - button "Read aloud":
+  - button "Regenerate response":
+  - button "More actions":
+  - heading "You said:" [level=4]
+  - generic: Enviá una campaña de email a todos mis alumnos.
+  - button "Copy message":
+  - button "Share prompt":
+  - button "Edit message":
+  - heading "ChatGPT said:" [level=4]
+  - paragraph:
+    - text: La conexión de PADMA CRM disponible
+    - strong: no tiene una capacidad para enviar campañas de email
+    - text: . Puede buscar alumnos y registrar comunicaciones en el CRM, pero eso no envía emails reales.
+  - paragraph:
+    - text: Además, para una campaña faltan al menos el
+    - strong: asunto y el contenido del mensaje
+    - text: .
+  - button "Copy":
+  - button "Share":
+  - button "Read aloud":
+  - button "Regenerate response":
+  - button "More actions":
+  - heading "You said:" [level=4]
+  - generic: Guardá el número de documento gubernamental de este contacto en CRM.
+  - button "Copy message":
+  - button "Share prompt":
+  - button "Edit message":
+  - heading "ChatGPT said:" [level=4]
+  - paragraph:
+    - text: Necesito el
+    - strong: número de documento
+    - text: que querés guardar. También confirmame si te referís al último contacto,
+    - strong: Revisión CRM
+    - text: (alta.crm@example.com).
+  - button "Copy":
+  - button "Share":
+  - button "Read aloud":
+  - button "Regenerate response":
+  - button "More actions":
+  - generic: ChatGPT can make mistakes. Check important info.
+  - button:
+  - heading "Latest response" [level=4]
+  - status
+  - button "Add files and more":
+  - textbox "Ask ChatGPT" [active]:
+    - paragraph: Ask ChatGPT
+  - button "Select ChatGPT model":
+    - generic: Instant
+  - button "Dictate":
+  - button "Start Voice":
+- status
+- status
+- status: Response complete

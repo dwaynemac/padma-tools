@@ -7,7 +7,19 @@ description: Use PADMA CRM through its remote MCP server to find authorized acco
 
 Use the `crm` MCP server as the only execution path for CRM data. OAuth determines the account allowlist; `account_name` only selects one account from that authorized set.
 
+## Reject government identifier requests before using tools
+
+When a request involves collecting, looking up, storing, updating, or returning government identifiers or identity documents (including DNI, CPF, RG, national IDs, or passports), refuse that part immediately, before account discovery or any other CRM tool call for that purpose. This applies even when the user has not supplied a number: do not ask for the number, document, attachment, contact, or account to complete the restricted request.
+
+Do not offer or use custom properties, comments, messages, communications, or any other field as a workaround, even if the user explicitly requests one. If a value or document was already supplied or appears in tool output, do not repeat it or pass it to another tool. For a mixed request, proceed only with separable supported work that does not use the restricted data.
+
+For example, respond to “Guardá el número de documento gubernamental de este contacto en CRM.” with: “No puedo solicitar ni guardar documentos gubernamentales mediante el plugin PADMA CRM.” Do not follow this refusal with a request for the missing number or a suggestion to store it elsewhere.
+
+MCP 2.0.0 removes structured government-identifier filters, property types, and projections. These skill instructions do not imply server-side redaction of arbitrary text. CRM's regular UI retains its identification features.
+
 ## Prepare
+
+For supported requests:
 
 1. Confirm that `crm` tools are available. Do not substitute browser automation, database access, or another integration when the MCP server is unavailable.
 2. Call `list_accounts` first. Treat it as the authoritative list for the current OAuth session.
@@ -146,6 +158,14 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 14. Treat `delete_operations_project` as destructive even though it preserves tasks and their other project assignments. Show the resolved project, obtain explicit confirmation immediately before deletion, and report `unassigned_tasks_count` as the number of tasks detached from that project.
 15. Project members can read every task in their project. Respect `forbidden` as an authorization boundary and do not attempt to bypass assignment, creator, collaborator, project membership, role, account, write-capability, or feature-level restrictions.
 
+## Manage Operations project sections
+
+1. Use `create_operations_project_section` and `reorder_operations_project_sections` only when exposed by the connected server (CRM MCP 1.20.0 or later). Both require write capability and an authenticated admin or director. Plugin documentation alone does not establish live tool availability.
+2. Discover the selected account's project and ordered sections with `list_operations_projects`. Reuse existing names and IDs before creating anything; never infer IDs or borrow them from another account or project.
+3. To append a missing section, pass `project_id` and `name` to `create_operations_project_section`. Names are trimmed, nonblank, at most 255 characters, and unique within the project ignoring case. Creation is not idempotent: after an uncertain result, read the project before retrying.
+4. To reorder, pass the complete ordered `section_ids` list to `reorder_operations_project_sections`, containing every current section ID exactly once. Preserve sections outside the requested ordering unless the user specifies their placement. An empty list is valid only for a project without sections. The replacement is atomic and idempotent and preserves section IDs and task assignments.
+5. Read back the project after each write and confirm its names, IDs, and order. After a stale-list rejection, rediscover the complete list before retrying. These tools do not rename or delete sections, move tasks, or reclassify historical work.
+
 ## Protect authorization and scope
 
 - Never ask the user to paste an OAuth authorization code or access token into a prompt.
@@ -156,14 +176,10 @@ Use the `crm` MCP server as the only execution path for CRM data. OAuth determin
 
 ## Respect write limits
 
-- CRM can assign or remove existing contact tags, create or reuse contacts, create supported system or custom contact properties, create or update communications, create contact comments, manage Operations projects and tasks, and participate in readable task conversations within the authenticated user's permissions.
+- CRM can assign or remove existing contact tags, create or reuse contacts, create supported system or custom contact properties, create or update communications, create contact comments, manage Operations projects, their sections, and tasks, and participate in readable task conversations within the authenticated user's permissions.
 - Contact creation only enriches missing identity and relationship fields; it does not overwrite existing contact data.
 - Property writes add values and preserve birthday conflicts; they do not expose `public` or `primary` controls.
 - CRM cannot otherwise update contacts, statuses, or statistics.
 - Do not emulate writes through browser automation or unrelated tools.
 - Do not call missing-stat calculation paths or present derived values as persisted CRM statistics.
 - If a requested operation is unsupported, explain the boundary and offer the closest available operation.
-
-## Government identifiers
-
-Do not request, search for, create, or return government identifiers such as DNI, CPF, RG, or passport numbers. MCP 2.0.0 removes their structured filters, property types, and projections. Do not work around this boundary with custom properties, comments, messages, or communications. If encountered in free text, do not repeat the value. These instructions do not imply server-side redaction of arbitrary text. CRM's regular UI retains its identification features.

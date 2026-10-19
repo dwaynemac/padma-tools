@@ -65,6 +65,12 @@ class MarketplaceCompatibilityTest < Minitest::Test
     end
   end
 
+  def test_money_declares_oauth_for_openai_hosts
+    server = read_json("plugins/money/mcp.json").fetch("mcpServers").fetch("money")
+
+    assert_equal "oauth", server.dig("extensions", "com.openai", "auth", "type")
+  end
+
   private
 
   def read_json(path)
@@ -101,7 +107,7 @@ class MarketplaceCompatibilityTest < Minitest::Test
       assert_equal "streamable-http", server.fetch("type")
       assert_match(%r{\Ahttps://}, server.fetch("url"))
       assert_equal native.dig("mcpServers", name, "url"), server.fetch("url")
-      assert_empty server.keys - %w[type url headers]
+      assert_empty server.keys - %w[type url headers extensions]
     end
   end
 end

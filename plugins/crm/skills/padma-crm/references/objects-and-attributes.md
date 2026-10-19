@@ -70,6 +70,10 @@ Interpret CRM records with these product semantics. The names shown are the MCP 
 - Project names are unique within an account without regard to case. Project members can read every task in the project without task mutation rights. Only admins and directors with write capability can create projects, rename them, replace membership, or delete them.
 - Deleting a project preserves every task and its assignments to other projects.
 
+Section names are trimmed, nonblank, at most 255 characters, and unique within
+their project ignoring case. Authorized section creation appends; reordering
+replaces the complete order atomically while preserving IDs and task assignments.
+
 ## Operations tasks
 
 - An Operations task is account-scoped work with a title, optional description and due date, one assignee, one creator, optional collaborators, an optional linked CRM contact, zero or more project assignments, and optional daily, weekly, monthly, or yearly recurrence.

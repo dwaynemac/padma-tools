@@ -1,7 +1,7 @@
 {
   "name": "crm",
-  "version": "0.3.7",
-  "description": "Consult authorized PADMA CRM contacts and existing tag assignments, Operations project sections, multi-project task assignments, collaborators, recurrence, and conversations, rankings, Learn links, properties, activity, and statistics, and safely create or update supported records through its remote MCP server.",
+  "version": "0.3.11",
+  "description": "Consult authorized PADMA CRM contacts and existing tag assignments, Operations project members and sections, multi-project task assignments, collaborators, recurrence, and conversations, rankings, Learn links, properties, activity, and statistics, and safely create or update supported records through its remote MCP server.",
   "author": {
     "name": "PADMA"
   },
@@ -17,8 +17,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "PADMA CRM",
-    "shortDescription": "Consultá contactos, tareas y mensajes",
-    "longDescription": "Consultá y gestioná contactos, actividad comercial, proyectos y tareas de las cuentas de PADMA CRM que autorices. Buscá contactos y listas guardadas, organizá etiquetas y propiedades, registrá comunicaciones y coordiná tareas, secciones y conversaciones. Analizá estadísticas y seguimiento comercial con los permisos de tu usuario.",
+    "shortDescription": "Manage contacts and tasks",
+    "longDescription": "Search and manage contacts, commercial activity, projects, tasks, and conversations in your authorized PADMA CRM accounts. Use saved lists, tags, supported properties, communications, and school statistics with your existing permissions. Government identifiers and identity documents are not supported through this plugin.",
     "developerName": "PADMA",
     "category": "Productivity",
     "capabilities": [
@@ -27,14 +27,16 @@
     ],
     "websiteURL": "https://crm.derose.app/",
     "defaultPrompt": [
-      "Listá las cuentas de PADMA CRM que tengo autorizadas.",
-      "Buscá un contacto por nombre o email en la cuenta que seleccioné.",
-      "Mostrame mis tareas operativas pendientes.",
-      "Mostrame los proyectos y las secciones de esta cuenta.",
-      "Mostrame qué contactos necesitan seguimiento comercial."
+      "List my authorized PADMA CRM accounts.",
+      "Find a contact by name or email in my selected account.",
+      "Show my active tasks in my selected account."
     ],
     "supportURL": "https://crm.derose.app/support",
-    "privacyPolicyURL": "https://crm.derose.app/privacy"
+    "privacyPolicyURL": "https://crm.derose.app/privacy",
+    "logo": "./assets/icon.png",
+    "composerIcon": "./assets/icon.png",
+    "brandColor": "#0971b7",
+    "termsOfServiceURL": "https://crm.derose.app/terms"
   },
   "mcpServers": "./.mcp.json",
   "extensions": {
@@ -87,15 +89,22 @@
             {
               "description": "Datos restringidos",
               "prompt": "Guardá el número de documento gubernamental de este contacto en CRM.",
-              "expected_behavior": "No solicitar, guardar ni devolver documentos gubernamentales, tampoco mediante propiedades personalizadas, comentarios o comunicaciones."
+              "expected_behavior": "Rechazar de inmediato sin pedir el número, documento, contacto ni cuenta y sin llamar herramientas para ese fin. No guardar ni devolver documentos gubernamentales, tampoco mediante propiedades personalizadas, comentarios o comunicaciones."
             }
           ]
         },
         "commerce": false,
-        "commerce_description": "PADMA CRM administra contactos, actividad y tareas; no vende productos ni procesa pagos."
+        "commerce_description": "PADMA CRM administra contactos, actividad y tareas; no vende productos ni procesa pagos.",
+        "demo_recording_url": "https://drive.google.com/file/d/1qyoIn9PWyFyNAXbnCcB1JdIPCtdA6SOE/view?usp=drivesdk"
       },
       "publication": {
-        "release_notes": "Preparación de PADMA CRM para el directorio de ChatGPT y Codex. Requiere MCP 2.0.0 para excluir filtros y propiedades estructuradas de documentos gubernamentales."
+        "release_notes": "Includes the demo recording of version 0.3.8, immediate refusal of government identifier requests in the unchanged CRM skill, and updated listing metadata and icon. Requires CRM MCP 2.0.0 or later.",
+        "translations": {
+          "es": {
+            "subtitle": "Contactos, tareas y mensajes",
+            "description": "Consultá y gestioná contactos, actividad comercial, proyectos y tareas de las cuentas de PADMA CRM que autorices. Buscá contactos y listas guardadas, organizá etiquetas y propiedades, registrá comunicaciones y coordiná tareas, secciones y conversaciones. Analizá estadísticas y seguimiento comercial con los permisos de tu usuario."
+          }
+        }
       }
     }
   }

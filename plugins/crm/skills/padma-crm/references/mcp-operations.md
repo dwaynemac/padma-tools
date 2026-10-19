@@ -39,12 +39,14 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 | `create_contact_communication` | optional account; required `request_id`, `padma_id`, `observations`, and `media` | Create an idempotent account-scoped communication as the authenticated user. |
 | `update_contact_communication` | optional account; required `communication_id` and at least one editable field | Update approved fields on an account-scoped communication. |
 | `list_operations_assignees` | optional `account_name` | Discover usernames available for Operations task assignment. |
-| `list_operations_projects` | optional `account_name` | List account-scoped Operations projects and their sorted members in alphabetical order. |
+| `list_operations_projects` | optional `account_name` | List account-scoped Operations projects in alphabetical order with sorted members and ordered sections. |
 | `create_operations_project` | optional account; required `name`; optional `member_usernames` | Create an Operations project and optional complete member list when authorized. |
 | `update_operations_project` | optional account; required `project_id` and at least one of `name` or `member_usernames` | Partially update a project; membership is a complete replacement and `[]` clears it. |
 | `create_operations_project_section` | optional account; required `project_id`, `name` | Append a uniquely named section to an authorized project. |
 | `reorder_operations_project_sections` | optional account; required `project_id`, complete `section_ids` | Atomically set the complete section order, preserving task assignments. |
 | `delete_operations_project` | optional account; required `project_id` | Delete a project, preserve its tasks, and report how many became unassigned. |
+| `create_operations_project_section` | optional `account_name`; required `project_id`, `name` | Append a section and return the updated project; requires admin/director and write capability. |
+| `reorder_operations_project_sections` | optional `account_name`; required `project_id`, complete `section_ids` | Atomically replace section order and return the updated project; requires admin/director and write capability. |
 | `list_operations_tasks` | optional account, task filters, `page_size`, `cursor` | List signed-cursor pages of Operations tasks readable by the authenticated user. |
 | `create_operations_task` | optional account; required `title`; optional `project_assignments`, collaborators, and recurrence | Create an Operations task with zero or more account-scoped project assignments. |
 | `update_operations_task` | optional account; required `task_id` and at least one editable field | Partially update an authorized task; change only listed project assignments and remove only explicit project IDs. |
@@ -174,6 +176,31 @@ For `update_contact_communication`:
 - Repeating an identical update returns `updated: false`.
 
 For `create_contact_comment`, pass only the resolved `padma_id` and exact approved `observations`. Each call creates a new comment, so inspect `get_contact_history` before retrying an uncertain result.
+
+## Operations project section writes
+
+CRM MCP 1.20.0 adds `create_operations_project_section` and
+`reorder_operations_project_sections`. Check actual tool availability before use.
+Both resolve `project_id` within the selected authorized account and require
+write capability plus existing project-management admin/director authorization.
+
+Creation accepts `name`, trims whitespace, rejects blank names, limits names to
+255 characters, and enforces case-insensitive uniqueness within the project.
+It appends under the project lock. It is not idempotent: read back the project
+before retrying an uncertain response and reuse an already-created section.
+
+Reordering accepts `section_ids`: the complete ordered list of positive integer
+IDs, each appearing exactly once and all belonging to that project. Missing,
+foreign, extra, or duplicate IDs cannot produce a partial reorder. `[]` is valid
+only when the project has no sections. The operation is atomic and idempotent;
+existing IDs and task assignments remain intact. On a stale list, rediscover
+sections and rebuild the complete order before retrying.
+
+Both return `{ account_name, project }`, with the project ID, name, members, and
+ordered `sections` containing `project_section_id`, `name`, and `position`.
+Read back with `list_operations_projects` after every write. Respect standard
+schema, validation, not-found, and forbidden errors; never bypass tenant or role
+checks. Section renaming and deletion are not exposed by these tools.
 
 ## Operations projects, tasks, and conversations
 

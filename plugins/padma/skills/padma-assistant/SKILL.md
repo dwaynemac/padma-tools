@@ -1,6 +1,6 @@
 ---
 name: padma-assistant
-description: Use the PADMA client ecosystem through the authorized CRM and Money MCP servers. Route each business question to its source of truth, search contacts, assign or remove existing tags, or register their properties and activity in CRM, analyze acquisition and dropout rankings, choose the correct operational or historical CRM funnel, analyze or manage finances and monthly plan payment debt in Money, and coordinate cross-product school reviews without mixing tenants, identifiers, currencies, dates, or unsupported applications. Use for requests about a school, students, contacts, marketing conversion, dropout reasons, commercial performance, payments, expenses, income, or combined CRM and financial analysis in PADMA.
+description: Use the PADMA client ecosystem through the authorized CRM and Money MCP servers. Route each business question to its source of truth, search contacts, assign or remove existing tags, or register their properties and activity in CRM, manage Operations projects and sections, analyze acquisition and dropout rankings, choose the correct operational or historical CRM funnel, analyze or manage finances and monthly plan payment debt in Money, and coordinate cross-product school reviews without mixing tenants, identifiers, currencies, dates, or unsupported applications. Use for requests about a school, students, contacts, marketing conversion, dropout reasons, commercial performance, payments, expenses, income, or combined CRM and financial analysis in PADMA.
 ---
 
 # Coordinate PADMA CRM and Money
@@ -18,7 +18,7 @@ This plugin provides coordination instructions only. It does not declare MCP ser
 ## Orient and route
 
 1. Read [references/ecosystem-map.md](references/ecosystem-map.md) to identify the source of truth and current MCP coverage.
-2. Use CRM for contacts, account-specific relationship data, contact history and communications, marketing-method and dropout-reason rankings, persisted school statistics, comparisons, live commercial follow-up stages, and historical lead funnels.
+2. Use CRM for Operations projects, sections, tasks and conversations, contacts, account-specific relationship data, contact history and communications, marketing-method and dropout-reason rankings, persisted school statistics, comparisons, live commercial follow-up stages, and historical lead funnels.
 3. Use Money for accounts, categories, movements, financial reports, plans, recurrent movements, and automation rules.
 4. Say plainly when a request belongs to Learn, Accounts administration, or another app not exposed by the installed product plugins. Do not simulate unavailable access.
 5. Read [references/connections-and-scope.md](references/connections-and-scope.md) before selecting organizations or recovering from OAuth/tool availability issues.
@@ -58,6 +58,7 @@ Para identificar planes con deuda de pagos, usá Money `search_plans(has_debt: t
 
 ## Write through supported product tools
 
+- Route Operations project and section management through `padma-crm`, including `create_operations_project_section` and `reorder_operations_project_sections` when available. Follow its account discovery, admin/director and write-capability checks, complete section-list ordering, and readback rules. The coordinator does not own an additional CRM server.
 - CRM can assign or remove existing contact tags when the connected server exposes `add_contact_tags` and `remove_contact_tags`, create or reuse contacts, create supported contact properties, create or update communications, and create account-visible comments. Follow the `padma-crm` skill for account scope, identity conflicts, idempotency, and exact inputs.
 - CRM contact creation only enriches missing fields, and property writes only add normalized values. Do not promise other contact, status, or statistic changes.
 - Before any Money write, read the current records, resolve related IDs, show the exact proposal, and obtain confirmation unless the user already confirmed that identical change.

@@ -1,0 +1,156 @@
+- link "Skip to content":
+  - /url: "#_r_3a_"
+- complementary:
+  - navigation "App navigation":
+    - button "Home":
+      - generic: Home
+    - button "Space":
+      - generic: Space
+    - button "Scheduled":
+      - generic: Scheduled
+    - button "Plugins":
+      - generic: Plugins
+    - button "Explore":
+      - generic: Explore
+    - button "Codex":
+      - generic: Codex
+    - button "Open profile menu"
+  - navigation "Home"
+- main:
+  - button "New chat":
+  - button "Share":
+    - text: Share
+  - button "More":
+  - button "Worked for a few seconds" [expanded]
+  - generic: Worked for a few seconds
+  - paragraph: Listed authorized CRM accounts
+  - heading "ChatGPT said:" [level=4]
+  - paragraph: "Tenés 1 cuenta autorizada en PADMA CRM:"
+  - list:
+    - strong: testing
+    - text: "— marca: derose — rol: admin"
+  - button "Copy":
+  - button "Share":
+  - button "Read aloud":
+  - button "More actions":
+  - heading "You said:" [level=4]
+  - generic: Mostrame mis permisos y las capacidades disponibles en la cuenta testing.
+  - button "Copy message":
+  - button "Share prompt":
+  - button "Edit message":
+  - button "Worked for 5s" [expanded]
+  - generic: Worked for 5s
+  - paragraph: Retrieved PADMA CRM account context
+  - heading "ChatGPT said:" [level=4]
+  - paragraph:
+    - text: En la cuenta
+    - strong: testing
+    - text: ":"
+  - list:
+    - strong: "Usuario:"
+    - text: cualquierbatata
+    - strong: "Rol:"
+    - text: admin
+    - strong: "Permisos/capacidades:"
+    - text: read, write
+    - strong: "Estados de contactos disponibles:"
+    - text: student, former_student, prospect
+  - paragraph:
+    - text: Los límites de lectura son
+    - strong: 50 registros por defecto
+    - text: "y"
+    - strong: 200 como máximo por página
+    - text: . Para estadísticas mensuales, el período por defecto es de
+    - strong: 12 meses
+    - text: ", con hasta"
+    - strong: 36 meses
+    - text: "y"
+    - strong: 20 métricas
+    - text: por consulta.
+  - paragraph:
+    - text: En términos funcionales, la conexión permite tanto
+    - strong: consultar
+    - text: como
+    - strong: modificar
+    - text: "información del CRM: contactos y sus propiedades/tags/comentarios, listas y búsquedas, historial, estadísticas y funnels, y el módulo Operations (tareas, proyectos y mensajes)."
+  - button "Copy":
+  - button "Share":
+  - button "Read aloud":
+  - button "Regenerate response":
+  - button "More actions":
+  - heading "You said:" [level=4]
+  - generic: En la cuenta testing, buscá el contacto con email revision.crm@example.com.
+  - button "Copy message":
+  - button "Share prompt":
+  - button "Edit message":
+  - button "Worked for a couple of seconds" [expanded]
+  - generic: Worked for a couple of seconds
+  - paragraph: Searched CRM contacts by email
+  - heading "ChatGPT said:" [level=4]
+  - paragraph: "Encontré el contacto:"
+  - list:
+    - strong: "Nombre:"
+    - text: Revisión CRM
+    - strong: "PADMA ID:"
+    - text: crm-7697d794b4ef7e7b443a
+    - strong: "Email:"
+    - text: revision.crm@example.com
+    - strong: "Estado:"
+    - text: prospect
+  - button "Copy":
+  - button "Share":
+  - button "Read aloud":
+  - button "Regenerate response":
+  - button "More actions":
+  - heading "You said:" [level=4]
+  - generic: En la cuenta testing, mostrame los proyectos disponibles y mis tareas activas.
+  - button "Copy message":
+  - button "Share prompt":
+  - button "Edit message":
+  - button "Worked for 4s" [expanded] [active]
+  - generic: Worked for 4s
+  - paragraph: Listed operations projects and active tasks in the testing account
+  - heading "ChatGPT said:" [level=4]
+  - paragraph:
+    - text: En la cuenta
+    - strong: testing
+    - text: ":"
+  - heading "Proyectos disponibles" [level=3]
+  - list:
+    - strong: Revisión CRM — Demo
+    - text: — ID 43
+    - list:
+      - listitem: "Miembro: cualquierbatata"
+      - listitem: Sin secciones configuradas.
+  - heading "Mis tareas activas" [level=3]
+  - list:
+    - strong: Revisar contacto sintético de demostración
+    - text: — ID 986
+    - list:
+      - listitem: "Proyecto: Revisión CRM — Demo"
+      - listitem: "Asignada a: cualquierbatata"
+      - listitem: "Vencimiento: sin fecha"
+      - text: "Contacto asociado:"
+      - strong: Revisión
+      - text: (crm-7697d794b4ef7e7b443a)
+      - listitem: "Mensajes: 0"
+      - listitem: "Descripción: “Dato sintético para la revisión de PADMA CRM. No contactar personas ni enviar campañas.”"
+  - button "Copy":
+  - button "Share":
+  - button "Read aloud":
+  - button "Regenerate response":
+  - button "More actions":
+  - generic: ChatGPT can make mistakes. Check important info.
+  - button:
+  - heading "Latest response" [level=4]
+  - status
+  - button "Add files and more":
+  - textbox "Ask ChatGPT":
+    - paragraph: Ask ChatGPT
+  - button "Select ChatGPT model":
+    - generic: Instant
+  - button "Dictate":
+  - button "Start Voice":
+- status
+- status
+- status: Response complete
