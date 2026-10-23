@@ -49,7 +49,11 @@ Each batch is atomic and idempotent. Duplicate IDs are normalized. Adding an exi
 
 ## Saved lists
 
-`list_contact_lists` discovers current list IDs and names. To retrieve one saved list, pass its `list_id` to `get_contact_list`; do not translate the list into `search_contacts` filters. The saved list's persisted filters and ordering determine which contacts are returned.
+`list_contact_lists` discovers current list IDs and names. To retrieve one saved list, pass its `list_id` to `get_contact_list`; do not translate the list into `search_contacts` filters. The saved list's persisted filters and ordering determine which contacts are returned. Use the same tool to inspect its rules through `list.filters` when that field is exposed by the connected server.
+
+`list.filters` preserves stored CRM keys, arrays, blank values, and value types on every page, including when no contacts match. It is `{}` when no filters are saved. These keys may differ from `search_contacts` inputs; never pass the object directly to that tool. List-combination filters contain referenced list IDs rather than expanded rules: resolve those lists within the selected account and inspect their filters when needed, stopping if a dependency repeats or cannot be resolved. Nonblank government-identification filters are rejected, including nested dependencies; blank identification fields are omitted.
+
+To add a contact through an inclusion tag, establish that dependency from the returned rules, resolve the tag with `list_tags`, and use the tag-assignment workflow. Names, columns, and current members alone do not establish the rule. Verify actual membership afterward; assigning a tag may leave other conditions unmet. A missing `list.filters` field means the connected server has not exposed this capability, not that the list has no conditions; ask for the filter configuration before inferring an inclusion tag.
 
 `get_contact_list` projects fields automatically from the list's saved UI columns. It maps the system columns for email, telephone, birthday, and occupation directly; returns a saved `age` column as top-level computed age without exposing birthday; maps `primary_address` and `primary_*` address components to address once; and maps exact account-owned custom-property labels to their definition IDs. Callers cannot add response selectors.
 

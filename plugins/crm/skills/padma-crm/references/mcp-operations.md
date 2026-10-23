@@ -28,7 +28,7 @@ The CRM hostname selects the OAuth issuer and resource. It does not restrict aut
 | `list_marketing_methods` | optional `account_name` | Discover active account marketing method IDs and values. |
 | `list_dropout_reasons` | optional `account_name` | Discover account dropout reason IDs and values for `dropout_reason_ids`. |
 | `list_contact_lists` | optional `account_name` | Discover saved contact-list IDs and names. |
-| `get_contact_list` | optional account, required `list_id`; optional `page_size`, `cursor` | Execute one saved list and return its contacts with fields derived from its configured columns, including top-level age. |
+| `get_contact_list` | optional account, required `list_id`; optional `page_size`, `cursor` | Execute one saved list, expose its persisted rules as `list.filters` when supported, and return its contacts with fields derived from its configured columns, including top-level age. |
 | `list_custom_property_definitions` | optional `account_name` | Discover account-owned custom property IDs, labels, and data types. |
 | `search_contacts` | optional account, filters, response selectors, `page_size`, `cursor` | Search account-scoped contact summaries and optionally project age, selected properties, Learn user IDs, or activity summaries. |
 | `get_contact` | optional `account_name`, required `padma_id`; optional response selectors | Read one account-scoped contact detail and optionally project age, selected properties, its Learn user ID, or activity summary. |
@@ -104,9 +104,9 @@ between a persisted zero and missing source data matters.
 
 ## Saved contact lists
 
-Use `list_contact_lists` for lightweight discovery. Use `get_contact_list` with one returned `list_id` when the user wants that saved list's contacts. CRM executes the saved filters, ordering, and membership semantics; do not attempt to reconstruct the list with `search_contacts`.
+Use `list_contact_lists` for lightweight discovery. Use `get_contact_list` with one returned `list_id` when the user wants that saved list's rules or contacts. CRM executes the saved filters, ordering, and membership semantics; do not attempt to reconstruct the list with `search_contacts`.
 
-The response contains the selected `account_name`, list metadata, contact summaries, and `next_cursor`. List metadata includes the ordered normalized `columns` and a derived `property_selection`. Each contact always has a `properties` array, including an empty array when no configured property has a value.
+The response contains the selected `account_name`, list metadata, contact summaries, and `next_cursor`. List metadata includes `filters` when supported by the connected server (see [Saved lists](contacts.md#saved-lists) for stored values, dependencies, and availability), the ordered normalized `columns` and a derived `property_selection`. Each contact always has a `properties` array, including an empty array when no configured property has a value.
 
 CRM derives projection from the saved columns:
 

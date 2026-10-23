@@ -179,7 +179,8 @@ Permite:
 - buscar contactos por identidad, cumpleaños, estado, vínculo con la cuenta, actividad, fechas y motivos de baja;
 - agregar o quitar etiquetas existentes de un contacto cuando el servidor expone `add_contact_tags` y `remove_contact_tags` (CRM MCP 1.19.0 o posterior), conservando las demás asignaciones y sin borrar etiquetas;
 - descubrir etiquetas, métodos de marketing, motivos de baja y listas guardadas antes de usarlos;
-- consultar una lista guardada respetando sus filtros, orden y columnas configuradas, incluida la edad calculada sin exponer la fecha de nacimiento;
+- consultar una lista guardada respetando sus filtros, orden y columnas configuradas, incluida la edad calculada sin exponer la fecha de nacimiento; inspeccionar sus reglas mediante `list.filters` cuando el servidor las expone;
+- agregar un contacto a una lista mediante una etiqueta existente cuando sus reglas de inclusión lo permiten, comprobar las demás condiciones y verificar la pertenencia después de asignarla;
 - descubrir propiedades personalizadas y consultar valores seleccionados del contacto;
 - consultar datos operativos del contacto dentro de la cuenta seleccionada;
 - consultar bajo demanda el identificador de usuario de Learn y el resumen de actividad y riesgo de abandono calculado por Learn;
