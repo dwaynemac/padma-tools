@@ -25,11 +25,11 @@ A contact `padma_id` is different from these organization selectors. A current C
 
 ## Availability and authorization
 
-- Missing tools: install or update the affected `crm` or `money` plugin, start a new task, and then reconnect that MCP.
+- Missing tools: install or update the affected `crm` or `money` plugin, start a new task, and then reconnect that MCP. For CRM only, first check and attempt MCP, then honor an explicit browser request under `padma-crm` “Explicit browser access”. Verify UI account scope when MCP is not exposed; never use this exception for a denied account/action, authentication failure, or restricted data. Money remains MCP-only.
 - `401`: reconnect the affected server and verify its exact resource URL.
 - `403` or `forbidden`: refresh discovery and authorization; do not probe other tenants.
 - `429`: wait for `Retry-After` instead of looping.
 - `503`: Accounts could not validate the credential; retry later without treating the grant as rejected.
 - Intended organization absent from discovery: reconnect that product and authorize the required account.
 
-If one MCP is unavailable during a combined request, continue only when the remaining product can answer a useful, clearly partial result. State what could not be verified.
+If one MCP is unavailable during a combined request, continue with a useful, clearly partial result, or the explicitly requested CRM browser path under its safeguards. State each source and what could not be verified; CRM browser access does not authorize Money access.

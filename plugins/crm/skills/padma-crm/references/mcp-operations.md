@@ -1,5 +1,7 @@
 # CRM MCP operations
 
+MCP is the preferred and first attempted execution path. For an explicit user request to use the browser, follow [the skill’s browser conditions](../SKILL.md#explicit-browser-access); the MCP schemas below do not describe UI inputs. Unavailable tools alone do not authorize switching paths, and browser access never bypasses authentication, authorization, or data restrictions.
+
 ## Connection and OAuth
 
 The plugin configures the `crm` Streamable HTTP MCP server at `https://crm.derose.app/mcp`. The client discovers PADMA Accounts as the authorization server, registers a public client through Dynamic Client Registration, and uses Authorization Code with PKCE. Do not configure a shared client secret.

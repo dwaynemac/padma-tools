@@ -207,6 +207,16 @@ El plugin incluye la skill `padma-crm`, que enseña al agente a preservar el
 aislamiento entre cuentas, paginar búsquedas, minimizar la exposición de datos
 personales y distinguir estadísticas faltantes de valores cero.
 
+El agente prioriza e intenta primero el MCP. Si le pedís explícitamente usar el
+navegador para CRM, puede acceder a la interfaz oficial después de comprobar e
+intentar el MCP disponible, incluso si sus herramientas no están expuestas.
+Por ejemplo: “Usá el navegador para consultar la lista de seguimiento de alumnos
+en mi cuenta seleccionada”. Antes verifica identidad, cuenta y permisos en la
+sesión de CRM. La excepción mantiene el alcance solicitado, la minimización de
+datos y las confirmaciones de escritura; no permite eludir denegaciones,
+autenticación, permisos ni restricciones de documentos gubernamentales. Sin esa
+solicitud no cambia automáticamente de vía. Money conserva acceso solo por MCP.
+
 #### Configurar el acceso
 
 1. Instalá el plugin e iniciá una tarea nueva.

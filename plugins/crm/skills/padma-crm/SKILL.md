@@ -5,7 +5,7 @@ description: Use PADMA CRM through its remote MCP server to find authorized acco
 
 # Use PADMA CRM
 
-Use the `crm` MCP server as the only execution path for CRM data. OAuth determines the account allowlist; `account_name` only selects one account from that authorized set.
+Prefer the `crm` MCP server and attempt it first for CRM data. Browser access is allowed only when the user explicitly requests it and the conditions below are met. MCP OAuth determines the account allowlist; `account_name` only selects one account from that authorized set.
 
 ## Reject government identifier requests before using tools
 
@@ -21,8 +21,8 @@ MCP 2.0.0 removes structured government-identifier filters, property types, and 
 
 For supported requests:
 
-1. Confirm that `crm` tools are available. Do not substitute browser automation, database access, or another integration when the MCP server is unavailable.
-2. Call `list_accounts` first. Treat it as the authoritative list for the current OAuth session.
+1. Discover available `crm` tools and attempt the required MCP workflow first, starting with `list_accounts` when exposed. Missing tools are an availability limitation, not an authorization denial. Without an explicit browser request, explain the limitation and how to enable or reconnect MCP; do not switch execution paths automatically. If the user explicitly requests browser access, follow “Explicit browser access” below. Never substitute database access or another integration.
+2. For the MCP path, call `list_accounts` first. Treat it as the authoritative list for the current OAuth session. Steps 3–5 apply to this MCP path; use the UI scope checks below for explicitly requested browser access.
 3. If one account is authorized, use it automatically. If several are authorized, select an account explicitly identified by the user or ask which one to use. Never infer an account from unrelated context.
 4. Keep the selected `account_name` on every account-scoped call in the workflow.
 5. Call `get_account_context` to obtain roles, valid contact statuses, capabilities, and current limits.
@@ -31,6 +31,18 @@ For supported requests:
 8. Read [references/contacts.md](references/contacts.md) for contact searches, detail handling, and privacy rules.
 9. Read [references/learn-activity-summary.md](references/learn-activity-summary.md) before interpreting Learn activity deltas, flags, timestamps, or churn risk.
 10. Read [references/monthly-statistics.md](references/monthly-statistics.md) before answering metric, comparison, trend, or either funnel question.
+
+## Explicit browser access
+
+- A request to use the browser must be explicit; a general request to complete the task or an unavailable MCP does not authorize it. Check MCP availability and attempt exposed tools first even when the user requests the browser. After that attempt, honor the explicit browser request within the same authorized task; do not require MCP to succeed before proceeding.
+- Use only the official PADMA CRM UI at `https://crm.derose.app/` and its normal sign-in flow. Let the user complete login or MFA when needed; never request credentials, OAuth codes, or tokens in chat or extract them from the session. If browser tools are unavailable, explain the limitation.
+- Verify the signed-in identity, accessible accounts, selected account, and applicable role and write permissions from the UI before accessing account data. When MCP discovery succeeded, keep the workflow within its authorized account allowlist as well. When MCP is not exposed, use only accounts visibly available to the authenticated UI user; a user-supplied account name, URL, or ID never grants access. Resolve ambiguous account selection with the user.
+- Never use the browser to bypass `401`, `403`, `forbidden`, an account absent from MCP discovery, missing write capability, role or feature restrictions, or any other authentication, authorization, or data restriction. Reconnect or resolve the permission issue through the normal authorized flow first. Browser consent does not override a denied action or denied tool execution.
+- Keep the requested operation, contact/list identity, account, filters, pagination, and minimum necessary data unchanged. The government-identifier refusal above applies equally in the browser, including lists whose filters or columns expose restricted data. Do not use private endpoints, database access, arbitrary integrations, or direct network calls as a browser substitute.
+- For writes, preserve all operation-specific authorization, exact-text approval, destructive-action confirmation, duplicate prevention, and readback requirements below. Browser access does not authorize extra operations or unsupported writes. Do not assume MCP request IDs or atomicity exist in the UI; after an uncertain result, inspect the UI before retrying and stop if the outcome cannot be established safely.
+- For example, if MCP tools are not exposed and the user explicitly asks to inspect a student follow-up list in the browser, verify the UI account and inspect only that list's rules and requested contacts. Do not change its filters or membership unless separately authorized. Report browser-observed facts as such, including incomplete coverage; never present them as MCP-confirmed results.
+
+The workflows below describe MCP tools and contracts. On the explicitly requested browser path, use the equivalent visible UI controls only where the same supported operation, identity, scope, permissions, and required safeguards can be verified. Do not require unavailable MCP tools to verify UI-only access or assume UI actions accept MCP identifiers or payloads. If a required safeguard cannot be verified, stop that operation and explain the limitation.
 
 ## Search contacts
 
@@ -54,7 +66,7 @@ For supported requests:
 ## Add a contact to a saved list
 
 1. When the user asks to “add a contact to a list”, first resolve the contact and saved list in the selected account with `search_contacts` and `list_contact_lists`. Saved lists are dynamic searches: adding an inclusion tag can be equivalent to adding the contact to the list.
-2. Call `get_contact_list` with the resolved `list_id` and inspect `list.filters` to identify inclusion tags and other conditions. Follow [references/contacts.md](references/contacts.md#saved-lists) for stored filter types and referenced lists; list names, matching tag names, columns, or current members do not prove that dependency. If the tools do not expose the filters, ask the user for the list's filter configuration or confirmation of the exact inclusion tag and any other conditions. Do not invent a filter-inspection tool or use another execution path.
+2. Call `get_contact_list` with the resolved `list_id` and inspect `list.filters` to identify inclusion tags and other conditions. Follow [references/contacts.md](references/contacts.md#saved-lists) for stored filter types and referenced lists; list names, matching tag names, columns, or current members do not prove that dependency. If the tools do not expose the filters, ask the user for the list's filter configuration or confirmation of the exact inclusion tag and any other conditions. Do not invent a filter-inspection tool. Inspect the UI only under “Explicit browser access”; otherwise keep the limitation explicit.
 3. When the inclusion tag is established and assigning it implements the requested membership, resolve its existing ID with `list_tags` and follow “Add or remove contact tags” using `add_contact_tags`. The request to add the contact to that list authorizes this tag assignment; no separate tag request is needed. Do not create tags, modify the list's filters, remove exclusion tags, or change unrelated contact data.
 4. Check membership after assignment with `search_contacts`, combining the resolved contact's identity with `intersect_list_ids: [list_id]`, or inspect `get_contact_list` and paginate as needed. Confirm the returned `padma_id` matches the intended contact before reporting that it belongs to the list. This checks membership without reconstructing the saved filters.
 5. Adding a tag alone does not prove membership when other filters apply. If the contact still does not match, report the tag assignment separately and explain any known unmet conditions. If the dependency cannot be established or no supported tag assignment implements the request, explain the limitation instead of claiming the contact was added.
@@ -178,7 +190,7 @@ For supported requests:
 
 - Never ask the user to paste an OAuth authorization code or access token into a prompt.
 - Never place OAuth credentials in files, URLs, logs, or MCP arguments. The client manages OAuth and DCR.
-- Never treat an `account_name` supplied by the user as authorization. Use only an account returned by `list_accounts`.
+- Never treat an `account_name` supplied by the user as authorization. For MCP, use only an account returned by `list_accounts`; for the explicitly requested browser path, apply the account checks above.
 - Do not switch accounts during a workflow unless the user explicitly asks.
 - Do not combine contacts or statistics from different accounts unless the user explicitly requests a clearly separated comparison and each account is authorized.
 
@@ -188,6 +200,6 @@ For supported requests:
 - Contact creation only enriches missing identity and relationship fields; it does not overwrite existing contact data.
 - Property writes add values and preserve birthday conflicts; they do not expose `public` or `primary` controls.
 - CRM cannot otherwise update contacts, statuses, or statistics.
-- Do not emulate writes through browser automation or unrelated tools.
+- Do not emulate unsupported writes through browser automation or unrelated tools. Supported writes through the UI require the explicit browser request and all safeguards above.
 - Do not call missing-stat calculation paths or present derived values as persisted CRM statistics.
 - If a requested operation is unsupported, explain the boundary and offer the closest available operation.
