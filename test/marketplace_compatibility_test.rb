@@ -71,6 +71,16 @@ class MarketplaceCompatibilityTest < Minitest::Test
     assert_equal "oauth", server.dig("extensions", "com.openai", "auth", "type")
   end
 
+  def test_crm_review_and_publication_metadata_match_portable_package
+    portable = read_json("plugins/crm/plugin.json").fetch("extensions").fetch("com.openai")
+    codex = read_json("plugins/crm/.codex-plugin/plugin.json")
+
+    assert_equal portable.fetch("interface"), codex.fetch("interface")
+    %w[review publication].each do |field|
+      assert_equal portable.fetch(field), codex.fetch("extensions").fetch("com.openai").fetch(field)
+    end
+  end
+
   private
 
   def read_json(path)

@@ -13,7 +13,7 @@ This plugin provides coordination instructions only. It does not declare MCP ser
 2. For CRM work, require the `crm` plugin and follow its `padma-crm` skill.
 3. For Money work, require the `money` plugin and follow its `padma-money` skill.
 4. For combined work, require both product plugins and preserve their independent OAuth and organization scopes.
-5. If a required tool is missing, ask the user to install or enable the corresponding product plugin and start a new task. Do not substitute browser automation, database access, or another integration.
+5. Prefer and attempt the required product MCP first. If a required tool is missing, explain how to install or enable the corresponding product plugin and start a new task. For CRM only, an explicit user request permits the browser path under `padma-crm` “Explicit browser access”, including its account, permission, data, and write safeguards; missing tools alone do not authorize it. Do not substitute database access or another integration. Money remains MCP-only.
 
 ## Orient and route
 
@@ -26,7 +26,7 @@ This plugin provides coordination instructions only. It does not declare MCP ser
 
 ## Resolve scope independently
 
-1. For CRM, call CRM `list_accounts`, select only a returned `account_name`, and call `get_account_context`.
+1. For CRM MCP, call CRM `list_accounts`, select only a returned `account_name`, and call `get_account_context`. For explicitly requested CRM browser access, follow `padma-crm` to verify the UI identity, accessible account and permissions; never bypass MCP denials or its discovered account allowlist.
 2. For Money, call Money `list_businesses`, select only a returned `business_id`, and call `get_business_context`.
 3. Do not infer that a CRM account and Money Business match from similar names. When a workflow needs both, have the user identify each selection unless an explicit current response supplies a reliable shared identifier.
 4. Keep each selector on every contextual call for its product. Never reuse IDs, cursors, roles, or permissions across products.
@@ -41,7 +41,7 @@ This plugin provides coordination instructions only. It does not declare MCP ser
 5. Paginate every search needed for complete coverage. Do not treat one page as a complete population.
 6. Preserve product semantics: CRM missing monthly values are unknown, not zero; Money amounts, including contact LTV, are integer cents with currency; Money reporting months differ from actual movement dates. Treat each nullable Money contact enrichment independently.
 7. Keep currencies separate and label derived calculations.
-8. Separate MCP-confirmed facts from interpretations and recommendations.
+8. Separate MCP-confirmed facts, explicitly requested CRM browser observations, and interpretations or recommendations.
 9. For combined analysis, align periods explicitly but preserve each product's source, date basis, freshness, filters, and missing coverage.
 10. Use CRM `get_commercial_funnel` for current actionable follow-up lists and `get_lead_funnel` for historical monthly conversion. Never treat the live stage counts as a conversion series.
 11. Use CRM `get_marketing_method_statistics` for acquisition conversion and `get_dropout_reason_statistics` for dropout counts by reason. Preserve the returned account-local monthly range.

@@ -1,7 +1,7 @@
 {
   "name": "padma",
-  "version": "0.1.14+codex.20260924130331",
-  "description": "Coordinate safe CRM and Money workflows, including CRM tag assignments and Operations project sections, enriched contacts and plans with payment debt over explicit monthly ranges, through one client-oriented skill.",
+  "version": "0.1.15+codex.20261028223431",
+  "description": "Coordinate safe CRM and Money workflows, including CRM tag assignments and Operations project sections, enriched contacts and plans with payment debt over explicit monthly ranges, through one client-oriented skill. Prefer and attempt MCP first; CRM browser access requires an explicit user request and preserves authorization and data restrictions.",
   "author": {
     "name": "PADMA"
   },
@@ -18,7 +18,7 @@
   "interface": {
     "displayName": "PADMA",
     "shortDescription": "Trabaj\u00e1 con CRM y Money desde un agente",
-    "longDescription": "Ense\u00f1a a Codex cu\u00e1ndo usar los plugins CRM y Money, c\u00f3mo trabajar con actividad de contactos, analizar rankings de marketing y bajas, elegir entre seguimiento comercial actual y conversi\u00f3n hist\u00f3rica, y relacionar contactos mediante su PADMA ID con el docente, Learn ID, LTV y plan actual de Money sin mezclar cuentas, identificadores locales ni fuentes de verdad. Para deudas de pagos, coordina b\u00fasquedas de planes en Money con un rango mensual expl\u00edcito. Permite agregar o quitar etiquetas existentes de contactos cuando el servidor CRM expone esas herramientas. Permite crear y ordenar secciones de proyectos operativos mediante CRM MCP 1.20.0 o posterior cuando las herramientas est\u00e1n disponibles y el usuario tiene permiso.",
+    "longDescription": "Ense\u00f1a a Codex cu\u00e1ndo usar los plugins CRM y Money, c\u00f3mo trabajar con actividad de contactos, analizar rankings de marketing y bajas, elegir entre seguimiento comercial actual y conversi\u00f3n hist\u00f3rica, y relacionar contactos mediante su PADMA ID con el docente, Learn ID, LTV y plan actual de Money sin mezclar cuentas, identificadores locales ni fuentes de verdad. Para deudas de pagos, coordina b\u00fasquedas de planes en Money con un rango mensual expl\u00edcito. Permite agregar o quitar etiquetas existentes de contactos cuando el servidor CRM expone esas herramientas. Permite crear y ordenar secciones de proyectos operativos mediante CRM MCP 1.20.0 o posterior cuando las herramientas est\u00e1n disponibles y el usuario tiene permiso. Prioriza e intenta primero MCP. Para CRM, permite navegador solo ante solicitud expl\u00edcita, con los mismos l\u00edmites de cuenta, permisos, datos y confirmaciones.",
     "developerName": "PADMA",
     "category": "Productivity",
     "capabilities": [
