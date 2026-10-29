@@ -93,7 +93,7 @@ replaces the complete order atomically while preserving IDs and task assignments
 
 - An Operations message belongs to one task conversation and exposes `message_id`, `author_username`, Markdown `body`, `created_at`, and `updated_at`.
 - Conversation visibility is inherited from the task. An account or user that cannot read the task cannot list or post its messages.
-- Message listing is newest first and paginates backward into older history. A missing conversation is represented as an empty message list, not as an error.
+- `list_operations_activities` combines comments and task changes oldest first and paginates forward. A task without a conversation still has creation activity. Use the entry type to distinguish messages from events; `messages_count` counts only messages. See [mcp-operations.md](mcp-operations.md) for entry fields and legacy history behavior.
 - CRM owns author attribution. Posting is not idempotent, can enroll a nonimplicit sender as a task collaborator, and notifies the other task participants.
 - The MCP does not expose message updates or deletions.
 

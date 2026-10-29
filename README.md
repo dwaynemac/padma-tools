@@ -194,7 +194,7 @@ Permite:
 - crear y ordenar secciones de proyectos con `create_operations_project_section` y `reorder_operations_project_sections` (CRM MCP 1.20.0 o posterior), con permiso de escritura y rol admin o director; descubrir y reutilizar las secciones existentes, enviar la lista completa de IDs al ordenar y verificar cada cambio mediante lectura, sin mover tareas;
 - listar, filtrar por proyecto y sección, asignar colaboradores, crear, editar, completar, reabrir y eliminar tareas operativas según los permisos del usuario, incluidos los accesos de colaboradores y miembros de proyecto;
 - asignar una misma tarea a varios proyectos de la cuenta, mover su sección en uno sin alterar los demás y quitar asociaciones concretas sin borrar la tarea;
-- consultar y publicar mensajes en las conversaciones de tareas operativas visibles, con autoría autenticada y paginación segura;
+- consultar comentarios y cambios de tareas operativas en orden cronológico y publicar comentarios con autoría autenticada y paginación segura;
 - configurar recurrencias diarias, semanales, mensuales o anuales y obtener la siguiente tarea al completar una ocurrencia;
 - leer series mensuales persistidas y su fecha de actualización;
 - comparar métricas con el mes anterior y el promedio de los tres meses previos;
@@ -233,8 +233,9 @@ El plugin no requiere una API key ni una variable de entorno. El cliente
 administra la sesión OAuth. Las escrituras disponibles permiten crear o
 reutilizar contactos, agregar o quitar asignaciones de etiquetas existentes, crear propiedades, crear o corregir comunicaciones,
 crear comentarios y gestionar proyectos y tareas operativas autorizadas.
-También permiten consultar y publicar mensajes en las conversaciones de esas
-tareas; los mensajes no se pueden editar ni eliminar mediante MCP.
+También permiten consultar la actividad de cada tarea: comentarios, creación,
+ediciones, movimientos y finalización, del más antiguo al más reciente.
+Se pueden publicar comentarios; no se pueden editar ni eliminar mediante MCP.
 
 ## Ejemplos
 
@@ -289,7 +290,7 @@ tareas; los mensajes no se pueden editar ni eliminar mediante MCP.
 - “Mové esta tarea a otra sección del proyecto seleccionado, conservando sus otros proyectos.”
 - “Creá una tarea para llamar a este contacto mañana y asignásela a esta persona.”
 - “Completá esta tarea; si te pido eliminarla, mostrame sus datos y confirmá antes.”
-- “Mostrame los mensajes más recientes de esta tarea operativa.”
+- “Mostrame los comentarios y cambios de esta tarea operativa en orden cronológico.”
 - “Publicá este mensaje en la tarea operativa que acabo de seleccionar.”
 - “Mostrame alumnos y bajas mes a mes durante el último año.”
 - “Compará la efectividad de este mes con el mes anterior.”
